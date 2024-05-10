@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  db:
+    image: joaodiasdev-product-list-db
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
+    build:
+      context: .
+      dockerfile: db/Dockerfile
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: joaodiasdev!#$%@16048888
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: joaodiasdev!#$%@AMD1604!!@
+      MYSQL_DATABASE: joaodiasdev-product-list
+    ports:
+     - 3308:3306
+    networks:
+     - joaodiasdev-product-list-network
+
+  joaodiasdev-product-list:
+    image: joaodiasdev-product-list
+    build:
+      context: .
+      dockerfile: joaodiasdev-product-list/Dockerfile
+    environment:
+      TZ: America/Sao_Paulo
+      ASPNETCORE_ENVIRONMENT: Development
+    ports:
+     - 7093:80
+    depends_on:
+     - db
+    networks:
+     - joaodiasdev-product-list-network
+networks:
+  joaodiasdev-product-list-network:
+    driver: bridge
+
