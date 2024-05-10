@@ -1,4 +1,4 @@
-﻿namespace JoaoDiasDev.ProductList.Data.Converter.Contract
+﻿namespace JoaoDiasDev.ListGenius.Data.Converter.Contract
 {
     public interface IParser<O, D>
     {

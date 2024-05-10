@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace JoaoDiasDev.ProductList.Services.Token.Interfaces
+namespace JoaoDiasDev.ListGenius.Services.Token.Interfaces
 {
     public interface ITokenService
     {

@@ -1,17 +1,17 @@
-﻿using JoaoDiasDev.ProductList.Data.Enums;
-using JoaoDiasDev.ProductList.Model.Base;
+﻿using JoaoDiasDev.ListGenius.Data.Enums;
+using JoaoDiasDev.ListGenius.Model.Base;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace JoaoDiasDev.ProductList.Model
+namespace JoaoDiasDev.ListGenius.Model
 {
-    [Table("product")]
+    [Table("products")]
     public class Product : BaseEntity
     {
         [Column("name")]
         public string Name { get; set; } = string.Empty;
 
         [Column("value")]
-        public decimal Value { get; set; }
+        public decimal Value { get; set; } = decimal.Zero;
 
         [Column("description")]
         public string Description { get; set; } = string.Empty;
@@ -31,7 +31,7 @@ namespace JoaoDiasDev.ProductList.Model
         [Column("unit")]
         public UnitOfMeasurement Unit { get; set; } = UnitOfMeasurement.Meter;
 
-        public virtual ProductList ProductList { get; set; } = new ProductList();
+        public virtual ProductsList ProductList { get; set; } = new ProductsList();
 
     }
 }

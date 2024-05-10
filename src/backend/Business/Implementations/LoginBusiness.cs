@@ -1,17 +1,16 @@
-﻿using JoaoDiasDev.ProductList.Business.Interfaces;
-using JoaoDiasDev.ProductList.Configurations;
-using JoaoDiasDev.ProductList.Data.VO;
-using JoaoDiasDev.ProductList.Repository.UserRepo;
-using JoaoDiasDev.ProductList.Services.Token.Interfaces;
+﻿using JoaoDiasDev.ListGenius.Business.Interfaces;
+using JoaoDiasDev.ListGenius.Configurations;
+using JoaoDiasDev.ListGenius.Data.VO;
+using JoaoDiasDev.ListGenius.Repository.UserRepo;
+using JoaoDiasDev.ListGenius.Services.Token.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace JoaoDiasDev.ProductList.Business.Implementations
+namespace JoaoDiasDev.ListGenius.Business.Implementations
 {
     public class LoginBusiness : ILoginBusiness
     {
         private const string DATE_FORMAT = "yyyy-MM-dd";
-
         private TokenConfiguration _configuration;
         private IUserRepository _repository;
         private readonly ITokenService _tokenService;

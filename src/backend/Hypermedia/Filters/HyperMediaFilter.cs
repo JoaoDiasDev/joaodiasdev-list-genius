@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace JoaoDiasDev.ProductList.Hypermedia.Filters
+namespace JoaoDiasDev.ListGenius.Hypermedia.Filters
 {
     public class HyperMediaFilter : ResultFilterAttribute
     {

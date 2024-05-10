@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace JoaoDiasDev.ProductList.Model.Base
+namespace JoaoDiasDev.ListGenius.Model.Base
 {
     public class BaseEntity
     {

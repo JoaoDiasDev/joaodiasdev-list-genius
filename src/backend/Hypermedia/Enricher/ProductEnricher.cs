@@ -1,11 +1,11 @@
-﻿using JoaoDiasDev.ProductList.Data.VO;
-using JoaoDiasDev.ProductList.Hypermedia.Constants;
+﻿using JoaoDiasDev.ListGenius.Data.VO;
+using JoaoDiasDev.ListGenius.Hypermedia.Constants;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
-namespace JoaoDiasDev.ProductList.Hypermedia.Enricher
+namespace JoaoDiasDev.ListGenius.Hypermedia.Enricher
 {
-    public class PersonEnricher : ContentResponseEnricher<PersonVO>
+    public class ProductEnricher : ContentResponseEnricher<ProductVO>
     {
         private readonly object _lock = new object();
 
@@ -19,9 +19,9 @@ namespace JoaoDiasDev.ProductList.Hypermedia.Enricher
             ;
         }
 
-        protected override Task EnrichModel(PersonVO content, IUrlHelper urlHelper)
+        protected override Task EnrichModel(ProductVO content, IUrlHelper urlHelper)
         {
-            var path = "api/v1/person";
+            var path = "api/v1/product";
             string link = GetLink(content.Id, urlHelper, path);
 
             content.Links

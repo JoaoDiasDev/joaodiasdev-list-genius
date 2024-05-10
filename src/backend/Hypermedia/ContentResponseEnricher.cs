@@ -1,11 +1,11 @@
-﻿using JoaoDiasDev.ProductList.Hypermedia.Abstract;
-using JoaoDiasDev.ProductList.Hypermedia.Utils;
+﻿using JoaoDiasDev.ListGenius.Hypermedia.Abstract;
+using JoaoDiasDev.ListGenius.Hypermedia.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.Collections.Concurrent;
 
-namespace JoaoDiasDev.ProductList.Hypermedia
+namespace JoaoDiasDev.ListGenius.Hypermedia
 {
     public abstract class ContentResponseEnricher<T> : IResponseEnricher where T : ISupportsHyperMedia
     {
@@ -18,9 +18,9 @@ namespace JoaoDiasDev.ProductList.Hypermedia
 
         bool IResponseEnricher.CanEnrich(ResultExecutingContext response)
         {
-            if (response.Result is OkObjectResult okObjectResult)
+            if (response.Result is OkObjectResult okObjectResult and not null)
             {
-                return CanEnrich(okObjectResult?.Value?.GetType());
+                return CanEnrich(okObjectResult?.Value?.GetType()!);
             }
             return false;
         }
@@ -56,7 +56,7 @@ namespace JoaoDiasDev.ProductList.Hypermedia
 
             }
 
-            await Task.FromResult<object>(null);
+            await Task.FromResult<object>(string.Empty);
         }
     }
 }

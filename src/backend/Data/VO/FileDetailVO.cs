@@ -1,9 +1,9 @@
-﻿namespace JoaoDiasDev.ProductList.Data.VO
+﻿namespace JoaoDiasDev.ListGenius.Data.VO
 {
     public class FileDetailVO
     {
-        public string DocumentName { get; set; }
-        public string DocumentType { get; set; }
-        public string DocumentUrl { get; set; }
+        public string DocumentName { get; set; } = string.Empty;
+        public string DocumentType { get; set; } = string.Empty;
+        public string DocumentUrl { get; set; } = string.Empty;
     }
 }

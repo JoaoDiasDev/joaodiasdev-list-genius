@@ -1,12 +1,12 @@
 ﻿using System.Text;
 
-namespace JoaoDiasDev.ProductList.Hypermedia
+namespace JoaoDiasDev.ListGenius.Hypermedia
 {
     public class HyperMediaLink
     {
-        private string _href;
+        private string _href = string.Empty;
 
-        public string Action { get; set; }
+        public string Action { get; set; } = string.Empty;
 
         public string Href
         {
@@ -22,8 +22,8 @@ namespace JoaoDiasDev.ProductList.Hypermedia
             set { _href = value; }
         }
 
-        public string Rel { get; set; }
+        public string Rel { get; set; } = string.Empty;
 
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
     }
 }

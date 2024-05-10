@@ -1,6 +1,6 @@
-﻿using JoaoDiasDev.ProductList.Model.Base;
+﻿using JoaoDiasDev.ListGenius.Model.Base;
 
-namespace JoaoDiasDev.ProductList.Repository.Generic
+namespace JoaoDiasDev.ListGenius.Repository.Generic
 {
     public interface IRepository<T> where T : BaseEntity
     {

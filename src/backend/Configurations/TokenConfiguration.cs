@@ -1,11 +1,11 @@
-﻿namespace JoaoDiasDev.ProductList.Configurations
+﻿namespace JoaoDiasDev.ListGenius.Configurations
 {
     public class TokenConfiguration
     {
-        public string Audience { get; set; }
-        public string Issuer { get; set; }
-        public string Secret { get; set; }
-        public int MinutesUntilExpiration { get; set; }
-        public int DaysUntilExpiration { get; set; }
+        public string Audience { get; set; } = string.Empty;
+        public string Issuer { get; set; } = string.Empty;
+        public string Secret { get; set; } = string.Empty;
+        public int MinutesUntilExpiration { get; set; } = 60;
+        public int DaysUntilExpiration { get; set; } = 7;
     }
 }

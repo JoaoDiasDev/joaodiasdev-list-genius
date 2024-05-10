@@ -1,6 +1,6 @@
-﻿using JoaoDiasDev.ProductList.Hypermedia.Abstract;
+﻿using JoaoDiasDev.ListGenius.Hypermedia.Abstract;
 
-namespace JoaoDiasDev.ProductList.Hypermedia.Filters
+namespace JoaoDiasDev.ListGenius.Hypermedia.Filters
 {
     public class HyperMediaFilterOptions
     {

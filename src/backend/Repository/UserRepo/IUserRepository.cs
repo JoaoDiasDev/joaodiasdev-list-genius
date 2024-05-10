@@ -1,7 +1,7 @@
-﻿using JoaoDiasDev.ProductList.Data.VO;
-using JoaoDiasDev.ProductList.Model;
+﻿using JoaoDiasDev.ListGenius.Data.VO;
+using JoaoDiasDev.ListGenius.Model;
 
-namespace JoaoDiasDev.ProductList.Repository.UserRepo
+namespace JoaoDiasDev.ListGenius.Repository.UserRepo
 {
     public interface IUserRepository
     {

@@ -1,10 +1,10 @@
-﻿using JoaoDiasDev.ProductList.Data.VO;
-using JoaoDiasDev.ProductList.Model;
-using JoaoDiasDev.ProductList.Model.Context;
+﻿using JoaoDiasDev.ListGenius.Data.VO;
+using JoaoDiasDev.ListGenius.Model;
+using JoaoDiasDev.ListGenius.Model.Context;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace JoaoDiasDev.ProductList.Repository.UserRepo
+namespace JoaoDiasDev.ListGenius.Repository.UserRepo
 {
     public class UserRepository : IUserRepository
     {

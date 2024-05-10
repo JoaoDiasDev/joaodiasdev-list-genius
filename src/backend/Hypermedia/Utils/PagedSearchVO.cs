@@ -1,22 +1,22 @@
-﻿using JoaoDiasDev.ProductList.Hypermedia.Abstract;
+﻿using JoaoDiasDev.ListGenius.Hypermedia.Abstract;
 
-namespace JoaoDiasDev.ProductList.Hypermedia.Utils
+namespace JoaoDiasDev.ListGenius.Hypermedia.Utils
 {
     public class PagedSearchVO<T> where T : ISupportsHyperMedia
     {
-        public int CurrentPage { get; set; }
+        public int CurrentPage { get; set; } = 1;
 
-        public Dictionary<string, object> Filters { get; set; }
+        public Dictionary<string, object> Filters { get; set; } = new Dictionary<string, object>();
 
-        public List<T> List { get; set; }
+        public List<T> List { get; set; } = new List<T>();
 
-        public int PageSize { get; set; }
+        public int PageSize { get; set; } = 20;
 
-        public string SortDirections { get; set; }
+        public string SortDirections { get; set; } = string.Empty;
 
-        public string SortFields { get; set; }
+        public string SortFields { get; set; } = string.Empty;
 
-        public int TotalResults { get; set; }
+        public int TotalResults { get; set; } = int.MaxValue;
 
         public PagedSearchVO()
         {

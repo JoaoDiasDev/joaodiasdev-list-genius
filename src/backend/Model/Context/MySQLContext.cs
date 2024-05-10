@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace JoaoDiasDev.ProductList.Model.Context
+namespace JoaoDiasDev.ListGenius.Model.Context
 {
     public class MySQLContext : DbContext
     {
@@ -11,7 +11,7 @@ namespace JoaoDiasDev.ProductList.Model.Context
         public MySQLContext(DbContextOptions<MySQLContext> options) : base(options) { }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductList> ProductsList { get; set; }
+        public DbSet<ProductsList> ProductsList { get; set; }
         public DbSet<User> Users { get; set; }
     }
 }

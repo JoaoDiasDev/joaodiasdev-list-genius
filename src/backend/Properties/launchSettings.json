@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "JoaoDiasDev.ProductList": {
+    "JoaoDiasDev.ListGenius": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

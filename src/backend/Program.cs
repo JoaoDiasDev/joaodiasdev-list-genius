@@ -1,22 +1,25 @@
-﻿using JoaoDiasDev.ProductList.Business.Implementations;
-using JoaoDiasDev.ProductList.Business.Interfaces;
-using JoaoDiasDev.ProductList.Configurations;
-using JoaoDiasDev.ProductList.Hypermedia.Enricher;
-using JoaoDiasDev.ProductList.Hypermedia.Filters;
-using JoaoDiasDev.ProductList.Model.Context;
-using JoaoDiasDev.ProductList.Repository.Generic;
-using JoaoDiasDev.ProductList.Repository.ProductRepo;
-using JoaoDiasDev.ProductList.Repository.UserRepo;
-using JoaoDiasDev.ProductList.Services.Token;
-using JoaoDiasDev.ProductList.Services.Token.Interfaces;
+﻿using EvolveDb;
+using JoaoDiasDev.ListGenius.Business.Implementations;
+using JoaoDiasDev.ListGenius.Business.Interfaces;
+using JoaoDiasDev.ListGenius.Configurations;
+using JoaoDiasDev.ListGenius.Hypermedia.Enricher;
+using JoaoDiasDev.ListGenius.Hypermedia.Filters;
+using JoaoDiasDev.ListGenius.Model.Context;
+using JoaoDiasDev.ListGenius.Repository.Generic;
+using JoaoDiasDev.ListGenius.Repository.ProductListRepo;
+using JoaoDiasDev.ListGenius.Repository.UserRepo;
+using JoaoDiasDev.ListGenius.Services.Token;
+using JoaoDiasDev.ListGenius.Services.Token.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MySqlConnector;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,10 +29,11 @@ builder.Services.AddControllers().AddXmlSerializerFormatters();
 
 // Adding Hyper media, HATEOAS Support
 var filterOptions = new HyperMediaFilterOptions();
-filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
-filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
+filterOptions.ContentResponseEnricherList.Add(new ProductEnricher());
+filterOptions.ContentResponseEnricherList.Add(new ProductListEnricher());
 builder.Services.AddSingleton(filterOptions);
 
+// Swagger
 builder.Services
     .AddSwaggerGen(
         options =>
@@ -46,6 +50,7 @@ builder.Services
                 });
         });
 
+// Cors
 builder.Services
     .AddCors(
         options =>
@@ -60,20 +65,21 @@ builder.Services
         });
 
 builder.Services.AddApiVersioning();
-
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddScoped<IPersonBusiness, PersonBusiness>();
-builder.Services.AddScoped<IBookBusiness, BookBusiness>();
+// Business Services
+//builder.Services.AddScoped<IProductBusiness, ProductBusiness>();
+//builder.Services.AddScoped<IProductsListBusiness, ProductsListBusiness>();
 builder.Services.AddScoped<ILoginBusiness, LoginBusiness>();
 builder.Services.AddScoped<IFileBusiness, FileBusiness>();
 
-builder.Services.AddSingleton<ITokenService, TokenService>();
-
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+// Repository Services
+builder.Services.AddScoped<IProductsListRepository, ProductsListRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
+// Token Services
+builder.Services.AddSingleton<ITokenService, TokenService>();
 var tokenConfiguration = new TokenConfiguration();
 
 new ConfigureFromConfigurationOptions<TokenConfiguration>(builder.Configuration.GetSection("TokenConfigurations"))
@@ -81,6 +87,7 @@ new ConfigureFromConfigurationOptions<TokenConfiguration>(builder.Configuration.
 
 builder.Services.AddSingleton(tokenConfiguration);
 
+// Authentication
 builder.Services
     .AddAuthentication(
         options =>
@@ -104,6 +111,7 @@ builder.Services
             };
         });
 
+// Authorization
 builder.Services
     .AddAuthorizationBuilder()
     .AddPolicy("Bearer", new AuthorizationPolicyBuilder()
@@ -116,38 +124,50 @@ Log.Logger = new LoggerConfiguration()
     .Console()
     .CreateLogger();
 
+// Database Context
 var connection = builder.Configuration.GetSection("MySQLConnection")["MySQLConnectionString"];
 builder.Services
-    .AddDbContext<MySQLContext>(options => options.UseMySql(connection, MySqlServerVersion.AutoDetect(connection)));
+    .AddDbContext<MySQLContext>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Using Evolve to create and update database if not using docker
-// void MigrateDatabase(string? connection)
-// {
-//    try
-//    {
-//        var evolveConnection = new MySqlConnection(connection);
-//        var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
-//        {
-//            Locations = new List<string> { "db/migrations", "db/dataset" },
-//            IsEraseDisabled = true
-//        };
-//        evolve.Migrate();
-//    }
-//    catch (Exception ex)
-//    {
-//        Log.Error("Database migration failed", ex);
-//        throw;
-//    }
-// }
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("Fixed", opt =>
+    {
+        opt.Window = TimeSpan.FromSeconds(10);
+        opt.PermitLimit = 100;
+    });
+});
+
+//Using Evolve to create and update database if not using docker
+void MigrateDatabase(string connection)
+{
+    try
+    {
+        var evolveConnection = new MySqlConnection(connection);
+        var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
+        {
+            Locations = new List<string> { "db/migrations", "db/dataset" },
+            IsEraseDisabled = true
+        };
+        evolve.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Log.Error("Database migration failed", ex);
+        throw;
+    }
+}
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // MigrateDatabase(connection);
+    // If needed to use Evolve to migration, instead docker
+    MigrateDatabase(connection);
     app.UseSwagger();
     app.UseSwaggerUI(
         c =>
@@ -156,13 +176,14 @@ if (app.Environment.IsDevelopment())
         });
 };
 
-var option = new RewriteOptions();
-option.AddRedirect("^$", "swagger");
-app.UseRewriter(option);
+
+app.UseRewriter(new RewriteOptions().AddRedirect("^$", "swagger"));
 
 app.UseRouting();
 
 app.UseCors();
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 

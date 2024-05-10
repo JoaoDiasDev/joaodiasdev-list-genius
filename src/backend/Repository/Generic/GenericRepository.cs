@@ -1,8 +1,8 @@
-﻿using JoaoDiasDev.ProductList.Model.Base;
-using JoaoDiasDev.ProductList.Model.Context;
+﻿using JoaoDiasDev.ListGenius.Model.Base;
+using JoaoDiasDev.ListGenius.Model.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace JoaoDiasDev.ProductList.Repository.Generic
+namespace JoaoDiasDev.ListGenius.Repository.Generic
 {
     public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {

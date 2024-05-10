@@ -1,10 +1,10 @@
-﻿using JoaoDiasDev.ProductList.Model.Base;
+﻿using JoaoDiasDev.ListGenius.Model.Base;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace JoaoDiasDev.ProductList.Model
+namespace JoaoDiasDev.ListGenius.Model
 {
-    [Table("ProductsList")]
-    public class ProductList : BaseEntity
+    [Table("products_list")]
+    public class ProductsList : BaseEntity
     {
         [Column("name")]
         public string Name { get; set; } = string.Empty;
@@ -14,12 +14,14 @@ namespace JoaoDiasDev.ProductList.Model
 
         [Column("enabled")]
         public bool Enabled { get; set; } = true;
+        [Column("public")]
+        public bool Public { get; set; } = false;
 
         [Column("total_products_count")]
-        public int TotalProductsCount { get; set; } = 0;
+        public int TotalProductsCount { get; set; } = default;
 
         [Column("total_products_value")]
-        public decimal TotalProductsValue { get; set; } = 0.0M;
+        public decimal TotalProductsValue { get; set; } = decimal.Zero;
 
         [Column("created_date")]
         public DateTime CreatedDate { get; set; } = DateTime.Now;

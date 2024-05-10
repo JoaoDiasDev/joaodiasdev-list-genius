@@ -1,7 +1,7 @@
-﻿using JoaoDiasDev.ProductList.Business.Interfaces;
-using JoaoDiasDev.ProductList.Data.VO;
+﻿using JoaoDiasDev.ListGenius.Business.Interfaces;
+using JoaoDiasDev.ListGenius.Data.VO;
 
-namespace JoaoDiasDev.ProductList.Business.Implementations
+namespace JoaoDiasDev.ListGenius.Business.Implementations
 {
     public class FileBusiness : IFileBusiness
     {

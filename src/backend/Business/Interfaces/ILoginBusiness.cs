@@ -1,6 +1,6 @@
-﻿using JoaoDiasDev.ProductList.Data.VO;
+﻿using JoaoDiasDev.ListGenius.Data.VO;
 
-namespace JoaoDiasDev.ProductList.Business.Interfaces
+namespace JoaoDiasDev.ListGenius.Business.Interfaces
 {
     public interface ILoginBusiness
     {

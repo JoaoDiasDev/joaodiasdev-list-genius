@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace JoaoDiasDev.ProductList.Hypermedia.Abstract
+namespace JoaoDiasDev.ListGenius.Hypermedia.Abstract
 {
     public interface IResponseEnricher
     {

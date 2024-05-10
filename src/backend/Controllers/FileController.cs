@@ -1,9 +1,9 @@
-﻿using JoaoDiasDev.ProductList.Business.Interfaces;
-using JoaoDiasDev.ProductList.Data.VO;
+﻿using JoaoDiasDev.ListGenius.Business.Interfaces;
+using JoaoDiasDev.ListGenius.Data.VO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JoaoDiasDev.ProductList.Controllers
+namespace JoaoDiasDev.ListGenius.Controllers
 {
     [ApiVersion("1")]
     [ApiController]
@@ -52,7 +52,7 @@ namespace JoaoDiasDev.ProductList.Controllers
             if (buffer != null)
             {
                 HttpContext.Response.ContentType = $"application/{Path.GetExtension(fileName).Replace(".", "")}";
-                HttpContext.Response.Headers.Add("content-length", buffer.Length.ToString());
+                HttpContext.Response.Headers.Append("content-length", buffer.Length.ToString());
                 await HttpContext.Response.Body.WriteAsync(buffer, 0, buffer.Length);
             }
             return new ContentResult();

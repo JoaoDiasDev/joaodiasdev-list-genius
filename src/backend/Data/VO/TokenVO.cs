@@ -1,4 +1,4 @@
-﻿namespace JoaoDiasDev.ProductList.Data.VO
+﻿namespace JoaoDiasDev.ListGenius.Data.VO
 {
     public class TokenVO
     {

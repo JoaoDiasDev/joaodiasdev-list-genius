@@ -1,9 +1,9 @@
-﻿using JoaoDiasDev.ProductList.Business.Interfaces;
-using JoaoDiasDev.ProductList.Data.VO;
+﻿using JoaoDiasDev.ListGenius.Business.Interfaces;
+using JoaoDiasDev.ListGenius.Data.VO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JoaoDiasDev.ProductList.Controllers
+namespace JoaoDiasDev.ListGenius.Controllers
 {
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]

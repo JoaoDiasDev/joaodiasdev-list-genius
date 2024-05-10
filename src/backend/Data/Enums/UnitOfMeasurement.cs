@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace JoaoDiasDev.ProductList.Data.Enums
+namespace JoaoDiasDev.ListGenius.Data.Enums
 {
     public enum UnitOfMeasurement
     {
@@ -14,7 +14,5 @@ namespace JoaoDiasDev.ProductList.Data.Enums
         CubicMeter = 3,
         [Description("UN")]
         Unit = 4,
-
-
     }
 }

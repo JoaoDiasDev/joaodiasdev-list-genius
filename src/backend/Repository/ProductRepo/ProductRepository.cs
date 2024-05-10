@@ -1,8 +1,8 @@
-﻿using JoaoDiasDev.ProductList.Model;
-using JoaoDiasDev.ProductList.Model.Context;
-using JoaoDiasDev.ProductList.Repository.Generic;
+﻿using JoaoDiasDev.ListGenius.Model;
+using JoaoDiasDev.ListGenius.Model.Context;
+using JoaoDiasDev.ListGenius.Repository.Generic;
 
-namespace JoaoDiasDev.ProductList.Repository.ProductRepo
+namespace JoaoDiasDev.ListGenius.Repository.ProductRepo
 {
     public class ProductRepository : GenericRepository<Product>, IProductRepository
     {

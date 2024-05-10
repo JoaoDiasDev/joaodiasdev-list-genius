@@ -1,11 +1,11 @@
-﻿using JoaoDiasDev.ProductList.Configurations;
-using JoaoDiasDev.ProductList.Services.Token.Interfaces;
+﻿using JoaoDiasDev.ListGenius.Configurations;
+using JoaoDiasDev.ListGenius.Services.Token.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
-namespace JoaoDiasDev.ProductList.Services.Token
+namespace JoaoDiasDev.ListGenius.Services.Token
 {
     public class TokenService : ITokenService
     {
@@ -21,7 +21,7 @@ namespace JoaoDiasDev.ProductList.Services.Token
                 issuer: _configuration.Issuer,
                 audience: _configuration.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(_configuration.MinutesUntilExpiration),
+                expires: DateTime.Now.AddDays(_configuration.DaysUntilExpiration),
                 signingCredentials: signinCredentials);
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
