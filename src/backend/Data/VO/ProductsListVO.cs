@@ -16,8 +16,12 @@ namespace JoaoDiasDev.ListGenius.Data.VO
 
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = true;
+
         [JsonPropertyName("public")]
         public bool Public { get; set; } = false;
+
+        [JsonPropertyName("external_link")]
+        public string ExternalLink { get; set; } = string.Empty;
 
         [JsonPropertyName("total_products_count")]
         public int TotalProductsCount { get; set; } = default;

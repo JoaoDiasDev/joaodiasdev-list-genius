@@ -30,12 +30,12 @@ namespace JoaoDiasDev.ListGenius.Controllers
         [ProducesResponseType(401)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(
-            [FromQuery] string? title,
+            [FromQuery] string name,
             string sortDirection,
             int pageSize,
             int page)
         {
-            return Ok(_productsListBusiness.FindWithPagedSearch(title ?? string.Empty, sortDirection, pageSize, page));
+            return Ok(_productsListBusiness.FindWithPagedSearch(name ?? string.Empty, sortDirection, pageSize, page));
         }
 
         [HttpGet("{id}")]

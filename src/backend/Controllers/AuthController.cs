@@ -76,5 +76,26 @@ namespace JoaoDiasDev.ListGenius.Controllers
             }
             return NoContent();
         }
+
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [Route("register")]
+        [Authorize("Bearer")]
+        public IActionResult Register([FromBody] UserVO user)
+        {
+            var userName = User?.Identity?.Name;
+            if (userName is null)
+            {
+                return BadRequest("Invalid client request");
+            }
+            var result = _loginBusiness.RevokeToken(userName);
+
+            if (!result)
+            {
+                return BadRequest("Invalid client request");
+            }
+            return NoContent();
+        }
     }
 }

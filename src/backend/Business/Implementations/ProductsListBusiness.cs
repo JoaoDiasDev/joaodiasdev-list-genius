@@ -34,18 +34,18 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
         }
 
         public PagedSearchVO<ProductsListVO> FindWithPagedSearch(
-            string? title, string sortDirection, int pageSize, int page)
+            string name, string sortDirection, int pageSize, int page)
         {
             var sort = (!string.IsNullOrWhiteSpace(sortDirection)) && !sortDirection.Equals("desc") ? "asc" : "desc";
             var size = (pageSize < 1) ? 10 : pageSize;
             var offset = page > 0 ? (page - 1) * size : 0;
 
             string query = @"select * from products_list p where 1 = 1 ";
-            if (!string.IsNullOrWhiteSpace(title)) query = query + $" and p.title like '%{title}%' ";
-            query += $" order by p.title {sort} limit {size} offset {offset}";
+            if (!string.IsNullOrWhiteSpace(name)) query = query + $" and p.Name like '%{name}%' ";
+            query += $" order by p.Name {sort} limit {size} offset {offset}";
 
             string countQuery = @"select count(*) from products_list p where 1 = 1 ";
-            if (!string.IsNullOrWhiteSpace(title)) countQuery = countQuery + $" and p.title like '%{title}%' ";
+            if (!string.IsNullOrWhiteSpace(name)) countQuery = countQuery + $" and p.Name like '%{name}%' ";
 
             var productsList = _repository.FindWithPagedSearch(query);
             int totalResults = _repository.GetCount(countQuery);

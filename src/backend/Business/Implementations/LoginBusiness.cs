@@ -47,7 +47,7 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
             _repository.RefreshUserInfo(user);
 
             DateTime createDate = DateTime.Now;
-            DateTime expirationDate = createDate.AddMinutes(_configuration.MinutesUntilExpiration);
+            DateTime expirationDate = createDate.AddDays(_configuration.DaysUntilExpiration);
 
             return new TokenVO(
                 accessToken,
@@ -81,7 +81,7 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
             _repository.RefreshUserInfo(user);
 
             DateTime createDate = DateTime.Now;
-            DateTime expirationDate = createDate.AddMinutes(_configuration.MinutesUntilExpiration);
+            DateTime expirationDate = createDate.AddDays(_configuration.DaysUntilExpiration);
 
             return new TokenVO(
                 accessToken,

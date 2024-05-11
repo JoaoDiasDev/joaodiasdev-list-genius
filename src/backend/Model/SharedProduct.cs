@@ -1,10 +1,9 @@
-﻿using JoaoDiasDev.ListGenius.Model.Base;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JoaoDiasDev.ListGenius.Model
 {
-    [Table("products")]
-    public class Product : BaseEntity
+    [Table("shared_products")]
+    public class SharedProduct
     {
         [Column("name")]
         public string Name { get; set; } = string.Empty;
@@ -30,14 +29,11 @@ namespace JoaoDiasDev.ListGenius.Model
         [Column("unit")]
         public string Unit { get; set; } = string.Empty;
 
-        [Column("id_products_list")]
-        public string IdProductsList { get; set; } = string.Empty;
 
         [Column("id_groups")]
         public string IdGroups { get; set; } = string.Empty;
 
         [Column("id_sub_groups")]
         public string IdSubGroups { get; set; } = string.Empty;
-
     }
 }

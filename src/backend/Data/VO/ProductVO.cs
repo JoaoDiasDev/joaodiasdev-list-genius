@@ -1,5 +1,4 @@
-﻿using JoaoDiasDev.ListGenius.Data.Enums;
-using JoaoDiasDev.ListGenius.Hypermedia;
+﻿using JoaoDiasDev.ListGenius.Hypermedia;
 using JoaoDiasDev.ListGenius.Hypermedia.Abstract;
 using System.Text.Json.Serialization;
 
@@ -31,7 +30,7 @@ namespace JoaoDiasDev.ListGenius.Data.VO
         public bool Enabled { get; set; } = true;
 
         [JsonPropertyName("unit")]
-        public UnitOfMeasurement Unit { get; set; } = UnitOfMeasurement.Meter;
+        public string Unit { get; set; } = string.Empty;
         public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
     }
 }

@@ -9,7 +9,7 @@ namespace JoaoDiasDev.ListGenius.Business.Interfaces
         ProductsListVO FindByID(long id);
         List<ProductsListVO> FindByName(string name);
         List<ProductsListVO> FindAll();
-        PagedSearchVO<ProductsListVO> FindWithPagedSearch(string title, string sortDirection, int pageSize, int page);
+        PagedSearchVO<ProductsListVO> FindWithPagedSearch(string name, string sortDirection, int pageSize, int page);
         ProductsListVO Update(ProductsListVO productsList);
         ProductsListVO Disable(long id);
         void Delete(long id);

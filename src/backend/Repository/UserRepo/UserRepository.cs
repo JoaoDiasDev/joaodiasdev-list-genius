@@ -19,7 +19,7 @@ namespace JoaoDiasDev.ListGenius.Repository.UserRepo
             try
             {
                 var password = ComputeHash(user.Password);
-                return _context.Users?.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password.Equals(password))) ?? throw new InvalidOperationException("User not found");
+                return _context.Users?.FirstOrDefault(u => (u.UserName == user.UserName) && (u.Password.Equals(password))) ?? throw new InvalidOperationException("Incorret credentials entered.");
             }
             catch (Exception)
             {

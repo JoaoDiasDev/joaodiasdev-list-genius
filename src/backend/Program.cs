@@ -7,6 +7,7 @@ using JoaoDiasDev.ListGenius.Hypermedia.Filters;
 using JoaoDiasDev.ListGenius.Model.Context;
 using JoaoDiasDev.ListGenius.Repository.Generic;
 using JoaoDiasDev.ListGenius.Repository.ProductListRepo;
+using JoaoDiasDev.ListGenius.Repository.ProductRepo;
 using JoaoDiasDev.ListGenius.Repository.UserRepo;
 using JoaoDiasDev.ListGenius.Services.Token;
 using JoaoDiasDev.ListGenius.Services.Token.Interfaces;
@@ -42,7 +43,7 @@ builder.Services
                 "v1",
                 new OpenApiInfo
                 {
-                    Title = "Product List API - João Dias Dev",
+                    Title = "List Genius API - João Dias Dev",
                     Version = "v1",
                     Description = "NET 8.0 Web RESTFul API",
                     Contact =
@@ -68,13 +69,14 @@ builder.Services.AddApiVersioning();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Business Services
-//builder.Services.AddScoped<IProductBusiness, ProductBusiness>();
-//builder.Services.AddScoped<IProductsListBusiness, ProductsListBusiness>();
+builder.Services.AddScoped<IProductBusiness, ProductBusiness>();
+builder.Services.AddScoped<IProductsListBusiness, ProductsListBusiness>();
 builder.Services.AddScoped<ILoginBusiness, LoginBusiness>();
 builder.Services.AddScoped<IFileBusiness, FileBusiness>();
 
 // Repository Services
 builder.Services.AddScoped<IProductsListRepository, ProductsListRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
@@ -149,7 +151,7 @@ void MigrateDatabase(string connection)
         var evolveConnection = new MySqlConnection(connection);
         var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
         {
-            Locations = new List<string> { "db/migrations", "db/dataset" },
+            Locations = new List<string> { "Database/migrations", "Database/dataset" },
             IsEraseDisabled = true
         };
         evolve.Migrate();
@@ -167,7 +169,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     // If needed to use Evolve to migration, instead docker
-    MigrateDatabase(connection);
+    MigrateDatabase(connection ?? string.Empty);
     app.UseSwagger();
     app.UseSwaggerUI(
         c =>

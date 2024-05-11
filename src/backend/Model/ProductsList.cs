@@ -14,6 +14,10 @@ namespace JoaoDiasDev.ListGenius.Model
 
         [Column("enabled")]
         public bool Enabled { get; set; } = true;
+
+        [Column("image")]
+        public byte[] Image { get; set; } = [];
+
         [Column("public")]
         public bool Public { get; set; } = false;
 
@@ -28,6 +32,9 @@ namespace JoaoDiasDev.ListGenius.Model
 
         [Column("updated_date")]
         public DateTime UpdatedDate { get; set; } = DateTime.Now;
+
+        [Column("id_users")]
+        public string idUsers { get; set; } = string.Empty;
 
         public virtual List<Product> Products { get; set; } = new List<Product>();
     }

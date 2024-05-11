@@ -62,14 +62,14 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
             string query = @"select * from products p where 1 = 1";
             if (!string.IsNullOrEmpty(name))
             {
-                query += $"\n and p.first_name like '%{name.ToLower()}%' or p.last_name like '%{name.ToLower()}%'";
+                query += $"\n and p.name like '%{name.ToLower()}%'";
             }
-            query += $"\n order by p.first_name {sort} limit {size} offset {offset}";
+            query += $"\n order by p.name {sort} limit {size} offset {offset}";
 
             string countQuery = @"select count(*) from products p where 1 = 1";
             if (!string.IsNullOrEmpty(name))
             {
-                countQuery += $"\n and p.first_name like '%{name.ToLower()}%' or p.last_name like '%{name.ToLower()}%'";
+                countQuery += $"\n and p.name like '%{name.ToLower()}%'";
             }
             var products = _repository.FindWithPagedSearch(query);
             int totalResults = _repository.GetCount(countQuery);
