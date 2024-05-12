@@ -2,30 +2,30 @@
 using JoaoDiasDev.ListGenius.Data.Converter.Implementations;
 using JoaoDiasDev.ListGenius.Data.VO;
 using JoaoDiasDev.ListGenius.Hypermedia.Utils;
-using JoaoDiasDev.ListGenius.Repository.ProductsListRepo;
+using JoaoDiasDev.ListGenius.Repository.SharedProductRepo;
 
 namespace JoaoDiasDev.ListGenius.Business.Implementations
 {
-    public class ProductsListBusiness : IProductsListBusiness
+    public class SharedProductBusiness : ISharedProductBusiness
     {
-        private readonly ProductsListConverter _converter;
-        private readonly IProductsListRepository _repository;
+        private readonly SharedProductConverter _converter;
+        private readonly ISharedProductRepository _repository;
 
 
-        public ProductsListBusiness(IProductsListRepository repository)
+        public SharedProductBusiness(ISharedProductRepository repository)
         {
             _repository = repository;
-            _converter = new ProductsListConverter();
+            _converter = new SharedProductConverter();
         }
 
-        public ProductsListVO Create(ProductsListVO productsList)
+        public SharedProductVO Create(SharedProductVO sharedProduct)
         {
-            var entity = _converter.Parse(productsList);
+            var entity = _converter.Parse(sharedProduct);
             if (entity != null)
             {
                 return _converter.Parse(_repository.Create(entity));
             }
-            return new ProductsListVO();
+            return new SharedProductVO();
         }
 
         public void Delete(long id)
@@ -33,62 +33,62 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
             _repository.Delete(id);
         }
 
-        public PagedSearchVO<ProductsListVO> FindWithPagedSearch(
+        public PagedSearchVO<SharedProductVO> FindWithPagedSearch(
             string name, string sortDirection, int pageSize, int page)
         {
             var sort = (!string.IsNullOrWhiteSpace(sortDirection)) && !sortDirection.Equals("desc") ? "asc" : "desc";
             var size = (pageSize < 1) ? 10 : pageSize;
             var offset = page > 0 ? (page - 1) * size : 0;
 
-            string query = @"select * from products_list p where 1 = 1 ";
+            string query = @"select * from shared_products p where 1 = 1 ";
             if (!string.IsNullOrWhiteSpace(name)) query = query + $" and p.Name like '%{name}%' ";
             query += $" order by p.Name {sort} limit {size} offset {offset}";
 
-            string countQuery = @"select count(*) from products_list p where 1 = 1 ";
+            string countQuery = @"select count(*) from shared_products p where 1 = 1 ";
             if (!string.IsNullOrWhiteSpace(name)) countQuery = countQuery + $" and p.Name like '%{name}%' ";
 
-            var productsList = _repository.FindWithPagedSearch(query);
+            var sharedProduct = _repository.FindWithPagedSearch(query);
             int totalResults = _repository.GetCount(countQuery);
 
-            return new PagedSearchVO<ProductsListVO>
+            return new PagedSearchVO<SharedProductVO>
             {
                 CurrentPage = page,
-                List = _converter.Parse(productsList),
+                List = _converter.Parse(sharedProduct),
                 PageSize = size,
                 SortDirections = sort,
                 TotalResults = totalResults
             };
         }
 
-        public ProductsListVO FindByID(long id)
+        public SharedProductVO FindById(long id)
         {
             return _converter.Parse(_repository.FindById(id));
         }
 
-        public ProductsListVO Update(ProductsListVO book)
+        public SharedProductVO Update(SharedProductVO book)
         {
             var entity = _converter.Parse(book);
             if (entity != null)
             {
                 return _converter.Parse(_repository.Update(entity));
             }
-            return new ProductsListVO();
+            return new SharedProductVO();
         }
 
-        public List<ProductsListVO> FindByName(string name)
+        public List<SharedProductVO> FindByName(string name)
         {
             return _converter.Parse(_repository.FindByName(name));
         }
 
-        public List<ProductsListVO> FindAll()
+        public List<SharedProductVO> FindAll()
         {
             return _converter.Parse(_repository.FindAll());
         }
 
-        public ProductsListVO Disable(long id)
+        public SharedProductVO Disable(long id)
         {
-            var productsList = _repository.Disable(id);
-            return _converter.Parse(productsList);
+            var sharedProduct = _repository.Disable(id);
+            return _converter.Parse(sharedProduct);
         }
     }
 }

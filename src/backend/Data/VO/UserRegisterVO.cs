@@ -10,5 +10,7 @@
 
         public string Role { get; set; } = string.Empty;
 
+        public byte[] Image { get; set; } = [];
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using JoaoDiasDev.ListGenius.Model;
 using JoaoDiasDev.ListGenius.Repository.Generic;
 
-namespace JoaoDiasDev.ListGenius.Repository.ProductListRepo
+namespace JoaoDiasDev.ListGenius.Repository.ProductsListRepo
 {
     public interface IProductsListRepository : IRepository<ProductsList>
     {

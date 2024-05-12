@@ -5,7 +5,7 @@ using System.Text;
 
 namespace JoaoDiasDev.ListGenius.Hypermedia.Enricher
 {
-    public class ProductListEnricher : ContentResponseEnricher<ProductsListVO>
+    public class SharedProductEnricher : ContentResponseEnricher<SharedProductVO>
     {
         private readonly object _lock = new object();
 
@@ -19,9 +19,9 @@ namespace JoaoDiasDev.ListGenius.Hypermedia.Enricher
             ;
         }
 
-        protected override Task EnrichModel(ProductsListVO content, IUrlHelper urlHelper)
+        protected override Task EnrichModel(SharedProductVO content, IUrlHelper urlHelper)
         {
-            var path = "api/v1/products-list";
+            var path = "api/v1/sharedproduct";
             string link = GetLink(content.Id, urlHelper, path);
 
             content.Links

@@ -1,5 +1,6 @@
 ﻿using JoaoDiasDev.ListGenius.Business.Interfaces;
 using JoaoDiasDev.ListGenius.Configurations;
+using JoaoDiasDev.ListGenius.Data.Converter.Implementations;
 using JoaoDiasDev.ListGenius.Data.VO;
 using JoaoDiasDev.ListGenius.Repository.UserRepo;
 using JoaoDiasDev.ListGenius.Services.Token.Interfaces;
@@ -14,6 +15,7 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
         private TokenConfiguration _configuration;
         private IUserRepository _repository;
         private readonly ITokenService _tokenService;
+        private readonly UserRegisterConverter _userRegisterConverter;
 
         public LoginBusiness(
             TokenConfiguration configuration,
@@ -23,6 +25,7 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
             _configuration = configuration;
             _repository = repository;
             _tokenService = tokenService;
+            _userRegisterConverter = new UserRegisterConverter();
         }
 
         public TokenVO ValidateCredentials(UserVO userCredentials)
@@ -66,7 +69,7 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
 
             var userName = principal?.Identity?.Name ?? string.Empty;
 
-            var user = _repository.ValidateCredentials(userName);
+            var user = _repository.ValidateCredentials(userName: userName, email: string.Empty);
 
             if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenUntilExpirationTime <= DateTime.Now)
             {
@@ -94,6 +97,21 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
         public bool RevokeToken(string userName)
         {
             return _repository.RevokeToken(userName);
+        }
+
+        public bool ValidateCredentials(UserRegisterVO user)
+        {
+            return _repository.ValidateCredentials(userName: user.UserName, email: user.Email).Id is not 0;
+        }
+
+        public bool CreateUser(UserRegisterVO userRegister)
+        {
+            var entity = _userRegisterConverter.Parse(userRegister);
+            if (entity != null)
+            {
+                return _repository.CreateUser(entity);
+            }
+            return true;
         }
     }
 }

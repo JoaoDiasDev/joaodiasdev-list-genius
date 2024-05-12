@@ -4,39 +4,41 @@ using System.Text.Json.Serialization;
 
 namespace JoaoDiasDev.ListGenius.Data.VO
 {
-    public class ProductsListVO : ISupportsHyperMedia
+    public class SharedProductVO : ISupportsHyperMedia
     {
         [JsonPropertyName("id")]
         public long Id { get; set; }
+
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
+
+        [JsonPropertyName("value")]
+        public decimal Value { get; set; } = decimal.Zero;
 
         [JsonPropertyName("description")]
         public string Description { get; set; } = string.Empty;
 
-        [JsonPropertyName("enabled")]
-        public bool Enabled { get; set; } = true;
+        [JsonPropertyName("qrcode")]
+        public string Qrcode { get; set; } = string.Empty;
 
         [JsonPropertyName("image")]
         public byte[] Image { get; set; } = [];
 
-        [JsonPropertyName("public")]
-        public bool Public { get; set; } = false;
+        [JsonPropertyName("link")]
+        public string Link { get; set; } = string.Empty;
 
-        [JsonPropertyName("external_link")]
-        public string ExternalLink { get; set; } = string.Empty;
-
-        [JsonPropertyName("total_products_count")]
-        public int TotalProductsCount { get; set; } = default;
-
-        [JsonPropertyName("total_products_value")]
-        public decimal TotalProductsValue { get; set; } = decimal.Zero;
+        [JsonPropertyName("enabled")]
+        public bool Enabled { get; set; } = true;
 
         [JsonPropertyName("created_date")]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         [JsonPropertyName("updated_date")]
         public DateTime UpdatedDate { get; set; } = DateTime.Now;
+
+        [JsonPropertyName("unit")]
+        public string Unit { get; set; } = string.Empty;
+
         public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
     }
 }

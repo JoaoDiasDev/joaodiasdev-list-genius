@@ -2,7 +2,7 @@
 using JoaoDiasDev.ListGenius.Model.Context;
 using JoaoDiasDev.ListGenius.Repository.Generic;
 
-namespace JoaoDiasDev.ListGenius.Repository.ProductListRepo
+namespace JoaoDiasDev.ListGenius.Repository.ProductsListRepo
 {
     public class ProductsListRepository : GenericRepository<ProductsList>, IProductsListRepository
     {

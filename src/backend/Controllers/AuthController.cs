@@ -82,20 +82,26 @@ namespace JoaoDiasDev.ListGenius.Controllers
         [ProducesResponseType(400)]
         [Route("register")]
         [Authorize("Bearer")]
-        public IActionResult Register([FromBody] UserVO user)
+        public IActionResult Register([FromBody] UserRegisterVO user)
         {
-            var userName = User?.Identity?.Name;
-            if (userName is null)
+            if (user is null)
             {
-                return BadRequest("Invalid client request");
+                return BadRequest("No User informed to register.");
             }
-            var result = _loginBusiness.RevokeToken(userName);
 
-            if (!result)
+            var userExist = _loginBusiness.ValidateCredentials(user: user ?? new UserRegisterVO());
+            if (userExist)
             {
-                return BadRequest("Invalid client request");
+                return BadRequest("User with same email or username already registered.");
             }
-            return NoContent();
+
+            if (!_loginBusiness.CreateUser(user ?? new UserRegisterVO()))
+            {
+                return BadRequest("Error when trying to creating user, contact support!");
+            }
+
+            return Ok("User registered with success");
+
         }
     }
 }

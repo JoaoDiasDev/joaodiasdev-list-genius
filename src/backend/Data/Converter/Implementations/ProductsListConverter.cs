@@ -4,7 +4,7 @@ using JoaoDiasDev.ListGenius.Model;
 
 namespace JoaoDiasDev.ListGenius.Data.Converter.Implementations
 {
-    public class ProductListConverter : IParser<ProductsListVO, ProductsList>, IParser<ProductsList, ProductsListVO>
+    public class ProductsListConverter : IParser<ProductsListVO, ProductsList>, IParser<ProductsList, ProductsListVO>
     {
         public ProductsList Parse(ProductsListVO origin)
         {
@@ -20,6 +20,7 @@ namespace JoaoDiasDev.ListGenius.Data.Converter.Implementations
                 TotalProductsCount = origin.TotalProductsCount,
                 TotalProductsValue = origin.TotalProductsValue,
                 UpdatedDate = origin.UpdatedDate,
+                Image = origin.Image,
             };
         }
 
@@ -37,6 +38,8 @@ namespace JoaoDiasDev.ListGenius.Data.Converter.Implementations
                 TotalProductsCount = origin.TotalProductsCount,
                 TotalProductsValue = origin.TotalProductsValue,
                 UpdatedDate = origin.UpdatedDate,
+                Image = origin.Image,
+                ExternalLink = origin.ExternalLink,
             };
         }
 

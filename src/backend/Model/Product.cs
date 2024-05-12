@@ -16,7 +16,7 @@ namespace JoaoDiasDev.ListGenius.Model
         public string Description { get; set; } = string.Empty;
 
         [Column("qrcode")]
-        public string qrcode { get; set; } = string.Empty;
+        public string Qrcode { get; set; } = string.Empty;
 
         [Column("image")]
         public byte[] Image { get; set; } = [];
@@ -29,6 +29,12 @@ namespace JoaoDiasDev.ListGenius.Model
 
         [Column("unit")]
         public string Unit { get; set; } = string.Empty;
+
+        [Column("created_date")]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        [Column("updated_date")]
+        public DateTime UpdatedDate { get; set; } = DateTime.Now;
 
         [Column("id_products_list")]
         public string IdProductsList { get; set; } = string.Empty;

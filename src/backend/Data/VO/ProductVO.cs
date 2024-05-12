@@ -21,7 +21,7 @@ namespace JoaoDiasDev.ListGenius.Data.VO
         public string qrcode { get; set; } = string.Empty;
 
         [JsonPropertyName("image")]
-        public string Image { get; set; } = string.Empty;
+        public byte[] Image { get; set; } = [];
 
         [JsonPropertyName("link")]
         public string Link { get; set; } = string.Empty;
@@ -29,8 +29,15 @@ namespace JoaoDiasDev.ListGenius.Data.VO
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = true;
 
+        [JsonPropertyName("created_date")]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        [JsonPropertyName("updated_date")]
+        public DateTime UpdatedDate { get; set; } = DateTime.Now;
+
         [JsonPropertyName("unit")]
         public string Unit { get; set; } = string.Empty;
+
         public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
     }
 }

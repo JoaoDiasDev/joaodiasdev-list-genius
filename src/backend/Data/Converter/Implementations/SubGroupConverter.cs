@@ -4,62 +4,58 @@ using JoaoDiasDev.ListGenius.Model;
 
 namespace JoaoDiasDev.ListGenius.Data.Converter.Implementations
 {
-    public class ProductConverter : IParser<ProductVO, Product>, IParser<Product, ProductVO>
+    public class SubGroupConverter : IParser<SubGroupVO, SubGroup>, IParser<SubGroup, SubGroupVO>
     {
-        public Product Parse(ProductVO origin)
+        public SubGroup Parse(SubGroupVO origin)
         {
             if (origin == null)
             {
-                return new Product();
+                return new SubGroup();
             }
-            return new Product
+            return new SubGroup
             {
                 Id = origin.Id,
                 Name = origin.Name,
                 Image = origin.Image,
                 Enabled = origin.Enabled,
-                Value = origin.Value,
-                Unit = origin.Unit,
                 Description = origin.Description,
-                Link = origin.Link,
-                Qrcode = origin.qrcode,
+                CreatedDate = origin.CreatedDate,
+                UpdatedDate = origin.UpdatedDate,
             };
         }
 
-        public List<Product> Parse(List<ProductVO> origin)
+        public List<SubGroup> Parse(List<SubGroupVO> origin)
         {
             if (origin == null)
             {
-                return new List<Product>();
+                return new List<SubGroup>();
             }
             return origin.Select(Parse).ToList();
         }
 
-        public ProductVO Parse(Product origin)
+        public SubGroupVO Parse(SubGroup origin)
         {
             if (origin == null)
             {
-                return new ProductVO();
+                return new SubGroupVO();
             }
-            return new ProductVO
+            return new SubGroupVO
             {
                 Id = origin.Id,
                 Name = origin.Name,
                 Image = origin.Image,
                 Enabled = origin.Enabled,
-                Value = origin.Value,
-                Unit = origin.Unit,
                 Description = origin.Description,
-                Link = origin.Link,
-                qrcode = origin.Qrcode,
+                CreatedDate = origin.CreatedDate,
+                UpdatedDate = origin.UpdatedDate,
             };
         }
 
-        public List<ProductVO> Parse(List<Product> origin)
+        public List<SubGroupVO> Parse(List<SubGroup> origin)
         {
             if (origin == null)
             {
-                return new List<ProductVO>();
+                return new List<SubGroupVO>();
             }
             return origin.Select(Parse).ToList();
         }

@@ -13,5 +13,5 @@ CREATE TABLE IF NOT EXISTS `products_list` (
   `id_users` BIGINT(11) NOT NULL,
   FOREIGN KEY (`id_users`) REFERENCES `users`(`id`),
   UNIQUE `name` (`name`),
-  UNIQUE `external_link` (`external_link`),
+  UNIQUE `external_link` (`external_link`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

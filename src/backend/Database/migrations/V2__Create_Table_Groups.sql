@@ -4,5 +4,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
 	`image` BLOB NOT NULL,
 	`description` VARCHAR(255) NOT NULL,
 	`enabled` BOOLEAN DEFAULT TRUE NOT NULL,
-	UNIQUE `name` (`name`),
+	`created_date` DATETIME(6) NOT NULL,
+    `updated_date` DATETIME(6) NOT NULL,
+	UNIQUE `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
