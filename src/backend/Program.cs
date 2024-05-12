@@ -148,7 +148,7 @@ void MigrateDatabase(string connection)
 {
     try
     {
-        var evolveConnection = new MySqlConnection(connection);
+        using (var dbConnection = new MySqlConnection(connection))
         var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
         {
             Locations = new List<string> { "Database/migrations", "Database/dataset" },
