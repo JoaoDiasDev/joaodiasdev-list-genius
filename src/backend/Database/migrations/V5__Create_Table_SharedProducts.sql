@@ -7,9 +7,11 @@ CREATE TABLE IF NOT EXISTS `shared_products`(
 	`image`  BLOB NOT NULL,
 	`link` VARCHAR(255) NOT NULL,
 	`enabled` BOOLEAN DEFAULT TRUE NOT NULL,
+	`created_date` DATETIME(6) NOT NULL,
+	`updated_date` DATETIME(6) NOT NULL,
 	`unit` ENUM('Unspecified', 'Meter', 'SquareMeter', 'CubicMeter', 'Unit') NOT NULL,
-	`id_groups` VARCHAR(100) NOT NULL,
-	`id_sub_groups` VARCHAR(100) NOT NULL,
+	`id_groups` BIGINT(11) NOT NULL,
+	`id_sub_groups` BIGINT(11) NOT NULL,
 	FOREIGN KEY (`id_groups`) REFERENCES `groups`(`id`),
 	FOREIGN KEY (`id_sub_groups`) REFERENCES `sub_groups`(`id`),
 	UNIQUE `name` (`name`)

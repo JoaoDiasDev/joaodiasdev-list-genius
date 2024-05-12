@@ -2,20 +2,20 @@
 using JoaoDiasDev.ListGenius.Data.Converter.Implementations;
 using JoaoDiasDev.ListGenius.Data.VO;
 using JoaoDiasDev.ListGenius.Hypermedia.Utils;
-using JoaoDiasDev.ListGenius.Repository.ProductListRepo;
+using JoaoDiasDev.ListGenius.Repository.ProductsListRepo;
 
 namespace JoaoDiasDev.ListGenius.Business.Implementations
 {
     public class ProductsListBusiness : IProductsListBusiness
     {
-        private readonly ProductListConverter _converter;
+        private readonly ProductsListConverter _converter;
         private readonly IProductsListRepository _repository;
 
 
         public ProductsListBusiness(IProductsListRepository repository)
         {
             _repository = repository;
-            _converter = new ProductListConverter();
+            _converter = new ProductsListConverter();
         }
 
         public ProductsListVO Create(ProductsListVO productsList)
@@ -77,17 +77,18 @@ namespace JoaoDiasDev.ListGenius.Business.Implementations
 
         public List<ProductsListVO> FindByName(string name)
         {
-            throw new NotImplementedException();
+            return _converter.Parse(_repository.FindByName(name));
         }
 
         public List<ProductsListVO> FindAll()
         {
-            throw new NotImplementedException();
+            return _converter.Parse(_repository.FindAll());
         }
 
         public ProductsListVO Disable(long id)
         {
-            throw new NotImplementedException();
+            var productsList = _repository.Disable(id);
+            return _converter.Parse(productsList);
         }
     }
 }

@@ -17,6 +17,9 @@ namespace JoaoDiasDev.ListGenius.Data.VO
         [JsonPropertyName("enabled")]
         public bool Enabled { get; set; } = true;
 
+        [JsonPropertyName("image")]
+        public byte[] Image { get; set; } = [];
+
         [JsonPropertyName("public")]
         public bool Public { get; set; } = false;
 

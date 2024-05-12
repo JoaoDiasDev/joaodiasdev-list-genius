@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS `products`(
 	`image`  BLOB NOT NULL,
 	`link` VARCHAR(255) NOT NULL,
 	`enabled` BOOLEAN DEFAULT TRUE NOT NULL,
+	`created_date` DATETIME(6) NOT NULL,
+	`updated_date` DATETIME(6) NOT NULL,
 	`unit` ENUM('Unspecified', 'Meter', 'SquareMeter', 'CubicMeter', 'Unit') NOT NULL,
 	`id_products_list` BIGINT(11) NOT NULL,
 	`id_groups` BIGINT(11) NOT NULL,
@@ -14,5 +16,5 @@ CREATE TABLE IF NOT EXISTS `products`(
 	FOREIGN KEY (`id_products_list`) REFERENCES `products_list`(`id`),
 	FOREIGN KEY (`id_groups`) REFERENCES `groups`(`id`),
 	FOREIGN KEY (`id_sub_groups`) REFERENCES `sub_groups`(`id`),
-	UNIQUE `name` (`name`),
+	UNIQUE `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

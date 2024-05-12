@@ -6,11 +6,15 @@ using JoaoDiasDev.ListGenius.Hypermedia.Enricher;
 using JoaoDiasDev.ListGenius.Hypermedia.Filters;
 using JoaoDiasDev.ListGenius.Model.Context;
 using JoaoDiasDev.ListGenius.Repository.Generic;
-using JoaoDiasDev.ListGenius.Repository.ProductListRepo;
+using JoaoDiasDev.ListGenius.Repository.GroupRepo;
 using JoaoDiasDev.ListGenius.Repository.ProductRepo;
+using JoaoDiasDev.ListGenius.Repository.ProductsListRepo;
+using JoaoDiasDev.ListGenius.Repository.SharedProductRepo;
+using JoaoDiasDev.ListGenius.Repository.SubGroupRepo;
 using JoaoDiasDev.ListGenius.Repository.UserRepo;
 using JoaoDiasDev.ListGenius.Services.Token;
 using JoaoDiasDev.ListGenius.Services.Token.Interfaces;
+using JoaoDiasDev.ListGenius.Util.Database;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
@@ -31,7 +35,10 @@ builder.Services.AddControllers().AddXmlSerializerFormatters();
 // Adding Hyper media, HATEOAS Support
 var filterOptions = new HyperMediaFilterOptions();
 filterOptions.ContentResponseEnricherList.Add(new ProductEnricher());
-filterOptions.ContentResponseEnricherList.Add(new ProductListEnricher());
+filterOptions.ContentResponseEnricherList.Add(new ProductsListEnricher());
+filterOptions.ContentResponseEnricherList.Add(new GroupEnricher());
+filterOptions.ContentResponseEnricherList.Add(new SubGroupEnricher());
+filterOptions.ContentResponseEnricherList.Add(new SharedProductEnricher());
 builder.Services.AddSingleton(filterOptions);
 
 // Swagger
@@ -73,12 +80,18 @@ builder.Services.AddScoped<IProductBusiness, ProductBusiness>();
 builder.Services.AddScoped<IProductsListBusiness, ProductsListBusiness>();
 builder.Services.AddScoped<ILoginBusiness, LoginBusiness>();
 builder.Services.AddScoped<IFileBusiness, FileBusiness>();
+builder.Services.AddScoped<IGroupBusiness, GroupBusiness>();
+builder.Services.AddScoped<ISubGroupBusiness, SubGroupBusiness>();
+builder.Services.AddScoped<ISharedProductBusiness, SharedProductBusiness>();
 
 // Repository Services
 builder.Services.AddScoped<IProductsListRepository, ProductsListRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<ISubGroupRepository, SubGroupRepository>();
+builder.Services.AddScoped<ISharedProductRepository, SharedProductRepository>();
 
 // Token Services
 builder.Services.AddSingleton<ITokenService, TokenService>();
@@ -148,13 +161,17 @@ void MigrateDatabase(string connection)
 {
     try
     {
+        if (!DatabaseHelper.CreateDatabase(connection)) throw new ApplicationException("Couldn't create database, verify to proceed.");
         using (var dbConnection = new MySqlConnection(connection))
-        var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
         {
-            Locations = new List<string> { "Database/migrations", "Database/dataset" },
-            IsEraseDisabled = true
-        };
-        evolve.Migrate();
+            var evolve = new Evolve(dbConnection, Log.Information)
+            {
+                Locations = new List<string> { "Database/migrations", "Database/dataset" },
+                IsEraseDisabled = true,
+            };
+
+            evolve.Migrate();
+        }
     }
     catch (Exception ex)
     {

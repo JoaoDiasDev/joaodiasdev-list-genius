@@ -22,7 +22,7 @@ namespace JoaoDiasDev.ListGenius.Data.Converter.Implementations
                 Unit = origin.Unit,
                 Description = origin.Description,
                 Link = origin.Link,
-                qrcode = origin.qrcode,
+                Qrcode = origin.qrcode,
             };
         }
 
@@ -51,7 +51,7 @@ namespace JoaoDiasDev.ListGenius.Data.Converter.Implementations
                 Unit = origin.Unit,
                 Description = origin.Description,
                 Link = origin.Link,
-                qrcode = origin.qrcode,
+                qrcode = origin.Qrcode,
             };
         }
 

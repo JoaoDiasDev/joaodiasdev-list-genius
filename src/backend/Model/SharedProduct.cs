@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using JoaoDiasDev.ListGenius.Model.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JoaoDiasDev.ListGenius.Model
 {
     [Table("shared_products")]
-    public class SharedProduct
+    public class SharedProduct : BaseEntity
     {
         [Column("name")]
         public string Name { get; set; } = string.Empty;
@@ -15,7 +16,7 @@ namespace JoaoDiasDev.ListGenius.Model
         public string Description { get; set; } = string.Empty;
 
         [Column("qrcode")]
-        public string qrcode { get; set; } = string.Empty;
+        public string Qrcode { get; set; } = string.Empty;
 
         [Column("image")]
         public byte[] Image { get; set; } = [];
@@ -25,6 +26,12 @@ namespace JoaoDiasDev.ListGenius.Model
 
         [Column("enabled")]
         public bool Enabled { get; set; } = true;
+
+        [Column("created_date")]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        [Column("updated_date")]
+        public DateTime UpdatedDate { get; set; } = DateTime.Now;
 
         [Column("unit")]
         public string Unit { get; set; } = string.Empty;

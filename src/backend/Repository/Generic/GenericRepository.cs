@@ -8,19 +8,19 @@ namespace JoaoDiasDev.ListGenius.Repository.Generic
     {
         protected MySQLContext _context;
 
-        private DbSet<T> dataset;
+        private DbSet<T> _dataset;
 
         public GenericRepository(MySQLContext context)
         {
             _context = context;
-            dataset = _context.Set<T>();
+            _dataset = _context.Set<T>();
         }
 
         public T Create(T item)
         {
             try
             {
-                dataset.Add(item);
+                _dataset.Add(item);
                 _context.SaveChanges();
                 return item;
             }
@@ -32,12 +32,12 @@ namespace JoaoDiasDev.ListGenius.Repository.Generic
 
         public void Delete(long id)
         {
-            var result = dataset.SingleOrDefault(p => p.Id.Equals(id));
+            var result = _dataset.SingleOrDefault(p => p.Id.Equals(id));
             if (result != null)
             {
                 try
                 {
-                    dataset.Remove(result);
+                    _dataset.Remove(result);
                     _context.SaveChanges();
                 }
                 catch (Exception)
@@ -47,15 +47,15 @@ namespace JoaoDiasDev.ListGenius.Repository.Generic
             }
         }
 
-        public bool Exists(long id) { return dataset.Any(p => p.Id.Equals(id)); }
+        public bool Exists(long id) { return _dataset.Any(p => p.Id.Equals(id)); }
 
-        public List<T> FindAll() { return dataset.ToList(); }
+        public List<T> FindAll() { return _dataset.ToList(); }
 
-        public T FindById(long id) { return dataset.SingleOrDefault(p => p.Id.Equals(id)) ?? throw new ArgumentNullException($"{typeof(T).Name} not found"); }
+        public T FindById(long id) { return _dataset.SingleOrDefault(p => p.Id.Equals(id)) ?? throw new ArgumentNullException($"{typeof(T).Name} not found"); }
 
         public List<T> FindWithPagedSearch(string query)
         {
-            return dataset.FromSqlRaw<T>(query).ToList();
+            return _dataset.FromSqlRaw<T>(query).ToList();
         }
 
         public int GetCount(string query)
@@ -75,7 +75,7 @@ namespace JoaoDiasDev.ListGenius.Repository.Generic
 
         public T Update(T item)
         {
-            var result = dataset.SingleOrDefault(p => p.Id.Equals(item.Id));
+            var result = _dataset.SingleOrDefault(p => p.Id.Equals(item.Id));
             if (result != null)
             {
                 try

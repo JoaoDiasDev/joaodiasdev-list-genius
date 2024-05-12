@@ -27,6 +27,9 @@ namespace JoaoDiasDev.ListGenius.Model
         [Column("total_products_value")]
         public decimal TotalProductsValue { get; set; } = decimal.Zero;
 
+        [Column("external_link")]
+        public string ExternalLink { get; set; } = string.Empty;
+
         [Column("created_date")]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
