@@ -1,0 +1,33 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.0.0
+MinimumVisualStudioVersion = 17.0.0.0
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JoaoDiasDev.ListGenius.UI.Server", "Server\JoaoDiasDev.ListGenius.UI.Server.csproj", "{8C70CF87-CA7F-449D-9B27-A12451D1C7E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JoaoDiasDev.ListGenius.UI.Client", "Client\JoaoDiasDev.ListGenius.UI.Client.csproj", "{030E4128-A2A9-4D02-A91A-002F65D64E26}"
+EndProject
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+
+		{030E4128-A2A9-4D02-A91A-002F65D64E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{030E4128-A2A9-4D02-A91A-002F65D64E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{030E4128-A2A9-4D02-A91A-002F65D64E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{030E4128-A2A9-4D02-A91A-002F65D64E26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C70CF87-CA7F-449D-9B27-A12451D1C7E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C70CF87-CA7F-449D-9B27-A12451D1C7E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C70CF87-CA7F-449D-9B27-A12451D1C7E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C70CF87-CA7F-449D-9B27-A12451D1C7E0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {06232F7C-116E-4895-A52A-B739C8F242BA}
+	EndGlobalSection
+EndGlobal

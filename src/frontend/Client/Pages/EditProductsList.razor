@@ -1,0 +1,111 @@
+@page "/edit-products-list"
+
+<PageTitle>Edit ProductsList</PageTitle>
+<RadzenRow>
+    <RadzenColumn SizeMD="9">
+    <RadzenLabel style="font-weight: bold" Text="Item no longer available." Visible="@(!canEdit)" />
+    </RadzenColumn>
+    <RadzenColumn SizeMD="3">
+    <RadzenButton ButtonStyle="ButtonStyle.Secondary" style="margin-bottom: 20px" Text="Close" Visible="@(!canEdit)" Click="@CancelButtonClick" />
+    </RadzenColumn>
+</RadzenRow>
+<RadzenRow>
+    <RadzenColumn SizeMD="9">
+    <RadzenLabel style="font-weight: bold" Text="Another user has made conflicting changes to one or more of the fields you have modified. Please reload." Visible="@hasChanges" />
+    </RadzenColumn>
+    <RadzenColumn SizeMD="3">
+    <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="autorenew" style="margin-bottom: 20px" Text="Reload" Visible="@hasChanges" Click="@ReloadButtonClick" />
+    </RadzenColumn>
+</RadzenRow>
+
+    <RadzenColumn SizeMD=12>
+        <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save ProductsList</RadzenAlert>
+        <RadzenTemplateForm TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.ProductsList" Data="@productsList" Visible="@(productsList != null && canEdit)" Submit="@FormSubmit">
+          <RadzenStack>
+            <RadzenFormField Text="name" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@productsList.name" Name="name" />
+                  </ChildContent>    
+                  <Helper>
+                    <RadzenRequiredValidator Component="name" Text="name is required" />
+                  </Helper>
+            </RadzenFormField>
+            <RadzenFormField Text="description" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@productsList.description" Name="description" />
+                  </ChildContent>    
+                  <Helper>
+                    <RadzenRequiredValidator Component="description" Text="description is required" />
+                  </Helper>
+            </RadzenFormField>
+            <RadzenRow style="margin-bottom: 1rem">
+                <RadzenColumn SizeMD="3">
+                    <RadzenLabel Text="enabled" Component="enabled" style="width: 100%" />
+                </RadzenColumn>
+                <RadzenColumn SizeMD="9">
+                    <RadzenCheckBox @bind-Value="@productsList.enabled" Name="enabled" />
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow style="margin-bottom: 1rem">
+                <RadzenColumn SizeMD="3">
+                    <RadzenLabel Text="public1" Component="public1" style="width: 100%" />
+                </RadzenColumn>
+                <RadzenColumn SizeMD="9">
+                    <RadzenCheckBox @bind-Value="@productsList.public1" Name="public1" />
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenFormField Text="totalproductscount" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@productsList.total_products_count" Name="total_products_count" />
+                  </ChildContent>    
+                  <Helper>
+                    <RadzenRequiredValidator Component="total_products_count" Text="total_products_count is required" />
+                  </Helper>
+            </RadzenFormField>
+            <RadzenFormField Text="totalproductsvalue" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenNumeric style="display: block; width: 100%" @bind-Value="@productsList.total_products_value" Name="total_products_value" />
+                  </ChildContent>    
+                  <Helper>
+                    <RadzenRequiredValidator Component="total_products_value" Text="total_products_value is required" />
+                  </Helper>
+            </RadzenFormField>
+            <RadzenFormField Text="externallink" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@productsList.external_link" Name="external_link" />
+                  </ChildContent>    
+                  <Helper>
+                    <RadzenRequiredValidator Component="external_link" Text="external_link is required" />
+                  </Helper>
+            </RadzenFormField>
+            <RadzenFormField Text="createddate" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenDatePicker DateFormat="dd/MM/yyyy" style="display: block; width: 100%" @bind-Value="@productsList.created_date" Name="created_date" />
+                  </ChildContent>    
+                  <Helper>
+                    <RadzenRequiredValidator Component="created_date" Text="created_date is required" />
+                  </Helper>
+            </RadzenFormField>
+            <RadzenFormField Text="updateddate" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenDatePicker DateFormat="dd/MM/yyyy" style="display: block; width: 100%" @bind-Value="@productsList.updated_date" Name="updated_date" />
+                  </ChildContent>    
+                  <Helper>
+                    <RadzenRequiredValidator Component="updated_date" Text="updated_date is required" />
+                  </Helper>
+            </RadzenFormField>
+            <RadzenFormField Text="User" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenDropDownDataGrid Data="@usersForidUsers" TextProperty="user_name" ValueProperty="id" AllowClear=true
+                          style="display: block; width: 100%" @bind-Value="@productsList.id_users" Name="id_users"
+                        SelectedValue=@usersForidUsersValue Count=@usersForidUsersCount LoadData=@usersForidUsersLoadData />
+              </ChildContent>
+            </RadzenFormField>
+          </RadzenStack>
+          <RadzenStack style="margin-top:1rem;" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick"  />
+          </RadzenStack>
+        </RadzenTemplateForm>
+    </RadzenColumn>
+

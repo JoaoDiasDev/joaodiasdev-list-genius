@@ -1,0 +1,64 @@
+@page "/add-user"
+
+<PageTitle>Add User</PageTitle>
+    <RadzenColumn SizeMD=12>
+        <RadzenAlert Shade="Shade.Lighter" Variant="Variant.Flat" Size="AlertSize.Small" AlertStyle="AlertStyle.Danger" Visible="@errorVisible">Cannot save User</RadzenAlert>
+        <RadzenTemplateForm TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Data="@user" Visible="@(user != null && canEdit)" Submit="@FormSubmit">
+          <RadzenStack>
+            <RadzenFormField Text="username" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@user.user_name" Name="user_name" />
+              </ChildContent>
+            </RadzenFormField>
+            <RadzenFormField Text="password" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@user.password" Name="password" />
+              </ChildContent>
+            </RadzenFormField>
+            <RadzenFormField Text="email" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@user.email" Name="email" />
+              </ChildContent>
+            </RadzenFormField>
+            <RadzenFormField Text="fullname" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@user.full_name" Name="full_name" />
+                  </ChildContent>    
+                  <Helper>
+                    <RadzenRequiredValidator Component="full_name" Text="full_name is required" />
+                  </Helper>
+            </RadzenFormField>
+            <RadzenRow style="margin-bottom: 1rem">
+                <RadzenColumn SizeMD="3">
+                    <RadzenLabel Text="enabled" Component="enabled" style="width: 100%" />
+                </RadzenColumn>
+                <RadzenColumn SizeMD="9">
+                    <RadzenCheckBox @bind-Value="@user.enabled" Name="enabled" />
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenFormField Text="refreshtoken" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@user.refresh_token" Name="refresh_token" />
+              </ChildContent>
+            </RadzenFormField>
+            <RadzenFormField Text="refreshtokenexpirytime" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenDatePicker DateFormat="dd/MM/yyyy" style="display: block; width: 100%" @bind-Value="@user.refresh_token_expiry_time" Name="refresh_token_expiry_time" />
+              </ChildContent>
+            </RadzenFormField>
+            <RadzenFormField Text="role" Variant="Variant.Flat">
+                  <ChildContent>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@user.role" Name="role" />
+                  </ChildContent>    
+                  <Helper>
+                    <RadzenRequiredValidator Component="role" Text="role is required" />
+                  </Helper>
+            </RadzenFormField>
+          </RadzenStack>
+          <RadzenStack style="margin-top:1rem;" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save" Variant="Variant.Flat" />
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Variant="Variant.Flat" Click="@CancelButtonClick"  />
+          </RadzenStack>
+        </RadzenTemplateForm>
+    </RadzenColumn>
+

@@ -1,0 +1,53 @@
+@page "/users"
+
+<PageTitle>Users</PageTitle>
+<RadzenStack>
+    <RadzenRow AlignItems="AlignItems.Center">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenText Text="Users" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                <RadzenButton Icon="add_circle_outline" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenTextBox Placeholder="Search ..." style="display: block; width: 100%" @oninput="@Search" aria-label="Search by all string columns" />
+    <RadzenRow>
+      <RadzenColumn SizeMD=12>
+        <RadzenDataGrid @ref="grid0" ColumnWidth="200px"   AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" ShowPagingSummary="true" PageSizeOptions=@(new int[]{5, 10, 20, 30})
+            Data="@users" LoadData="@Grid0LoadData" Count="@count" TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" RowDoubleClick="@EditRow">
+            <Columns>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Property="id" Title="id">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Property="user_name" Title="username">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Property="password" Title="password">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Property="email" Title="email">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Property="full_name" Title="fullname">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Property="enabled" Title="enabled">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Property="refresh_token" Title="refreshtoken">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Property="refresh_token_expiry_time" Title="refreshtokenexpirytime">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Property="role" Title="role">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="JoaoDiasDev.ListGenius.UI.Server.Models.joaodiasdev_list_genius.User" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                    <Template Context="user">
+
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                            Shade="Shade.Lighter" Variant="Variant.Flat"
+                            Click=@(args => GridDeleteButtonClick(args, user)) @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+
+        </RadzenDataGrid>
+
+    </RadzenColumn>
+  </RadzenRow>
+</RadzenStack>
