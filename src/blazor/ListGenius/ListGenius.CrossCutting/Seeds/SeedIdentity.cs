@@ -30,7 +30,7 @@ namespace ListGenius.CrossCutting.Seeds
             {
                 var adminUser = new ApplicationUser
                 {
-                    UserName = "joaodiasadmin",
+                    UserName = adminEmail,
                     Email = adminEmail,
                     EmailConfirmed = true
                 };
@@ -43,7 +43,7 @@ namespace ListGenius.CrossCutting.Seeds
             {
                 var normalUser = new ApplicationUser
                 {
-                    UserName = "joaodiasuser",
+                    UserName = userEmail,
                     Email = userEmail,
                     EmailConfirmed = true
                 };

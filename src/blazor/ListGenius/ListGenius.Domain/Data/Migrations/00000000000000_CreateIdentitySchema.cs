@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
 
 #nullable disable
 
-namespace BlazorApp1Demi.Migrations
+namespace ListGenius.Domain.Data.Migrations
 {
     /// <inheritdoc />
     public partial class CreateIdentitySchema : Migration

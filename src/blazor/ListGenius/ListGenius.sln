@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListGenius.Web", "ListGenius.Web\ListGenius.Web\ListGenius.Web.csproj", "{CA69C979-3802-409C-9794-00A6CD34AF1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListGenius.Web", "ListGenius.Web\ListGenius.Web\ListGenius.Web.csproj", "{CA69C979-3802-409C-9794-00A6CD34AF1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListGenius.Web.Client", "ListGenius.Web\ListGenius.Web.Client\ListGenius.Web.Client.csproj", "{47D4E9F4-51A5-4011-B231-32FA0D9F69E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListGenius.Web.Client", "ListGenius.Web\ListGenius.Web.Client\ListGenius.Web.Client.csproj", "{47D4E9F4-51A5-4011-B231-32FA0D9F69E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListGenius.Shared", "ListGenius.Shared\ListGenius.Shared.csproj", "{2DB097B8-014D-4DEF-8529-BEEDB14DA784}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListGenius.Shared", "ListGenius.Shared\ListGenius.Shared.csproj", "{2DB097B8-014D-4DEF-8529-BEEDB14DA784}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListGenius.Domain", "ListGenius.Domain\ListGenius.Domain.csproj", "{4959769F-C8AB-443A-A361-E9BCFEBD0CB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListGenius.Domain", "ListGenius.Domain\ListGenius.Domain.csproj", "{4959769F-C8AB-443A-A361-E9BCFEBD0CB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListGenius.CrossCutting", "ListGenius.CrossCutting\ListGenius.CrossCutting.csproj", "{FE588140-8B80-45D9-BEE5-6681A099BA09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListGenius.CrossCutting", "ListGenius.CrossCutting\ListGenius.CrossCutting.csproj", "{FE588140-8B80-45D9-BEE5-6681A099BA09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

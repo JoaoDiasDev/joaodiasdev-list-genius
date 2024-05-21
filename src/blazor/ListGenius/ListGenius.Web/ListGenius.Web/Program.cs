@@ -1,4 +1,5 @@
 ﻿using ListGenius.CrossCutting.DependencyInjection;
+using ListGenius.CrossCutting.Seeds;
 using ListGenius.Domain.Context;
 using ListGenius.Web.Components;
 using ListGenius.Web.Components.Account;
@@ -33,10 +34,11 @@ builder.Services.AddAuthentication(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
@@ -67,7 +69,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     dbContext.Database.EnsureCreated();
-    //await SeedIdentity.SeedRolesAndUsersAsync(services);
+    await SeedIdentity.SeedRolesAndUsersAsync(services);
 }
 
 // Configure the HTTP request pipeline.
@@ -98,9 +100,9 @@ app.UseCors();
 
 app.MapControllers();
 
-app.MapControllerRoute(
-    name: "DefaultApi",
-    pattern: "{controller=values}/{id?}");
+//app.MapControllerRoute(
+//    name: "DefaultApi",
+//    pattern: "{controller=values}/{id?}");
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

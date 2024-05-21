@@ -1,8 +1,23 @@
-﻿@inherits LayoutComponentBase
+﻿@using ListGenius.Domain.Context
+@using Microsoft.AspNetCore.Identity
 
+@inherits LayoutComponentBase
+
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<FluentDesignTheme Mode="DesignThemeModes.Dark" OfficeColor="OfficeColor.Excel" />
 <FluentLayout>
     <FluentHeader>
-        ListGenius.Web
+        <img src="ListGeniusLogo.png" alt="List Genius Logo" />
+        <FluentSpacer />
+        @if (IsAdmin)
+        {
+            <a class="register-user-link" href="Account/Register">Register new user</a>
+        }
+
+
     </FluentHeader>
     <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
         <NavMenu />
@@ -13,9 +28,9 @@
         </FluentBodyContent>
     </FluentStack>
     <FluentFooter>
-        <a href="https://www.fluentui-blazor.net" target="_blank">Documentation and demos</a>
+        <a href="http://joaodiasdev.com" target="_blank">© Copyright @DateTime.Now.Year JoaoDiasDev. All Rights Reserved - Made With Love 💘</a>
         <FluentSpacer />
-        <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor" target="_blank">About Blazor</a>
+        <a href="about" target="_blank">Sobre e Como Usar</a>
     </FluentFooter>
 </FluentLayout>
 
@@ -24,3 +39,20 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+
+    private bool IsAdmin { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            var currentUser = await UserManager.GetUserAsync(user);
+            IsAdmin = await UserManager.IsInRoleAsync(currentUser ?? new ApplicationUser(), "admin");
+        }
+    }
+}

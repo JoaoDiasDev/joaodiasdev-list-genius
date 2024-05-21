@@ -12,6 +12,16 @@ body {
     display: none;
 }
 
+.register-user-link {
+    color: blueviolet;
+    text-decoration: none;
+}
+
+.register-user-link:hover {
+    color: cornflowerblue;
+    text-decoration: none;
+}
+
 .main {
     min-height: calc(100dvh - 86px);
     color: var(--neutral-foreground-rest);
