@@ -3,9 +3,9 @@ using ListGenius.Domain.Repository.Generic;
 
 namespace ListGenius.Domain.Repository.SubGroupRepo
 {
-    public interface ISubGroupRepository : IRepository<SubGroup>
+    public interface ISubGroupRepository : IRepository<ProductSubGroup>
     {
-        SubGroup Disable(long id);
-        List<SubGroup> FindByName(string Name);
+        ProductSubGroup Disable(long id);
+        List<ProductSubGroup> FindByName(string Name);
     }
 }

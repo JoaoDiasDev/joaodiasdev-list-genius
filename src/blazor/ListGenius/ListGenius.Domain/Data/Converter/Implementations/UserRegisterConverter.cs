@@ -4,15 +4,15 @@ using ListGenius.Shared.VO.User;
 
 namespace ListGenius.Domain.Data.Converter.Implementations
 {
-    public class UserRegisterConverter : IParser<UserRegisterVO, User>, IParser<User, UserRegisterVO>
+    public class UserRegisterConverter : IParser<UserRegisterVO, UserIdentity>, IParser<UserIdentity, UserRegisterVO>
     {
-        public User Parse(UserRegisterVO origin)
+        public UserIdentity Parse(UserRegisterVO origin)
         {
             if (origin == null)
             {
-                return new User();
+                return new UserIdentity();
             }
-            return new User
+            return new UserIdentity
             {
                 Email = origin.Email,
                 Image = origin.Image,
@@ -22,16 +22,16 @@ namespace ListGenius.Domain.Data.Converter.Implementations
             };
         }
 
-        public List<User> Parse(List<UserRegisterVO> origin)
+        public List<UserIdentity> Parse(List<UserRegisterVO> origin)
         {
             if (origin == null)
             {
-                return new List<User>();
+                return new List<UserIdentity>();
             }
             return origin.Select(Parse).ToList();
         }
 
-        public UserRegisterVO Parse(User origin)
+        public UserRegisterVO Parse(UserIdentity origin)
         {
             if (origin == null)
             {
@@ -47,7 +47,7 @@ namespace ListGenius.Domain.Data.Converter.Implementations
             };
         }
 
-        public List<UserRegisterVO> Parse(List<User> origin)
+        public List<UserRegisterVO> Parse(List<UserIdentity> origin)
         {
             if (origin == null)
             {

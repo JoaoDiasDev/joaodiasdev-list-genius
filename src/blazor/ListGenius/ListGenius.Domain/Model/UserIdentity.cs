@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ListGenius.Domain.Model
 {
     [Table("users")]
-    public class User : BaseEntity
+    public class UserIdentity : BaseEntity
     {
         [Column("user_name")]
         public string UserName { get; set; } = string.Empty;

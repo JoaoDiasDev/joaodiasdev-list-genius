@@ -17,7 +17,7 @@ namespace ListGenius.Shared.VO.Product
         public string Description { get; set; } = string.Empty;
 
         [JsonPropertyName("qrcode")]
-        public string Qrcode { get; set; } = string.Empty;
+        public byte[] Qrcode { get; set; } = [];
 
         [JsonPropertyName("image")]
         public byte[] Image { get; set; } = [];

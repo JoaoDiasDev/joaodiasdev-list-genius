@@ -4,15 +4,15 @@ using ListGenius.Shared.VO.SubGroup;
 
 namespace ListGenius.Domain.Data.Converter.Implementations
 {
-    public class SubGroupConverter : IParser<SubGroupVO, SubGroup>, IParser<SubGroup, SubGroupVO>
+    public class SubGroupConverter : IParser<SubGroupVO, ProductSubGroup>, IParser<ProductSubGroup, SubGroupVO>
     {
-        public SubGroup Parse(SubGroupVO origin)
+        public ProductSubGroup Parse(SubGroupVO origin)
         {
             if (origin == null)
             {
-                return new SubGroup();
+                return new ProductSubGroup();
             }
-            return new SubGroup
+            return new ProductSubGroup
             {
                 Id = origin.Id,
                 Name = origin.Name,
@@ -24,16 +24,16 @@ namespace ListGenius.Domain.Data.Converter.Implementations
             };
         }
 
-        public List<SubGroup> Parse(List<SubGroupVO> origin)
+        public List<ProductSubGroup> Parse(List<SubGroupVO> origin)
         {
             if (origin == null)
             {
-                return new List<SubGroup>();
+                return new List<ProductSubGroup>();
             }
             return origin.Select(Parse).ToList();
         }
 
-        public SubGroupVO Parse(SubGroup origin)
+        public SubGroupVO Parse(ProductSubGroup origin)
         {
             if (origin == null)
             {
@@ -51,7 +51,7 @@ namespace ListGenius.Domain.Data.Converter.Implementations
             };
         }
 
-        public List<SubGroupVO> Parse(List<SubGroup> origin)
+        public List<SubGroupVO> Parse(List<ProductSubGroup> origin)
         {
             if (origin == null)
             {

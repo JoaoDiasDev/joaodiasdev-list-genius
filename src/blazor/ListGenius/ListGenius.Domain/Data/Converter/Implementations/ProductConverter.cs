@@ -22,7 +22,7 @@ namespace ListGenius.Domain.Data.Converter.Implementations
                 Unit = origin.Unit,
                 Description = origin.Description,
                 Link = origin.Link,
-                Qrcode = origin.qrcode,
+                Qrcode = origin.Qrcode,
             };
         }
 
@@ -51,7 +51,7 @@ namespace ListGenius.Domain.Data.Converter.Implementations
                 Unit = origin.Unit,
                 Description = origin.Description,
                 Link = origin.Link,
-                qrcode = origin.Qrcode,
+                Qrcode = origin.Qrcode,
             };
         }
 

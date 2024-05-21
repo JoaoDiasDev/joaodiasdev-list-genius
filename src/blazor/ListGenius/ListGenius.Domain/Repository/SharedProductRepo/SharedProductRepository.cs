@@ -4,20 +4,20 @@ using ListGenius.Domain.Repository.Generic;
 
 namespace ListGenius.Domain.Repository.SharedProductRepo
 {
-    public class SharedProductRepository : GenericRepository<SharedProduct>, ISharedProductRepository
+    public class SharedProductRepository : GenericRepository<ProductShared>, ISharedProductRepository
     {
         public SharedProductRepository(ApplicationDbContext context) : base(context)
         {
         }
 
-        public SharedProduct Disable(long id)
+        public ProductShared Disable(long id)
         {
-            if (!_context.SharedProducts.Any(p => p.Id.Equals(id)))
+            if (!_context.ProductsShared.Any(p => p.Id.Equals(id)))
             {
-                return new SharedProduct();
+                return new ProductShared();
             }
 
-            var subGroup = _context.SharedProducts.SingleOrDefault(p => p.Id.Equals(id));
+            var subGroup = _context.ProductsShared.SingleOrDefault(p => p.Id.Equals(id));
 
             if (subGroup != null)
             {
@@ -33,19 +33,19 @@ namespace ListGenius.Domain.Repository.SharedProductRepo
                 }
             }
 
-            return subGroup ?? new SharedProduct();
+            return subGroup ?? new ProductShared();
         }
 
-        public List<SharedProduct> FindByName(string Name)
+        public List<ProductShared> FindByName(string Name)
         {
             if (!string.IsNullOrEmpty(Name))
             {
-                return _context.SharedProducts
+                return _context.ProductsShared
                  .Where(
                      p => p.Name.ToLower().Contains(Name.ToLower()))
                  .ToList();
             }
-            return new List<SharedProduct>();
+            return new List<ProductShared>();
         }
     }
 }

@@ -4,15 +4,15 @@ using ListGenius.Shared.VO.Group;
 
 namespace ListGenius.Domain.Data.Converter.Implementations
 {
-    public class GroupConverter : IParser<GroupVO, Group>, IParser<Group, GroupVO>
+    public class GroupConverter : IParser<GroupVO, ProductGroup>, IParser<ProductGroup, GroupVO>
     {
-        public Group Parse(GroupVO origin)
+        public ProductGroup Parse(GroupVO origin)
         {
             if (origin == null)
             {
-                return new Group();
+                return new ProductGroup();
             }
-            return new Group
+            return new ProductGroup
             {
                 Id = origin.Id,
                 Name = origin.Name,
@@ -24,16 +24,16 @@ namespace ListGenius.Domain.Data.Converter.Implementations
             };
         }
 
-        public List<Group> Parse(List<GroupVO> origin)
+        public List<ProductGroup> Parse(List<GroupVO> origin)
         {
             if (origin == null)
             {
-                return new List<Group>();
+                return new List<ProductGroup>();
             }
             return origin.Select(Parse).ToList();
         }
 
-        public GroupVO Parse(Group origin)
+        public GroupVO Parse(ProductGroup origin)
         {
             if (origin == null)
             {
@@ -51,7 +51,7 @@ namespace ListGenius.Domain.Data.Converter.Implementations
             };
         }
 
-        public List<GroupVO> Parse(List<Group> origin)
+        public List<GroupVO> Parse(List<ProductGroup> origin)
         {
             if (origin == null)
             {

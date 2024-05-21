@@ -4,12 +4,12 @@ using ListGenius.Shared.VO.Product;
 
 namespace ListGenius.Domain.Data.Converter.Implementations
 {
-    public class SharedProductConverter : IParser<SharedProductVO, SharedProduct>, IParser<SharedProduct, SharedProductVO>
+    public class SharedProductConverter : IParser<SharedProductVO, ProductShared>, IParser<ProductShared, SharedProductVO>
     {
-        public SharedProduct Parse(SharedProductVO origin)
+        public ProductShared Parse(SharedProductVO origin)
         {
-            if (origin == null) return new SharedProduct();
-            return new SharedProduct
+            if (origin == null) return new ProductShared();
+            return new ProductShared
             {
                 Id = origin.Id,
                 CreatedDate = origin.CreatedDate,
@@ -25,7 +25,7 @@ namespace ListGenius.Domain.Data.Converter.Implementations
             };
         }
 
-        public SharedProductVO Parse(SharedProduct origin)
+        public SharedProductVO Parse(ProductShared origin)
         {
             if (origin == null) return new SharedProductVO();
             return new SharedProductVO
@@ -44,13 +44,13 @@ namespace ListGenius.Domain.Data.Converter.Implementations
             };
         }
 
-        public List<SharedProduct> Parse(List<SharedProductVO> origin)
+        public List<ProductShared> Parse(List<SharedProductVO> origin)
         {
-            if (origin == null) return new List<SharedProduct>();
+            if (origin == null) return new List<ProductShared>();
             return origin.Select(item => Parse(item)).ToList();
         }
 
-        public List<SharedProductVO> Parse(List<SharedProduct> origin)
+        public List<SharedProductVO> Parse(List<ProductShared> origin)
         {
             if (origin == null) return new List<SharedProductVO>();
             return origin.Select(item => Parse(item)).ToList();

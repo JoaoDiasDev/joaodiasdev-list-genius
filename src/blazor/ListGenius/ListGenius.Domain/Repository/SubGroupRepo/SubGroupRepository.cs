@@ -4,20 +4,20 @@ using ListGenius.Domain.Repository.Generic;
 
 namespace ListGenius.Domain.Repository.SubGroupRepo
 {
-    public class SubGroupRepository : GenericRepository<SubGroup>, ISubGroupRepository
+    public class SubGroupRepository : GenericRepository<ProductSubGroup>, ISubGroupRepository
     {
         public SubGroupRepository(ApplicationDbContext context) : base(context)
         {
         }
 
-        public SubGroup Disable(long id)
+        public ProductSubGroup Disable(long id)
         {
-            if (!_context.SubGroups.Any(p => p.Id.Equals(id)))
+            if (!_context.ProductSubGroups.Any(p => p.Id.Equals(id)))
             {
-                return new SubGroup();
+                return new ProductSubGroup();
             }
 
-            var subGroup = _context.SubGroups.SingleOrDefault(p => p.Id.Equals(id));
+            var subGroup = _context.ProductSubGroups.SingleOrDefault(p => p.Id.Equals(id));
 
             if (subGroup != null)
             {
@@ -33,19 +33,19 @@ namespace ListGenius.Domain.Repository.SubGroupRepo
                 }
             }
 
-            return subGroup ?? new SubGroup();
+            return subGroup ?? new ProductSubGroup();
         }
 
-        public List<SubGroup> FindByName(string Name)
+        public List<ProductSubGroup> FindByName(string Name)
         {
             if (!string.IsNullOrEmpty(Name))
             {
-                return _context.SubGroups
+                return _context.ProductSubGroups
                  .Where(
                      p => p.Name.ToLower().Contains(Name.ToLower()))
                  .ToList();
             }
-            return new List<SubGroup>();
+            return new List<ProductSubGroup>();
         }
     }
 }

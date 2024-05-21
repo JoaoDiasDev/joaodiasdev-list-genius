@@ -8,8 +8,8 @@ namespace ListGenius.Domain.Context
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductsList> ProductsList { get; set; }
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<SubGroup> SubGroups { get; set; }
-        public DbSet<SharedProduct> SharedProducts { get; set; }
+        public DbSet<ProductGroup> ProductGroups { get; set; }
+        public DbSet<ProductSubGroup> ProductSubGroups { get; set; }
+        public DbSet<ProductShared> ProductsShared { get; set; }
     }
 }

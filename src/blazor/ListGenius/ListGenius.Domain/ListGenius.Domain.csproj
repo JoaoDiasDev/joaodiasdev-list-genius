@@ -27,4 +27,8 @@
     <ProjectReference Include="..\ListGenius.Shared\ListGenius.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
 </Project>

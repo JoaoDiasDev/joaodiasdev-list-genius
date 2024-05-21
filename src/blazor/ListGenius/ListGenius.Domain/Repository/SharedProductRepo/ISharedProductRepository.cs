@@ -3,9 +3,9 @@ using ListGenius.Domain.Repository.Generic;
 
 namespace ListGenius.Domain.Repository.SharedProductRepo
 {
-    public interface ISharedProductRepository : IRepository<SharedProduct>
+    public interface ISharedProductRepository : IRepository<ProductShared>
     {
-        SharedProduct Disable(long id);
-        List<SharedProduct> FindByName(string Name);
+        ProductShared Disable(long id);
+        List<ProductShared> FindByName(string Name);
     }
 }
