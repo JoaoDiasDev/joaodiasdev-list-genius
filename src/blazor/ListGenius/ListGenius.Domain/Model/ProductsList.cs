@@ -1,5 +1,5 @@
-﻿using ListGenius.Domain.Model.Base;
-using Microsoft.AspNetCore.Identity;
+﻿using ListGenius.Domain.Context;
+using ListGenius.Domain.Model.Base;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -57,13 +57,10 @@ namespace ListGenius.Domain.Model
         [Column("id_user")]
         public string IdUser { get; set; } = string.Empty;
 
-        [JsonIgnore]
-        [NotMapped]
-        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+        public virtual ICollection<Product> Products { get; set; } = [];
 
         [JsonIgnore]
-        [NotMapped]
-        public virtual IdentityUser User { get; set; } = new IdentityUser();
+        public virtual ApplicationUser User { get; set; } = new ApplicationUser();
     }
 
 }

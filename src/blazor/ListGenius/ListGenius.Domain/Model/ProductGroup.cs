@@ -32,5 +32,7 @@ namespace ListGenius.Domain.Model
         [Required]
         [Column("updated_date")]
         public DateTime UpdatedDate { get; set; } = DateTime.Now;
+
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }

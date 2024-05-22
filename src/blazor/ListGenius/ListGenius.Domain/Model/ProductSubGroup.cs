@@ -1,4 +1,5 @@
 ﻿using ListGenius.Domain.Model.Base;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -35,13 +36,14 @@ namespace ListGenius.Domain.Model
         public DateTime UpdatedDate { get; set; } = DateTime.Now;
 
         [Required]
-        [ForeignKey("product_groups")]
+        [ForeignKey("ProductGroup")]
         [Column("id_product_groups")]
-        [DefaultValue(0)]
-        public int IdProductGroups { get; set; } = 0;
+        public long IdProductGroups { get; set; }
 
         [JsonIgnore]
-        [NotMapped]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public virtual ProductGroup ProductGroup { get; set; } = new ProductGroup();
+
+        public virtual ICollection<Product> Products { get; set; } = [];
     }
 }

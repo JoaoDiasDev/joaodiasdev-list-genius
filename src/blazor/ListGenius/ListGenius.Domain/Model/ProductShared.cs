@@ -1,4 +1,5 @@
 ﻿using ListGenius.Domain.Model.Base;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -49,23 +50,21 @@ namespace ListGenius.Domain.Model
         public string Unit { get; set; } = string.Empty;
 
         [Required]
-        [ForeignKey("product_groups")]
+        [ForeignKey("ProductGroup")]
         [Column("id_product_groups")]
-        [DefaultValue(0)]
-        public int IdProductGroups { get; set; } = 0;
+        public long IdProductGroups { get; set; }
 
         [Required]
-        [ForeignKey("product_sub_groups")]
+        [ForeignKey("ProductSubGroup")]
         [Column("id_product_sub_groups")]
-        [DefaultValue(0)]
-        public int IdProductSubGroups { get; set; } = 0;
+        public long IdProductSubGroups { get; set; }
 
         [JsonIgnore]
-        [NotMapped]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public virtual ProductGroup ProductGroup { get; set; } = new ProductGroup();
 
         [JsonIgnore]
-        [NotMapped]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public virtual ProductSubGroup ProductSubGroup { get; set; } = new ProductSubGroup();
     }
 }
