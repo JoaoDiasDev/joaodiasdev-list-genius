@@ -24,6 +24,10 @@
             <FluentValidationMessage For="() => Input.PhoneNumber" class="text-danger" />
             <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" Style="width: 100%;">Save</FluentButton>
         </EditForm>
+        @if (user?.NormalizedEmail?.Equals("joaodiasworking@gmail.com", StringComparison.OrdinalIgnoreCase) ?? false)
+        {
+            <FluentNavLink Href="Account/Register" Style="margin-top: 1rem;"><FluentButton Type="ButtonType.Button" Appearance="Appearance.Accent" Style="width: 100%;">  Register new user</FluentButton></FluentNavLink>
+        }
     </FluentGridItem>
 </FluentGrid>
 

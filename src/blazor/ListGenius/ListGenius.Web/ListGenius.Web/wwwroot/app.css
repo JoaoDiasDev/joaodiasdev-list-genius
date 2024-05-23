@@ -13,12 +13,12 @@ body {
 }
 
 .register-user-link {
-    color: blueviolet;
+    color: black;
     text-decoration: none;
 }
 
 .register-user-link:hover {
-    color: cornflowerblue;
+    color: black;
     text-decoration: none;
 }
 

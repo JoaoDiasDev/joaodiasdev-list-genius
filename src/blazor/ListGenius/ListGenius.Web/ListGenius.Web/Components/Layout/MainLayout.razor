@@ -11,13 +11,6 @@
 <FluentLayout>
     <FluentHeader>
         <img src="ListGeniusLogo.png" alt="List Genius Logo" />
-        <FluentSpacer />
-        @if (IsAdmin)
-        {
-            <a class="register-user-link" href="Account/Register">Register new user</a>
-        }
-
-
     </FluentHeader>
     <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
         <NavMenu />
@@ -42,17 +35,4 @@
 
 @code {
 
-    private bool IsAdmin { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity?.IsAuthenticated ?? false)
-        {
-            var currentUser = await UserManager.GetUserAsync(user);
-            IsAdmin = await UserManager.IsInRoleAsync(currentUser ?? new ApplicationUser(), "admin");
-        }
-    }
 }
