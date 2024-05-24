@@ -4,9 +4,10 @@ namespace ListGenius.Domain.Repository.Generic
 {
     public interface IRepository<T> where T : BaseEntity
     {
+
         T Create(T item);
 
-        void Delete(long id);
+        bool Delete(long id);
 
         bool Exists(long id);
 

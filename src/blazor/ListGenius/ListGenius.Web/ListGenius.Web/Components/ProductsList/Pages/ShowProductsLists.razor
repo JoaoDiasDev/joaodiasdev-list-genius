@@ -1,0 +1,27 @@
+﻿@inject IProductsListBusiness _productListBusiness
+
+<FluentStack>
+    @foreach (var productList in ProductsLists!)
+    {
+        <FluentCard Width="300px" Height="300px">
+            <div class="card-footer">
+                <a href="/products-list/edit/@productList.Id">
+                    <FluentButton>Editar</FluentButton>
+                </a>
+                <a href="/products-list/delete/@productList.Id">
+                <FluentButton OnClick="Delete(productList.Id)">Excluir</FluentButton>
+                </a>
+            </div>
+        </FluentCard>
+    }
+</FluentStack>
+
+@code {
+    [Parameter]
+    public IEnumerable<ProductsListVO>? ProductsLists { get; set; }
+
+    public bool Delete(long id)
+    {
+        bool result = _
+    }
+}

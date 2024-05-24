@@ -28,9 +28,9 @@ namespace ListGenius.Domain.Business.Implementations
             return new ProductsListVO();
         }
 
-        public void Delete(long id)
+        public bool Delete(long id)
         {
-            _repository.Delete(id);
+            return _repository.Delete(id);
         }
 
         public PagedSearchVO<ProductsListVO> FindWithPagedSearch(
@@ -75,12 +75,12 @@ namespace ListGenius.Domain.Business.Implementations
             return new ProductsListVO();
         }
 
-        public List<ProductsListVO> FindByName(string name)
+        public IEnumerable<ProductsListVO> FindByName(string name)
         {
             return _converter.Parse(_repository.FindByName(name));
         }
 
-        public List<ProductsListVO> FindAll()
+        public IEnumerable<ProductsListVO> FindAll()
         {
             return _converter.Parse(_repository.FindAll());
         }

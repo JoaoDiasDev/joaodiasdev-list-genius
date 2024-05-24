@@ -30,7 +30,7 @@ namespace ListGenius.Domain.Repository.Generic
             }
         }
 
-        public void Delete(long id)
+        public bool Delete(long id)
         {
             var result = _dataset.SingleOrDefault(p => p.Id.Equals(id));
             if (result != null)
@@ -39,12 +39,14 @@ namespace ListGenius.Domain.Repository.Generic
                 {
                     _dataset.Remove(result);
                     _context.SaveChanges();
+                    return true;
                 }
                 catch (Exception)
                 {
-                    throw;
+                    return false;
                 }
             }
+            return false;
         }
 
         public bool Exists(long id) { return _dataset.Any(p => p.Id.Equals(id)); }
