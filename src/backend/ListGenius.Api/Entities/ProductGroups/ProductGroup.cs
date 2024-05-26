@@ -10,8 +10,22 @@ public sealed class ProductGroup : BaseEntity
 
     public string Description { get; set; } = string.Empty;
     public byte[] Image { get; set; } = [];
-    public IEnumerable<ProductSubGroup> ProductSubGroups { get; set; } = [];
-    public IEnumerable<Product> Products { get; set; } = [];
-    public IEnumerable<ProductShared> ProductsShared { get; set; } = [];
+    public List<ProductSubGroup> ProductSubGroups { get; set; } = [];
+    public List<Product> Products { get; set; } = [];
+    public List<ProductShared> ProductsShared { get; set; } = [];
     public ProductGroup() { }
+    public ProductGroup(string name,
+        string description, DateTime
+        createdDate, DateTime
+        updatedDate,
+        bool enabled,
+        byte[] image)
+    {
+        Name = name;
+        Description = description;
+        Enabled = enabled;
+        CreatedDate = createdDate;
+        UpdatedDate = updatedDate;
+        Image = image;
+    }
 }

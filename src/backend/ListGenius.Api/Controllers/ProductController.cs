@@ -18,7 +18,11 @@ public class ProductController(IProductRepository productRepository, IMapper map
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
     {
-        var products = await _productRepository.GetAllAsync();
+        var products = await _productRepository.GetAllAsync(
+            p => p.ProductGroup,
+            p => p.ProductSubGroup,
+            p => p.ProductsList);
+
         if (products is null)
         {
             return NotFound("No products.");

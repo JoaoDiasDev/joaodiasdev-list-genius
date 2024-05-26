@@ -34,4 +34,14 @@ public abstract class BaseEntity
     {
         UpdatedDate = DateTime.Now;
     }
+
+    public BaseEntity() { }
+
+    public BaseEntity(string name, bool enabled, DateTime createdDate, DateTime updatedDate)
+    {
+        Name = name;
+        Enabled = enabled;
+        CreatedDate = createdDate;
+        UpdatedDate = updatedDate;
+    }
 }

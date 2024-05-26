@@ -16,9 +16,24 @@ public sealed class ProductSubGroup : BaseEntity
 
     public ProductGroup ProductGroup { get; set; } = new ProductGroup();
 
-    public IEnumerable<Product> Products { get; set; } = [];
+    public List<Product> Products { get; set; } = [];
 
-    public IEnumerable<ProductShared> ProductsShared { get; set; } = [];
+    public List<ProductShared> ProductsShared { get; set; } = [];
 
     public ProductSubGroup() { }
+
+    public ProductSubGroup(string name,
+        string description,
+        bool enabled,
+        DateTime createdDate,
+        DateTime updatedDate,
+        byte[] image)
+    {
+        Name = name;
+        Description = description;
+        Enabled = enabled;
+        CreatedDate = createdDate;
+        UpdatedDate = updatedDate;
+        Image = image;
+    }
 }

@@ -9,5 +9,7 @@ public class ApplicationUser : IdentityUser
     public byte[] LogoImage { get; set; } = [];
     public byte[] ProfilePicture { get; set; } = [];
 
-    public IEnumerable<ProductsList> ProductsLists { get; set; } = [];
+    public List<ProductsList> ProductsLists { get; set; } = [];
+
+    public ApplicationUser() { }
 }

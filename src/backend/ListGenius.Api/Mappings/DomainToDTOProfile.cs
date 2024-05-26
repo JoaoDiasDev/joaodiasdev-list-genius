@@ -15,15 +15,21 @@ public class DomainToDTOProfile : Profile
             .ForMember(dto => dto.GroupName, opt => opt.MapFrom(src => src.ProductGroup.Name))
             .ForMember(dto => dto.SubGroupName, opt => opt.MapFrom(src => src.ProductSubGroup.Name))
             .ForMember(dto => dto.ShoppingListName, opt => opt.MapFrom(src => src.ProductsList.Name))
+            .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Unit))
             .ReverseMap();
+
         CreateMap<ProductsList, ProductsListDTO>()
-            .ForMember(dto => dto.UserName, opt => opt.MapFrom(src => src.User.NormalizedUserName))
+            .ForMember(dto => dto.UserName, opt => opt.MapFrom(src => src.User.FullName))
             .ReverseMap();
+
         CreateMap<ProductShared, ProductSharedDTO>()
             .ForMember(dto => dto.GroupName, opt => opt.MapFrom(src => src.ProductGroup.Name))
             .ForMember(dto => dto.SubGroupName, opt => opt.MapFrom(src => src.ProductSubGroup.Name))
+            .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Unit))
             .ReverseMap();
+
         CreateMap<ProductGroup, ProductGroupDTO>().ReverseMap();
+
         CreateMap<ProductSubGroup, ProductSubGroupDTO>()
             .ForMember(dto => dto.GroupName, opt => opt.MapFrom(src => src.ProductGroup.Name))
             .ReverseMap();

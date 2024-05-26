@@ -1,5 +1,6 @@
 ﻿using ListGenius.Api.Entities.Bases;
 using ListGenius.Api.Entities.ProductGroups;
+using ListGenius.Api.Entities.Products.Enums;
 using ListGenius.Api.Entities.ProductsLists;
 using ListGenius.Api.Entities.ProductSubGroups;
 
@@ -21,5 +22,10 @@ public sealed class Product : BaseProduct
 
     public Product() { }
 
+    public Product(string name, bool enabled, DateTime createdDate, DateTime updatedDate,
+                     decimal value, string description, byte[] qrcode, byte[] image, string link, UnitsOfMeasurement unit)
+          : base(name, enabled, createdDate, updatedDate, value, description, qrcode, image, link, unit)
+    {
+    }
 
 }

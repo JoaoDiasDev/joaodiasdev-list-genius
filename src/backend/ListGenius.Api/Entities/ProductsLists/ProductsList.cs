@@ -17,19 +17,19 @@ public sealed class ProductsList : BaseEntity
 
     public string IdUser { get; private set; } = string.Empty;
 
-    public IEnumerable<Product> Products { get; set; } = [];
+    public List<Product> Products { get; set; } = [];
 
     public ApplicationUser User { get; set; } = new ApplicationUser();
 
     public ProductsList() { }
 
-    public ProductsList(string name, IEnumerable<Product> products)
+    public ProductsList(string name, List<Product> products)
     {
         ValidateDomain(
             name,
             products);
     }
-    public ProductsList(int id, string name, IEnumerable<Product> products)
+    public ProductsList(int id, string name, List<Product> products)
     {
         DomainExceptionValidation.When(id < 0, "Id inválido.");
         Id = id;
@@ -37,7 +37,7 @@ public sealed class ProductsList : BaseEntity
             name,
             products);
     }
-    private void ValidateDomain(string name, IEnumerable<Product> products)
+    private void ValidateDomain(string name, List<Product> products)
     {
         DomainExceptionValidation.When(
             string.IsNullOrEmpty(name),

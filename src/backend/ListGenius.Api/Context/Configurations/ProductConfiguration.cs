@@ -1,4 +1,5 @@
 ﻿using ListGenius.Api.Entities.Products;
+using ListGenius.Api.Entities.Products.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -18,7 +19,11 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Enabled).HasDefaultValue(true).IsRequired();
         builder.Property(p => p.CreatedDate).IsRequired().HasColumnType("datetime");
         builder.Property(p => p.UpdatedDate).IsRequired().HasColumnType("datetime");
-        builder.Property(p => p.Unit).HasMaxLength(20).IsRequired();
+        builder.Property(p => p.Unit)
+            .HasConversion(p => p.ToString(),
+            p => (UnitsOfMeasurement)Enum.Parse(typeof(UnitsOfMeasurement), p))
+            .HasMaxLength(30)
+            .IsRequired();
 
         builder.HasOne(p => p.ProductGroup).WithMany(pg => pg.Products).HasForeignKey(p => p.IdProductGroup);
         builder.HasOne(p => p.ProductSubGroup).WithMany(psg => psg.Products).HasForeignKey(p => p.IdProductSubGroup);

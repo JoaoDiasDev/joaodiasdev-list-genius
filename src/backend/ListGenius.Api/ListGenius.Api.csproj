@@ -7,6 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Folder Include="Mappings\Resolvers\" />
+		<Folder Include="Migrations\" />
 		<Folder Include="wwwroot\images\" />
 	</ItemGroup>
 

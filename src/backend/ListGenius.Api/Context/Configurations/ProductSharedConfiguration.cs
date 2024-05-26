@@ -17,7 +17,7 @@ public class ProductSharedConfiguration : IEntityTypeConfiguration<ProductShared
         builder.Property(p => p.Enabled).IsRequired().HasDefaultValue(true);
         builder.Property(p => p.CreatedDate).IsRequired().HasColumnType("datetime");
         builder.Property(p => p.UpdatedDate).IsRequired().HasColumnType("datetime");
-        builder.Property(p => p.Unit).IsRequired().HasMaxLength(20);
+        builder.Property(p => p.Unit).HasConversion<string>().IsRequired().HasMaxLength(20);
 
         builder.HasOne(p => p.ProductGroup).WithMany(pg => pg.ProductsShared).HasForeignKey(p => p.IdProductGroup);
         builder.HasOne(p => p.ProductSubGroup).WithMany(psg => psg.ProductsShared).HasForeignKey(p => p.IdProductSubGroup);

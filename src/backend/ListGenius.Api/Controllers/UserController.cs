@@ -10,23 +10,18 @@ namespace ListGenius.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController : ControllerBase
+public class UserController(UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager,
+    RoleManager<IdentityRole> roleManager,
+    IConfiguration configuration) : ControllerBase
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IConfiguration _configuration;
-
-    public UserController(UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager,
-        IConfiguration configuration)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _configuration = configuration;
-    }
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+    private readonly RoleManager<IdentityRole> _roleManager = roleManager;
+    private readonly IConfiguration _configuration = configuration;
 
     [HttpPost("Register")]
-    public async Task<IActionResult> CreateUser([FromBody] User model)
+    public async Task<IActionResult> CreateUser([FromBody] UserRegister model)
     {
         var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName };
 
@@ -34,6 +29,14 @@ public class UserController : ControllerBase
 
         if (result.Succeeded)
         {
+            string defaultRole = "User";
+
+            if (!await _roleManager.RoleExistsAsync(defaultRole))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(defaultRole));
+            }
+
+            await _userManager.AddToRoleAsync(user, defaultRole);
             return Ok(model);
         }
         else

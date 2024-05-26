@@ -1,4 +1,9 @@
 using ListGenius.Api.Context;
+using ListGenius.Api.Entities.ProductGroups;
+using ListGenius.Api.Entities.Products;
+using ListGenius.Api.Entities.ProductShareds;
+using ListGenius.Api.Entities.ProductsLists;
+using ListGenius.Api.Entities.ProductSubGroups;
 using ListGenius.Api.Entities.Users;
 using ListGenius.Api.Mappings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +22,12 @@ builder.Services.AddControllers().AddJsonOptions(x =>
   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddScoped<IProductsListRepository, ProductsListRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductSharedRepository, ProductSharedRepository>();
+builder.Services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
+builder.Services.AddScoped<IProductSubGroupRepository, ProductSubGroupRepository>();
 
 builder.Services.AddRateLimiter(_ => _
            .AddSlidingWindowLimiter(policyName: "sliding", options =>
@@ -105,7 +116,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var dbContext = services.GetRequiredService<AppDbContext>();
     dbContext.Database.EnsureCreated();
 }
 
@@ -117,6 +128,7 @@ if (app.Environment.IsDevelopment())
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "List Genius API");
     });
+
 }
 else
 {

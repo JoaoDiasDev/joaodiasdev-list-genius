@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListGenius.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240525192527_Initial")]
+    [Migration("20240526220542_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -59,7 +59,19 @@ namespace ListGenius.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductGroup");
+                    b.ToTable("ProductGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 678, DateTimeKind.Local).AddTicks(9968),
+                            Description = "GERAL",
+                            Enabled = true,
+                            Image = new byte[] { 0 },
+                            Name = "GERAL",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local)
+                        });
                 });
 
             modelBuilder.Entity("ListGenius.Api.Entities.ProductShareds.ProductShared", b =>
@@ -109,10 +121,9 @@ namespace ListGenius.Api.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varbinary(500)");
 
-                    b.Property<string>("Unit")
-                        .IsRequired()
+                    b.Property<int>("Unit")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -128,6 +139,104 @@ namespace ListGenius.Api.Migrations
                     b.HasIndex("IdProductSubGroup");
 
                     b.ToTable("ProductsShared");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(283),
+                            Description = "TESTE 1",
+                            Enabled = true,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 1",
+                            Qrcode = new byte[] { 0 },
+                            Unit = 1,
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(283),
+                            Value = 22.05m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(288),
+                            Description = "TESTE 2",
+                            Enabled = true,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 2",
+                            Qrcode = new byte[] { 0 },
+                            Unit = 2,
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(289),
+                            Value = 33.33m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(290),
+                            Description = "TESTE 3",
+                            Enabled = false,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 3",
+                            Qrcode = new byte[] { 0 },
+                            Unit = 0,
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(291),
+                            Value = 42.33m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(293),
+                            Description = "TESTE 4",
+                            Enabled = true,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 4",
+                            Qrcode = new byte[] { 0 },
+                            Unit = 3,
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(293),
+                            Value = 77.77m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(295),
+                            Description = "TESTE 5",
+                            Enabled = true,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 5",
+                            Qrcode = new byte[] { 0 },
+                            Unit = 4,
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(295),
+                            Value = 66.66m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(298),
+                            Description = "TESTE 6",
+                            Enabled = false,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 6",
+                            Qrcode = new byte[] { 0 },
+                            Unit = 0,
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(298),
+                            Value = 35.31m
+                        });
                 });
 
             modelBuilder.Entity("ListGenius.Api.Entities.ProductSubGroups.ProductSubGroup", b =>
@@ -171,7 +280,20 @@ namespace ListGenius.Api.Migrations
 
                     b.HasIndex("IdProductGroup");
 
-                    b.ToTable("ProductSubGroup");
+                    b.ToTable("ProductSubGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(177),
+                            Description = "GERAL",
+                            Enabled = true,
+                            IdProductGroup = 1,
+                            Image = new byte[] { 0 },
+                            Name = "GERAL",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(178)
+                        });
                 });
 
             modelBuilder.Entity("ListGenius.Api.Entities.Products.Product", b =>
@@ -226,8 +348,8 @@ namespace ListGenius.Api.Migrations
 
                     b.Property<string>("Unit")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -245,6 +367,110 @@ namespace ListGenius.Api.Migrations
                     b.HasIndex("IdProductsList");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(350),
+                            Description = "TESTE 1",
+                            Enabled = true,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            IdProductsList = 1,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 1",
+                            Qrcode = new byte[] { 0 },
+                            Unit = "Meter",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(351),
+                            Value = 22.05m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(355),
+                            Description = "TESTE 2",
+                            Enabled = true,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            IdProductsList = 1,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 2",
+                            Qrcode = new byte[] { 0 },
+                            Unit = "SquareMeter",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(356),
+                            Value = 33.33m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(357),
+                            Description = "TESTE 3",
+                            Enabled = false,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            IdProductsList = 1,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 3",
+                            Qrcode = new byte[] { 0 },
+                            Unit = "Unspecified",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(358),
+                            Value = 42.33m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(361),
+                            Description = "TESTE 4",
+                            Enabled = true,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            IdProductsList = 2,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 4",
+                            Qrcode = new byte[] { 0 },
+                            Unit = "CubicMeter",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(362),
+                            Value = 77.77m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(364),
+                            Description = "TESTE 5",
+                            Enabled = true,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            IdProductsList = 2,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 5",
+                            Qrcode = new byte[] { 0 },
+                            Unit = "Unit",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(374),
+                            Value = 66.66m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(390),
+                            Description = "TESTE 6",
+                            Enabled = false,
+                            IdProductGroup = 1,
+                            IdProductSubGroup = 1,
+                            IdProductsList = 2,
+                            Image = new byte[] { 0 },
+                            Link = "",
+                            Name = "Teste 6",
+                            Qrcode = new byte[] { 0 },
+                            Unit = "Unspecified",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(390),
+                            Value = 35.31m
+                        });
                 });
 
             modelBuilder.Entity("ListGenius.Api.Entities.ProductsLists.ProductsList", b =>
@@ -300,6 +526,30 @@ namespace ListGenius.Api.Migrations
                     b.HasIndex("IdUser");
 
                     b.ToTable("ProductsLists");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(229),
+                            Description = "Description for Shopping List 1",
+                            ExternalLink = "",
+                            IdUser = "37846734-172e-4149-8cec-6f43d1eb3f60",
+                            Image = new byte[] { 0 },
+                            Name = "Shopping List 1",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(230)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(232),
+                            Description = "Description for Shopping List 2",
+                            ExternalLink = "",
+                            IdUser = "37846734-172e-4149-8cec-6f43d1eb3f60",
+                            Image = new byte[] { 0 },
+                            Name = "Shopping List 2",
+                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(233)
+                        });
                 });
 
             modelBuilder.Entity("ListGenius.Api.Entities.Users.ApplicationUser", b =>
@@ -377,6 +627,46 @@ namespace ListGenius.Api.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "37846734-172e-4149-8cec-6f43d1eb3f60",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "3ae26c2d-5766-4316-84dc-22d78a855b78",
+                            Email = "jmmatheus23@gmail.com",
+                            EmailConfirmed = true,
+                            FullName = "JoaoDiasUser",
+                            LockoutEnabled = false,
+                            LogoImage = new byte[0],
+                            NormalizedEmail = "JMMATHEUS23@GMAIL.COM",
+                            NormalizedUserName = "JMMATHEUS23@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOWpoGN/K/e6j469eZWgLMSI4dh/5127SQDTlVDXMbFLAMpOWNij/sQJ/lgmn98inQ==",
+                            PhoneNumberConfirmed = false,
+                            ProfilePicture = new byte[0],
+                            SecurityStamp = "8b31d330-34f6-4933-9fd9-ca513cd467f2",
+                            TwoFactorEnabled = false,
+                            UserName = "jmmatheus23@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "38846734-172e-4149-8cec-6f43d1eb3f60",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "9bf849c9-003c-4948-90fc-ec38bb42d7aa",
+                            Email = "joaodiasworking@gmail.com",
+                            EmailConfirmed = true,
+                            FullName = "JoaoDiasAdmin",
+                            LockoutEnabled = false,
+                            LogoImage = new byte[0],
+                            NormalizedEmail = "JOAODIASWORKING@GMAIL.COM",
+                            NormalizedUserName = "JOAODIASWORKING@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIV/fDyl9nIelduka1A6I0tvaEYSwRv415/B6zDVqw2iZRhe9MtMhFTF2M862i0Aeg==",
+                            PhoneNumberConfirmed = false,
+                            ProfilePicture = new byte[0],
+                            SecurityStamp = "d033b9cc-4084-4881-ac58-54f8a388037c",
+                            TwoFactorEnabled = false,
+                            UserName = "joaodiasworking@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -404,6 +694,20 @@ namespace ListGenius.Api.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -491,6 +795,18 @@ namespace ListGenius.Api.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "37846734-172e-4149-8cec-6f43d1eb3f60",
+                            RoleId = "2"
+                        },
+                        new
+                        {
+                            UserId = "38846734-172e-4149-8cec-6f43d1eb3f60",
+                            RoleId = "1"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

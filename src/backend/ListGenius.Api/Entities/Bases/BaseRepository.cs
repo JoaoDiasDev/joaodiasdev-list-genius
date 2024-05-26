@@ -24,10 +24,16 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return entity!;
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
     {
-        var entities = await DbSet.ToListAsync();
-        return entities;
+        IQueryable<TEntity> query = DbSet;
+
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        return await query.ToListAsync();
     }
 
     public async Task AddAsync(TEntity entity)

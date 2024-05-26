@@ -1,7 +1,4 @@
-﻿using ListGenius.Api.Entities.ProductGroups;
-using ListGenius.Api.Entities.ProductsLists;
-using ListGenius.Api.Entities.ProductSubGroups;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -73,19 +70,16 @@ public class ProductDTO
     [MaxLength(20)]
     public string Unit { get; set; } = string.Empty;
 
+    [JsonPropertyName("shopping_list_name")]
     [DisplayName("Nome Shopping List")]
     public string ShoppingListName { get; set; } = string.Empty;
 
+    [JsonPropertyName("group_name")]
     [DisplayName("Nome Grupo")]
     public string GroupName { get; set; } = string.Empty;
 
+    [JsonPropertyName("sub_group_name")]
     [DisplayName("Nome Sub Grupo")]
     public string SubGroupName { get; set; } = string.Empty;
-
-    public ProductsList ProductsList { get; set; } = new ProductsList();
-
-    public ProductGroup ProductGroup { get; set; } = new ProductGroup();
-
-    public ProductSubGroup ProductSubGroup { get; set; } = new ProductSubGroup();
 
 }
