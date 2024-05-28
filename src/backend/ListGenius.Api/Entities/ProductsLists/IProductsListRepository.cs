@@ -2,4 +2,6 @@
 
 namespace ListGenius.Api.Entities.ProductsLists;
 
-public interface IProductsListRepository : IBaseRepository<ProductsList>;
+public interface IProductsListRepository : IBaseRepository<ProductsList>
+{
+}

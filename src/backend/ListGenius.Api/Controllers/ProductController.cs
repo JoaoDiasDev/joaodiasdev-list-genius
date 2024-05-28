@@ -1,8 +1,12 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
+using ListGenius.Api.Entities.ProductGroups;
 using ListGenius.Api.Entities.Products;
+using ListGenius.Api.Entities.ProductsLists;
+using ListGenius.Api.Entities.ProductSubGroups;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Controllers;
 
@@ -54,9 +58,33 @@ public class ProductController(IProductRepository productRepository, IMapper map
 
         var product = _mapper.Map<Product>(productDTO);
 
+        var productGroup = await _productRepository.FindByName<ProductGroup>(productDTO.GroupName);
+        if (productGroup is null)
+        {
+            return BadRequest($"ProductGroup '{productDTO.GroupName}' does not exist.");
+        }
+        product.IdProductGroup = productGroup.Id;
+        product.ProductGroup = productGroup;
+
+        var productSubGroup = await _productRepository.FindByName<ProductSubGroup>(productDTO.SubGroupName);
+        if (productSubGroup is null)
+        {
+            return BadRequest($"ProductSubGroup '{productDTO.SubGroupName}' does not exist.");
+        }
+        product.IdProductSubGroup = productSubGroup.Id;
+        product.ProductSubGroup = productSubGroup;
+
+        var productsList = await _productRepository.FindByName<ProductsList>(productDTO.ShoppingListName);
+        if (productsList is null)
+        {
+            return BadRequest($"ProductsList '{productDTO.ShoppingListName}' does not exist.");
+        }
+        product.IdProductsList = productsList.Id;
+        product.ProductsList = productsList;
+
         await _productRepository.AddAsync(product);
 
-        return new CreatedAtRouteResult("GetProduct", new { id = productDTO.Id }, productDTO);
+        return new CreatedAtRouteResult("GetProduct", new { id = product.Id }, productDTO);
     }
 
     [HttpPut]
@@ -72,9 +100,35 @@ public class ProductController(IProductRepository productRepository, IMapper map
             return BadRequest("Invalid data");
         }
 
-        var product = _mapper.Map<Product>(productDTO);
 
-        await _productRepository.UpdateAsync(product);
+        var product = await _productRepository.GetByIdAsync(id);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        _mapper.Map(productDTO, product);
+
+        try
+        {
+            bool updated = await _productRepository.UpdateAsync(product);
+            if (!updated)
+            {
+                return Ok("No changes were detected.");
+            }
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _productRepository.ExistsAsync(id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Conflict("Concurrency conflict occurred while updating the product. Please try again.");
+            }
+        }
 
         return Ok(productDTO);
     }
@@ -90,6 +144,7 @@ public class ProductController(IProductRepository productRepository, IMapper map
 
         await _productRepository.RemoveAsync(id);
 
-        return Ok(product);
+        var productDTO = _mapper.Map<ProductDTO>(product);
+        return Ok(productDTO);
     }
 }

@@ -2,4 +2,6 @@
 
 namespace ListGenius.Api.Entities.ProductSubGroups;
 
-public interface IProductSubGroupRepository : IBaseRepository<ProductSubGroup>;
+public interface IProductSubGroupRepository : IBaseRepository<ProductSubGroup>
+{
+}

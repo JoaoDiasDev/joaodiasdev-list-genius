@@ -42,10 +42,20 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         await _db.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(TEntity entity)
+    public async Task<bool> UpdateAsync(TEntity entity)
     {
-        DbSet.Update(entity);
-        await _db.SaveChangesAsync();
+        var existingEntity = await _db.Set<TEntity>().FindAsync(entity.Id) ?? throw new DbUpdateConcurrencyException();
+        _db.Entry(existingEntity).CurrentValues.SetValues(entity);
+
+        if (_db.Entry(existingEntity).State is EntityState.Modified)
+        {
+            await _db.SaveChangesAsync();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public async Task RemoveAsync(int? id)
@@ -69,7 +79,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return entity;
     }
 
-    public async Task<IEnumerable<TEntity>> FindByName(string name)
+    public async Task<IEnumerable<TEntity>> FindAllByName(string name)
     {
         var entities = await DbSet
          .Where(e => EF.Functions.Like(e.Name, $"%{name}%"))
@@ -81,5 +91,15 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
 
         return entities;
+    }
+
+    public async Task<TEntity> FindByName<TEntity>(string name) where TEntity : class
+    {
+        return await _db.Set<TEntity>().FirstOrDefaultAsync(e => EF.Property<string>(e, "Name") == name);
+    }
+
+    public async Task<bool> ExistsAsync(int id)
+    {
+        return await DbSet.AnyAsync(e => e.Id == id);
     }
 }
