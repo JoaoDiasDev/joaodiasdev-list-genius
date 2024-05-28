@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -13,75 +14,100 @@ namespace ListGenius.Api.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NormalizedName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LogoImage = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    ProfilePicture = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FullName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LogoImage = table.Column<byte[]>(type: "longblob", nullable: false),
+                    ProfilePicture = table.Column<byte[]>(type: "longblob", nullable: false),
+                    UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NormalizedEmail = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SecurityStamp = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "ProductGroups",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Image = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Enabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductGroups", x => x.Id);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClaimType = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClaimValue = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -91,17 +117,21 @@ namespace ListGenius.Api.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClaimType = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClaimValue = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -111,16 +141,21 @@ namespace ListGenius.Api.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProviderKey = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ProviderDisplayName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -130,14 +165,17 @@ namespace ListGenius.Api.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -152,16 +190,21 @@ namespace ListGenius.Api.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Value = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -171,21 +214,26 @@ namespace ListGenius.Api.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "ProductsLists",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Image = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
-                    Public = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    ExternalLink = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    IdUser = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    Public = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
+                    ExternalLink = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IdUser = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Enabled = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -197,19 +245,22 @@ namespace ListGenius.Api.Migrations
                         column: x => x.IdUser,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "ProductSubGroups",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Image = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
                     IdProductGroup = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Enabled = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -221,27 +272,32 @@ namespace ListGenius.Api.Migrations
                         column: x => x.IdProductGroup,
                         principalTable: "ProductGroups",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     IdProductsList = table.Column<int>(type: "int", nullable: false),
                     IdProductGroup = table.Column<int>(type: "int", nullable: false),
                     IdProductSubGroup = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Enabled = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     Value = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Qrcode = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
                     Image = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
-                    Link = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Unit = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                    Link = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Unit = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -261,26 +317,31 @@ namespace ListGenius.Api.Migrations
                         column: x => x.IdProductsList,
                         principalTable: "ProductsLists",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "ProductsShared",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     IdProductGroup = table.Column<int>(type: "int", nullable: false),
                     IdProductSubGroup = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Enabled = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     Value = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Qrcode = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
                     Image = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
-                    Link = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Unit = table.Column<int>(type: "int", maxLength: 20, nullable: false)
+                    Link = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Unit = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -295,7 +356,8 @@ namespace ListGenius.Api.Migrations
                         column: x => x.IdProductSubGroup,
                         principalTable: "ProductSubGroups",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
@@ -311,14 +373,14 @@ namespace ListGenius.Api.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "LogoImage", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "37846734-172e-4149-8cec-6f43d1eb3f60", 0, "3ae26c2d-5766-4316-84dc-22d78a855b78", "jmmatheus23@gmail.com", true, "JoaoDiasUser", false, null, new byte[0], "JMMATHEUS23@GMAIL.COM", "JMMATHEUS23@GMAIL.COM", "AQAAAAIAAYagAAAAEOWpoGN/K/e6j469eZWgLMSI4dh/5127SQDTlVDXMbFLAMpOWNij/sQJ/lgmn98inQ==", null, false, new byte[0], "8b31d330-34f6-4933-9fd9-ca513cd467f2", false, "jmmatheus23@gmail.com" },
-                    { "38846734-172e-4149-8cec-6f43d1eb3f60", 0, "9bf849c9-003c-4948-90fc-ec38bb42d7aa", "joaodiasworking@gmail.com", true, "JoaoDiasAdmin", false, null, new byte[0], "JOAODIASWORKING@GMAIL.COM", "JOAODIASWORKING@GMAIL.COM", "AQAAAAIAAYagAAAAEIV/fDyl9nIelduka1A6I0tvaEYSwRv415/B6zDVqw2iZRhe9MtMhFTF2M862i0Aeg==", null, false, new byte[0], "d033b9cc-4084-4881-ac58-54f8a388037c", false, "joaodiasworking@gmail.com" }
+                    { "37846734-172e-4149-8cec-6f43d1eb3f60", 0, "ebb3f168-0fe3-4f3c-87b4-7daab6c93165", "jmmatheus23@gmail.com", true, "JoaoDiasUser", false, null, new byte[0], "JMMATHEUS23@GMAIL.COM", "JMMATHEUS23@GMAIL.COM", "AQAAAAIAAYagAAAAECp8YUXOfG/QpkEQW1KioCFuYGM4SMWaEijWd05gtSO8708l6BJDwdXdh/Km+pZH+w==", null, false, new byte[0], "69c95e87-0141-4da9-907a-0dcf2813855f", false, "jmmatheus23@gmail.com" },
+                    { "38846734-172e-4149-8cec-6f43d1eb3f60", 0, "1ecafad4-8039-479a-91ed-ac429ab9c4e1", "joaodiasworking@gmail.com", true, "JoaoDiasAdmin", false, null, new byte[0], "JOAODIASWORKING@GMAIL.COM", "JOAODIASWORKING@GMAIL.COM", "AQAAAAIAAYagAAAAEJubyjN02YLIxvioCqVCjA72qcJJG6vwZ9aGCQN1hciZ76qoj/C3CPcxa8Zcf11dfA==", null, false, new byte[0], "e8cf8860-dde9-4b8f-9e06-5505b338fdd9", false, "joaodiasworking@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
                 table: "ProductGroups",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "Image", "Name", "UpdatedDate" },
-                values: new object[] { 1, new DateTime(2024, 5, 26, 19, 5, 40, 678, DateTimeKind.Local).AddTicks(9968), "GERAL", true, new byte[] { 0 }, "GERAL", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local) });
+                values: new object[] { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1475), "GERAL", true, new byte[] { 0 }, "GERAL", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1495) });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -332,15 +394,15 @@ namespace ListGenius.Api.Migrations
             migrationBuilder.InsertData(
                 table: "ProductSubGroups",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "Image", "Name", "UpdatedDate" },
-                values: new object[] { 1, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(177), "GERAL", true, 1, new byte[] { 0 }, "GERAL", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(178) });
+                values: new object[] { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1564), "GERAL", true, 1, new byte[] { 0 }, "GERAL", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1565) });
 
             migrationBuilder.InsertData(
                 table: "ProductsLists",
                 columns: new[] { "Id", "CreatedDate", "Description", "ExternalLink", "IdUser", "Image", "Name", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(229), "Description for Shopping List 1", "", "37846734-172e-4149-8cec-6f43d1eb3f60", new byte[] { 0 }, "Shopping List 1", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(230) },
-                    { 2, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(232), "Description for Shopping List 2", "", "37846734-172e-4149-8cec-6f43d1eb3f60", new byte[] { 0 }, "Shopping List 2", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(233) }
+                    { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1617), "Description for Shopping List 1", "", "37846734-172e-4149-8cec-6f43d1eb3f60", new byte[] { 0 }, "Shopping List 1", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1617) },
+                    { 2, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1620), "Description for Shopping List 2", "", "37846734-172e-4149-8cec-6f43d1eb3f60", new byte[] { 0 }, "Shopping List 2", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1620) }
                 });
 
             migrationBuilder.InsertData(
@@ -348,56 +410,56 @@ namespace ListGenius.Api.Migrations
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "IdProductSubGroup", "IdProductsList", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(350), "TESTE 1", true, 1, 1, 1, new byte[] { 0 }, "", "Teste 1", new byte[] { 0 }, "Meter", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(351), 22.05m },
-                    { 2, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(355), "TESTE 2", true, 1, 1, 1, new byte[] { 0 }, "", "Teste 2", new byte[] { 0 }, "SquareMeter", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(356), 33.33m }
+                    { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2262), "TESTE 1", true, 1, 1, 1, new byte[] { 0 }, "", "Teste 1", new byte[] { 0 }, "Meter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2268), 22.05m },
+                    { 2, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2275), "TESTE 2", true, 1, 1, 1, new byte[] { 0 }, "", "Teste 2", new byte[] { 0 }, "SquareMeter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2276), 33.33m }
                 });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "CreatedDate", "Description", "IdProductGroup", "IdProductSubGroup", "IdProductsList", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
-                values: new object[] { 3, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(357), "TESTE 3", 1, 1, 1, new byte[] { 0 }, "", "Teste 3", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(358), 42.33m });
+                values: new object[] { 3, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2277), "TESTE 3", 1, 1, 1, new byte[] { 0 }, "", "Teste 3", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2278), 42.33m });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "IdProductSubGroup", "IdProductsList", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
                 values: new object[,]
                 {
-                    { 4, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(361), "TESTE 4", true, 1, 1, 2, new byte[] { 0 }, "", "Teste 4", new byte[] { 0 }, "CubicMeter", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(362), 77.77m },
-                    { 5, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(364), "TESTE 5", true, 1, 1, 2, new byte[] { 0 }, "", "Teste 5", new byte[] { 0 }, "Unit", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(374), 66.66m }
+                    { 4, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2394), "TESTE 4", true, 1, 1, 2, new byte[] { 0 }, "", "Teste 4", new byte[] { 0 }, "CubicMeter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2395), 77.77m },
+                    { 5, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2396), "TESTE 5", true, 1, 1, 2, new byte[] { 0 }, "", "Teste 5", new byte[] { 0 }, "Unit", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2414), 66.66m }
                 });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "CreatedDate", "Description", "IdProductGroup", "IdProductSubGroup", "IdProductsList", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
-                values: new object[] { 6, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(390), "TESTE 6", 1, 1, 2, new byte[] { 0 }, "", "Teste 6", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(390), 35.31m });
+                values: new object[] { 6, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2424), "TESTE 6", 1, 1, 2, new byte[] { 0 }, "", "Teste 6", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2424), 35.31m });
 
             migrationBuilder.InsertData(
                 table: "ProductsShared",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "IdProductSubGroup", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(283), "TESTE 1", true, 1, 1, new byte[] { 0 }, "", "Teste 1", new byte[] { 0 }, 1, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(283), 22.05m },
-                    { 2, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(288), "TESTE 2", true, 1, 1, new byte[] { 0 }, "", "Teste 2", new byte[] { 0 }, 2, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(289), 33.33m }
+                    { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1652), "TESTE 1", true, 1, 1, new byte[] { 0 }, "", "Teste 1", new byte[] { 0 }, "Meter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1653), 22.05m },
+                    { 2, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1657), "TESTE 2", true, 1, 1, new byte[] { 0 }, "", "Teste 2", new byte[] { 0 }, "SquareMeter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1657), 33.33m }
                 });
 
             migrationBuilder.InsertData(
                 table: "ProductsShared",
                 columns: new[] { "Id", "CreatedDate", "Description", "IdProductGroup", "IdProductSubGroup", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
-                values: new object[] { 3, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(290), "TESTE 3", 1, 1, new byte[] { 0 }, "", "Teste 3", new byte[] { 0 }, 0, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(291), 42.33m });
+                values: new object[] { 3, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1659), "TESTE 3", 1, 1, new byte[] { 0 }, "", "Teste 3", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1659), 42.33m });
 
             migrationBuilder.InsertData(
                 table: "ProductsShared",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "IdProductSubGroup", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
                 values: new object[,]
                 {
-                    { 4, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(293), "TESTE 4", true, 1, 1, new byte[] { 0 }, "", "Teste 4", new byte[] { 0 }, 3, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(293), 77.77m },
-                    { 5, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(295), "TESTE 5", true, 1, 1, new byte[] { 0 }, "", "Teste 5", new byte[] { 0 }, 4, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(295), 66.66m }
+                    { 4, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1660), "TESTE 4", true, 1, 1, new byte[] { 0 }, "", "Teste 4", new byte[] { 0 }, "CubicMeter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1660), 77.77m },
+                    { 5, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1661), "TESTE 5", true, 1, 1, new byte[] { 0 }, "", "Teste 5", new byte[] { 0 }, "Unit", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1662), 66.66m }
                 });
 
             migrationBuilder.InsertData(
                 table: "ProductsShared",
                 columns: new[] { "Id", "CreatedDate", "Description", "IdProductGroup", "IdProductSubGroup", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
-                values: new object[] { 6, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(298), "TESTE 6", 1, 1, new byte[] { 0 }, "", "Teste 6", new byte[] { 0 }, 0, new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(298), 35.31m });
+                values: new object[] { 6, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1663), "TESTE 6", 1, 1, new byte[] { 0 }, "", "Teste 6", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1663), 35.31m });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -408,8 +470,7 @@ namespace ListGenius.Api.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -435,8 +496,7 @@ namespace ListGenius.Api.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_IdProductGroup",

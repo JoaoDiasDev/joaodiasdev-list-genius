@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListGenius.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240526220542_Initial")]
+    [Migration("20240528230644_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -21,9 +21,9 @@ namespace ListGenius.Api.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("ListGenius.Api.Entities.ProductGroups.ProductGroup", b =>
                 {
@@ -31,7 +31,7 @@ namespace ListGenius.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -39,10 +39,10 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<byte[]>("Image")
                         .IsRequired()
@@ -52,7 +52,7 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -65,12 +65,12 @@ namespace ListGenius.Api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 678, DateTimeKind.Local).AddTicks(9968),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1475),
                             Description = "GERAL",
                             Enabled = true,
                             Image = new byte[] { 0 },
                             Name = "GERAL",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local)
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1495)
                         });
                 });
 
@@ -80,7 +80,7 @@ namespace ListGenius.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -88,11 +88,11 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Enabled")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true);
 
                     b.Property<int>("IdProductGroup")
@@ -109,21 +109,22 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Link")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<byte[]>("Qrcode")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("varbinary(500)");
 
-                    b.Property<int>("Unit")
+                    b.Property<string>("Unit")
+                        .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("int");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -144,7 +145,7 @@ namespace ListGenius.Api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(283),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1652),
                             Description = "TESTE 1",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -153,14 +154,14 @@ namespace ListGenius.Api.Migrations
                             Link = "",
                             Name = "Teste 1",
                             Qrcode = new byte[] { 0 },
-                            Unit = 1,
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(283),
+                            Unit = "Meter",
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1653),
                             Value = 22.05m
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(288),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1657),
                             Description = "TESTE 2",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -169,14 +170,14 @@ namespace ListGenius.Api.Migrations
                             Link = "",
                             Name = "Teste 2",
                             Qrcode = new byte[] { 0 },
-                            Unit = 2,
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(289),
+                            Unit = "SquareMeter",
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1657),
                             Value = 33.33m
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(290),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1659),
                             Description = "TESTE 3",
                             Enabled = false,
                             IdProductGroup = 1,
@@ -185,14 +186,14 @@ namespace ListGenius.Api.Migrations
                             Link = "",
                             Name = "Teste 3",
                             Qrcode = new byte[] { 0 },
-                            Unit = 0,
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(291),
+                            Unit = "Unspecified",
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1659),
                             Value = 42.33m
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(293),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1660),
                             Description = "TESTE 4",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -201,14 +202,14 @@ namespace ListGenius.Api.Migrations
                             Link = "",
                             Name = "Teste 4",
                             Qrcode = new byte[] { 0 },
-                            Unit = 3,
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(293),
+                            Unit = "CubicMeter",
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1660),
                             Value = 77.77m
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(295),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1661),
                             Description = "TESTE 5",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -217,14 +218,14 @@ namespace ListGenius.Api.Migrations
                             Link = "",
                             Name = "Teste 5",
                             Qrcode = new byte[] { 0 },
-                            Unit = 4,
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(295),
+                            Unit = "Unit",
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1662),
                             Value = 66.66m
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(298),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1663),
                             Description = "TESTE 6",
                             Enabled = false,
                             IdProductGroup = 1,
@@ -233,8 +234,8 @@ namespace ListGenius.Api.Migrations
                             Link = "",
                             Name = "Teste 6",
                             Qrcode = new byte[] { 0 },
-                            Unit = 0,
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(298),
+                            Unit = "Unspecified",
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1663),
                             Value = 35.31m
                         });
                 });
@@ -245,7 +246,7 @@ namespace ListGenius.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -253,11 +254,11 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Enabled")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true);
 
                     b.Property<int>("IdProductGroup")
@@ -271,7 +272,7 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -286,13 +287,13 @@ namespace ListGenius.Api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(177),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1564),
                             Description = "GERAL",
                             Enabled = true,
                             IdProductGroup = 1,
                             Image = new byte[] { 0 },
                             Name = "GERAL",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(178)
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1565)
                         });
                 });
 
@@ -302,7 +303,7 @@ namespace ListGenius.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -310,11 +311,11 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Enabled")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true);
 
                     b.Property<int>("IdProductGroup")
@@ -334,12 +335,12 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Link")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<byte[]>("Qrcode")
                         .IsRequired()
@@ -349,7 +350,7 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("varchar(30)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime");
@@ -372,7 +373,7 @@ namespace ListGenius.Api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(350),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2262),
                             Description = "TESTE 1",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -383,13 +384,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 1",
                             Qrcode = new byte[] { 0 },
                             Unit = "Meter",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(351),
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2268),
                             Value = 22.05m
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(355),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2275),
                             Description = "TESTE 2",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -400,13 +401,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 2",
                             Qrcode = new byte[] { 0 },
                             Unit = "SquareMeter",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(356),
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2276),
                             Value = 33.33m
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(357),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2277),
                             Description = "TESTE 3",
                             Enabled = false,
                             IdProductGroup = 1,
@@ -417,13 +418,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 3",
                             Qrcode = new byte[] { 0 },
                             Unit = "Unspecified",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(358),
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2278),
                             Value = 42.33m
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(361),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2394),
                             Description = "TESTE 4",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -434,13 +435,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 4",
                             Qrcode = new byte[] { 0 },
                             Unit = "CubicMeter",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(362),
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2395),
                             Value = 77.77m
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(364),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2396),
                             Description = "TESTE 5",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -451,13 +452,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 5",
                             Qrcode = new byte[] { 0 },
                             Unit = "Unit",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(374),
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2414),
                             Value = 66.66m
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(390),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2424),
                             Description = "TESTE 6",
                             Enabled = false,
                             IdProductGroup = 1,
@@ -468,7 +469,7 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 6",
                             Qrcode = new byte[] { 0 },
                             Unit = "Unspecified",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(390),
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2424),
                             Value = 35.31m
                         });
                 });
@@ -479,7 +480,7 @@ namespace ListGenius.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
@@ -487,21 +488,21 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Enabled")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true);
 
                     b.Property<string>("ExternalLink")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("IdUser")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<byte[]>("Image")
                         .IsRequired()
@@ -511,11 +512,11 @@ namespace ListGenius.Api.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<bool>("Public")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("tinyint(1)")
                         .HasDefaultValue(false);
 
                     b.Property<DateTime>("UpdatedDate")
@@ -531,90 +532,90 @@ namespace ListGenius.Api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(229),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1617),
                             Description = "Description for Shopping List 1",
                             ExternalLink = "",
                             IdUser = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             Image = new byte[] { 0 },
                             Name = "Shopping List 1",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(230)
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1617)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(232),
+                            CreatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1620),
                             Description = "Description for Shopping List 2",
                             ExternalLink = "",
                             IdUser = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             Image = new byte[] { 0 },
                             Name = "Shopping List 2",
-                            UpdatedDate = new DateTime(2024, 5, 26, 19, 5, 40, 679, DateTimeKind.Local).AddTicks(233)
+                            UpdatedDate = new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1620)
                         });
                 });
 
             modelBuilder.Entity("ListGenius.Api.Entities.Users.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<byte[]>("LogoImage")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("longblob");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<byte[]>("ProfilePicture")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("longblob");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
 
@@ -623,8 +624,7 @@ namespace ListGenius.Api.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
 
@@ -633,7 +633,7 @@ namespace ListGenius.Api.Migrations
                         {
                             Id = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3ae26c2d-5766-4316-84dc-22d78a855b78",
+                            ConcurrencyStamp = "ebb3f168-0fe3-4f3c-87b4-7daab6c93165",
                             Email = "jmmatheus23@gmail.com",
                             EmailConfirmed = true,
                             FullName = "JoaoDiasUser",
@@ -641,10 +641,10 @@ namespace ListGenius.Api.Migrations
                             LogoImage = new byte[0],
                             NormalizedEmail = "JMMATHEUS23@GMAIL.COM",
                             NormalizedUserName = "JMMATHEUS23@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOWpoGN/K/e6j469eZWgLMSI4dh/5127SQDTlVDXMbFLAMpOWNij/sQJ/lgmn98inQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECp8YUXOfG/QpkEQW1KioCFuYGM4SMWaEijWd05gtSO8708l6BJDwdXdh/Km+pZH+w==",
                             PhoneNumberConfirmed = false,
                             ProfilePicture = new byte[0],
-                            SecurityStamp = "8b31d330-34f6-4933-9fd9-ca513cd467f2",
+                            SecurityStamp = "69c95e87-0141-4da9-907a-0dcf2813855f",
                             TwoFactorEnabled = false,
                             UserName = "jmmatheus23@gmail.com"
                         },
@@ -652,7 +652,7 @@ namespace ListGenius.Api.Migrations
                         {
                             Id = "38846734-172e-4149-8cec-6f43d1eb3f60",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9bf849c9-003c-4948-90fc-ec38bb42d7aa",
+                            ConcurrencyStamp = "1ecafad4-8039-479a-91ed-ac429ab9c4e1",
                             Email = "joaodiasworking@gmail.com",
                             EmailConfirmed = true,
                             FullName = "JoaoDiasAdmin",
@@ -660,10 +660,10 @@ namespace ListGenius.Api.Migrations
                             LogoImage = new byte[0],
                             NormalizedEmail = "JOAODIASWORKING@GMAIL.COM",
                             NormalizedUserName = "JOAODIASWORKING@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIV/fDyl9nIelduka1A6I0tvaEYSwRv415/B6zDVqw2iZRhe9MtMhFTF2M862i0Aeg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJubyjN02YLIxvioCqVCjA72qcJJG6vwZ9aGCQN1hciZ76qoj/C3CPcxa8Zcf11dfA==",
                             PhoneNumberConfirmed = false,
                             ProfilePicture = new byte[0],
-                            SecurityStamp = "d033b9cc-4084-4881-ac58-54f8a388037c",
+                            SecurityStamp = "e8cf8860-dde9-4b8f-9e06-5505b338fdd9",
                             TwoFactorEnabled = false,
                             UserName = "joaodiasworking@gmail.com"
                         });
@@ -672,26 +672,25 @@ namespace ListGenius.Api.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
 
@@ -716,17 +715,17 @@ namespace ListGenius.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -741,17 +740,17 @@ namespace ListGenius.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -763,17 +762,17 @@ namespace ListGenius.Api.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -785,10 +784,10 @@ namespace ListGenius.Api.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -812,16 +811,16 @@ namespace ListGenius.Api.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 

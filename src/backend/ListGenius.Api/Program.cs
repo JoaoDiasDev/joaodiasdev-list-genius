@@ -85,8 +85,8 @@ builder.Services.AddSwaggerGen(c =>
 
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-         options.UseSqlServer(connection,
-             b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
+         options.UseMySql(connection, serverVersion: ServerVersion.AutoDetect(connection),
+             mySqlOptionsAction: b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
 
 builder.Services.AddAutoMapper(typeof(DomainToDTOProfile));
