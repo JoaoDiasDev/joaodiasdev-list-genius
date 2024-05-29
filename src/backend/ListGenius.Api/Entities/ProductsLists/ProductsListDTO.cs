@@ -1,5 +1,4 @@
-﻿using ListGenius.Api.Entities.Users;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -56,6 +55,4 @@ public class ProductsListDTO
 
     [DisplayName("Nome Usuário")]
     public string UserName { get; set; } = string.Empty;
-
-    public ApplicationUser User { get; set; } = new ApplicationUser();
 }

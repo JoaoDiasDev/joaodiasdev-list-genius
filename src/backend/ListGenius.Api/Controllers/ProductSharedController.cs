@@ -1,8 +1,11 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
+using ListGenius.Api.Entities.ProductGroups;
 using ListGenius.Api.Entities.ProductShareds;
+using ListGenius.Api.Entities.ProductSubGroups;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Controllers;
 
@@ -18,7 +21,10 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductSharedDTO>>> Get()
     {
-        var productShareds = await _productSharedRepository.GetAllAsync();
+        var productShareds = await _productSharedRepository.GetAllAsync(
+            p => p.ProductGroup,
+            p => p.ProductSubGroup);
+
         if (productShareds is null)
         {
             return NotFound("No Products.");
@@ -33,7 +39,7 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
         var productShared = await _productSharedRepository.GetByIdAsync(id);
         if (productShared is null)
         {
-            return NotFound($"ProductShared with {id} not found");
+            return NotFound($"ProductShared with id {id} not found");
         }
 
         var productSharedDto = _mapper.Map<ProductSharedDTO>(productShared);
@@ -49,6 +55,22 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
         }
 
         var productShared = _mapper.Map<ProductShared>(productSharedDTO);
+
+        var productGroup = await _productSharedRepository.FindByName<ProductGroup>(productSharedDTO.GroupName);
+        if (productGroup is null)
+        {
+            return BadRequest($"ProductGroup '{productSharedDTO.GroupName}' does not exist.");
+        }
+        productShared.IdProductGroup = productGroup.Id;
+        productShared.ProductGroup = productGroup;
+
+        var productSubGroup = await _productSharedRepository.FindByName<ProductSubGroup>(productSharedDTO.SubGroupName);
+        if (productSubGroup is null)
+        {
+            return BadRequest($"ProductSubGroup '{productSharedDTO.SubGroupName}' does not exist.");
+        }
+        productShared.IdProductSubGroup = productSubGroup.Id;
+        productShared.ProductSubGroup = productSubGroup;
 
         await _productSharedRepository.AddAsync(productShared);
 
@@ -68,9 +90,34 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
             return BadRequest("Invalid data");
         }
 
-        var productShared = _mapper.Map<ProductShared>(productSharedDTO);
+        var productShared = await _productSharedRepository.GetByIdAsync(id);
 
-        await _productSharedRepository.UpdateAsync(productShared);
+        if (productShared == null)
+        {
+            return NotFound($"No Product Shared with id {id}.");
+        }
+
+        _mapper.Map(productSharedDTO, productShared);
+
+        try
+        {
+            bool updated = await _productSharedRepository.UpdateAsync(productShared);
+            if (!updated)
+            {
+                return Ok("No changes were detected.");
+            }
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _productSharedRepository.ExistsAsync(id))
+            {
+                return NotFound($"No Product Shared with id {id}.");
+            }
+            else
+            {
+                return Conflict("Concurrency conflict occurred while updating the Product Shared. Please try again.");
+            }
+        }
 
         return Ok(productSharedDTO);
     }
@@ -86,6 +133,8 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
 
         await _productSharedRepository.RemoveAsync(id);
 
-        return Ok(productShared);
+        var productSharedDTO = _mapper.Map<ProductSharedDTO>(productShared);
+
+        return Ok(productSharedDTO);
     }
 }

@@ -29,7 +29,9 @@ public class DomainToDTOProfile : Profile
             .ForMember(dto => dto.GroupName, opt => opt.MapFrom(src => src.ProductGroup.Name))
             .ForMember(dto => dto.SubGroupName, opt => opt.MapFrom(src => src.ProductSubGroup.Name))
             .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Unit))
-            .ReverseMap();
+            .ReverseMap()
+            .ForPath(src => src.ProductGroup, opt => opt.Ignore())
+            .ForPath(src => src.ProductSubGroup, opt => opt.Ignore());
 
         CreateMap<ProductGroup, ProductGroupDTO>().ReverseMap();
 

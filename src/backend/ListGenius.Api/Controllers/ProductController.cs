@@ -41,7 +41,7 @@ public class ProductController(IProductRepository productRepository, IMapper map
         var product = await _productRepository.GetByIdAsync(id);
         if (product is null)
         {
-            return NotFound($"Product with {id} not found");
+            return NotFound($"Product with id {id} not found");
         }
 
         var productDto = _mapper.Map<ProductDTO>(product);
@@ -105,7 +105,7 @@ public class ProductController(IProductRepository productRepository, IMapper map
 
         if (product == null)
         {
-            return NotFound();
+            return NotFound($"No Product with id {id}.");
         }
 
         _mapper.Map(productDTO, product);
@@ -122,7 +122,7 @@ public class ProductController(IProductRepository productRepository, IMapper map
         {
             if (!await _productRepository.ExistsAsync(id))
             {
-                return NotFound();
+                return NotFound($"No Product with id {id}.");
             }
             else
             {

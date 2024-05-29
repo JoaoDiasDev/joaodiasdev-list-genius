@@ -1,8 +1,10 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
 using ListGenius.Api.Entities.ProductsLists;
+using ListGenius.Api.Entities.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Controllers;
 
@@ -18,11 +20,14 @@ public class ProductsListController(IProductsListRepository productsListReposito
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductsListDTO>>> Get()
     {
-        var productsLists = await _productsListRepository.GetAllAsync();
+        var productsLists = await _productsListRepository.GetAllAsync(
+            pl => pl.User);
+
         if (productsLists is null)
         {
             return NotFound("No Products Lists.");
         }
+
         var productsListsDto = _mapper.Map<IEnumerable<ProductsListDTO>>(productsLists);
         return Ok(productsListsDto);
     }
@@ -31,9 +36,10 @@ public class ProductsListController(IProductsListRepository productsListReposito
     public async Task<ActionResult<ProductsListDTO>> Get(int id)
     {
         var productsList = await _productsListRepository.GetByIdAsync(id);
+
         if (productsList is null)
         {
-            return NotFound($"ProductsList with {id} not found");
+            return NotFound($"ProductsList with id {id} not found");
         }
 
         var productsListDto = _mapper.Map<ProductsListDTO>(productsList);
@@ -47,8 +53,15 @@ public class ProductsListController(IProductsListRepository productsListReposito
         {
             return BadRequest("Invalid data.");
         }
-
         var productsList = _mapper.Map<ProductsList>(productsListDTO);
+
+        var user = await _productsListRepository.FindByName<ApplicationUser>(productsListDTO.UserName);
+        if (user is null)
+        {
+            return BadRequest($"User '{productsListDTO.UserName}' does not exist.");
+        }
+        productsList.IdUser = user.Id;
+        productsList.User = user;
 
         await _productsListRepository.AddAsync(productsList);
 
@@ -60,7 +73,7 @@ public class ProductsListController(IProductsListRepository productsListReposito
     {
         if (id != productsListDTO.Id)
         {
-            return BadRequest($"{id} is different from productsList id {productsListDTO.Id}");
+            return BadRequest($"{id} is different from Products List id {productsListDTO.Id}");
         }
 
         if (productsListDTO is null)
@@ -68,9 +81,34 @@ public class ProductsListController(IProductsListRepository productsListReposito
             return BadRequest("Invalid data");
         }
 
-        var productsList = _mapper.Map<ProductsList>(productsListDTO);
+        var productsList = await _productsListRepository.GetByIdAsync(id);
 
-        await _productsListRepository.UpdateAsync(productsList);
+        if (productsList == null)
+        {
+            return NotFound($"No Products List with id {id}.");
+        }
+
+        _mapper.Map(productsListDTO, productsList);
+
+        try
+        {
+            bool updated = await _productsListRepository.UpdateAsync(productsList);
+            if (!updated)
+            {
+                return Ok("No changes were detected.");
+            }
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await _productsListRepository.ExistsAsync(id))
+            {
+                return NotFound($"No Products List with id {id}.");
+            }
+            else
+            {
+                return Conflict("Concurrency conflict occurred while updating the productsList. Please try again.");
+            }
+        }
 
         return Ok(productsListDTO);
     }
@@ -86,6 +124,8 @@ public class ProductsListController(IProductsListRepository productsListReposito
 
         await _productsListRepository.RemoveAsync(id);
 
-        return Ok(productsList);
+        var productsListDTO = _mapper.Map<ProductsListDTO>(productsList);
+
+        return Ok(productsListDTO);
     }
 }

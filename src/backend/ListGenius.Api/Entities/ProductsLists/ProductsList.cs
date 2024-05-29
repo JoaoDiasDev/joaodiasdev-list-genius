@@ -15,7 +15,7 @@ public sealed class ProductsList : BaseEntity
 
     public string ExternalLink { get; private set; } = string.Empty;
 
-    public string IdUser { get; private set; } = string.Empty;
+    public string IdUser { get; set; } = string.Empty;
 
     public List<Product> Products { get; set; } = [];
 
