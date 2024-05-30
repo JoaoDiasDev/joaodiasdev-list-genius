@@ -1,24 +1,24 @@
 ﻿using ListGenius.Api.Entities.Bases;
 using ListGenius.Api.Entities.ProductGroups;
 using ListGenius.Api.Entities.Products;
-using ListGenius.Api.Entities.ProductShareds;
+using ListGenius.Api.Entities.ProductsShared;
 
 namespace ListGenius.Api.Entities.ProductSubGroups;
 
 
-public sealed class ProductSubGroup : BaseEntity
+public class ProductSubGroup : BaseEntity
 {
-    public string Description { get; set; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
 
-    public byte[] Image { get; set; } = [];
+    public byte[] Image { get; init; } = [];
 
     public int IdProductGroup { get; set; }
 
-    public ProductGroup ProductGroup { get; set; } = new ProductGroup();
+    public virtual ProductGroup ProductGroup { get; set; } = new();
 
-    public List<Product> Products { get; set; } = [];
+    public virtual ICollection<Product> Products { get; init; } = [];
 
-    public List<ProductShared> ProductsShared { get; set; } = [];
+    public virtual ICollection<ProductShared> ProductsShared { get; init; } = [];
 
     public ProductSubGroup() { }
 

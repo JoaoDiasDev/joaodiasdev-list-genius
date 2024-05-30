@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<Folder Include="Mappings\Resolvers\" />
 		<Folder Include="Migrations\" />
+		<Folder Include="Validation\" />
 		<Folder Include="wwwroot\images\" />
 	</ItemGroup>
 

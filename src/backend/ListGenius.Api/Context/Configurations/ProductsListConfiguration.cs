@@ -9,6 +9,7 @@ namespace ListGenius.Api.Context.Configurations
         public void Configure(EntityTypeBuilder<ProductsList> builder)
         {
             builder.HasKey(p => p.Id);
+            builder.Property(p => p.IdUser).IsRequired().HasMaxLength(100);
             builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
             builder.Property(p => p.Description).HasMaxLength(200);
             builder.Property(p => p.Enabled).IsRequired().HasDefaultValue(true);

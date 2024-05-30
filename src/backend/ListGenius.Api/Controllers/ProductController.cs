@@ -16,13 +16,10 @@ namespace ListGenius.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ProductController(IProductRepository productRepository, IMapper mapper) : ControllerBase
 {
-    private readonly IProductRepository _productRepository = productRepository;
-    private readonly IMapper _mapper = mapper;
-
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
+    public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
     {
-        var products = await _productRepository.GetAllAsync(
+        var products = await productRepository.GetAllAsync(
             p => p.ProductGroup,
             p => p.ProductSubGroup,
             p => p.ProductsList);
@@ -31,88 +28,88 @@ public class ProductController(IProductRepository productRepository, IMapper map
         {
             return NotFound("No products.");
         }
-        var productsDto = _mapper.Map<IEnumerable<ProductDTO>>(products);
+        var productsDto = mapper.Map<IEnumerable<ProductDto>>(products);
         return Ok(productsDto);
     }
 
     [HttpGet("{id:int}", Name = "GetProduct")]
-    public async Task<ActionResult<ProductDTO>> Get(int id)
+    public async Task<ActionResult<ProductDto>> Get(int id)
     {
-        var product = await _productRepository.GetByIdAsync(id);
+        var product = await productRepository.GetByIdAsync(id);
         if (product is null)
         {
             return NotFound($"Product with id {id} not found");
         }
 
-        var productDto = _mapper.Map<ProductDTO>(product);
+        var productDto = mapper.Map<ProductDto>(product);
         return Ok(productDto);
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] ProductDTO productDTO)
+    public async Task<ActionResult> Post([FromBody] ProductDto productDto)
     {
-        if (productDTO is null)
+        if (productDto is null)
         {
             return BadRequest("Invalid data.");
         }
 
-        var product = _mapper.Map<Product>(productDTO);
+        var product = mapper.Map<Product>(productDto);
 
-        var productGroup = await _productRepository.FindByName<ProductGroup>(productDTO.GroupName);
+        var productGroup = await productRepository.FindByProperty<ProductGroup>("Name", productDto.GroupName);
         if (productGroup is null)
         {
-            return BadRequest($"ProductGroup '{productDTO.GroupName}' does not exist.");
+            return BadRequest($"ProductGroup '{productDto.GroupName}' does not exist.");
         }
         product.IdProductGroup = productGroup.Id;
         product.ProductGroup = productGroup;
 
-        var productSubGroup = await _productRepository.FindByName<ProductSubGroup>(productDTO.SubGroupName);
+        var productSubGroup = await productRepository.FindByProperty<ProductSubGroup>("Name", productDto.SubGroupName);
         if (productSubGroup is null)
         {
-            return BadRequest($"ProductSubGroup '{productDTO.SubGroupName}' does not exist.");
+            return BadRequest($"ProductSubGroup '{productDto.SubGroupName}' does not exist.");
         }
         product.IdProductSubGroup = productSubGroup.Id;
         product.ProductSubGroup = productSubGroup;
 
-        var productsList = await _productRepository.FindByName<ProductsList>(productDTO.ShoppingListName);
+        var productsList = await productRepository.FindByProperty<ProductsList>("Name", productDto.ShoppingListName);
         if (productsList is null)
         {
-            return BadRequest($"ProductsList '{productDTO.ShoppingListName}' does not exist.");
+            return BadRequest($"ProductsList '{productDto.ShoppingListName}' does not exist.");
         }
         product.IdProductsList = productsList.Id;
         product.ProductsList = productsList;
 
-        await _productRepository.AddAsync(product);
+        await productRepository.AddAsync(product);
 
-        return new CreatedAtRouteResult("GetProduct", new { id = product.Id }, productDTO);
+        return new CreatedAtRouteResult("GetProduct", new { id = product.Id }, productDto);
     }
 
     [HttpPut]
-    public async Task<ActionResult> Put(int id, [FromBody] ProductDTO productDTO)
+    public async Task<ActionResult> Put(int id, [FromBody] ProductDto productDto)
     {
-        if (id != productDTO.Id)
+        if (id != productDto.Id)
         {
-            return BadRequest($"{id} is different from product id {productDTO.Id}");
+            return BadRequest($"{id} is different from product id {productDto.Id}");
         }
 
-        if (productDTO is null)
+        if (productDto is null)
         {
             return BadRequest("Invalid data");
         }
 
 
-        var product = await _productRepository.GetByIdAsync(id);
+        var product = await productRepository.GetByIdAsync(id);
 
-        if (product == null)
+        if (product is null)
         {
             return NotFound($"No Product with id {id}.");
         }
 
-        _mapper.Map(productDTO, product);
+        mapper.Map(productDto, product);
 
         try
         {
-            bool updated = await _productRepository.UpdateAsync(product);
+            var updated = await productRepository.UpdateAsync(product);
             if (!updated)
             {
                 return Ok("No changes were detected.");
@@ -120,7 +117,7 @@ public class ProductController(IProductRepository productRepository, IMapper map
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!await _productRepository.ExistsAsync(id))
+            if (!await productRepository.ExistsAsync<ProductGroup>(id))
             {
                 return NotFound($"No Product with id {id}.");
             }
@@ -130,21 +127,21 @@ public class ProductController(IProductRepository productRepository, IMapper map
             }
         }
 
-        return Ok(productDTO);
+        return Ok(productDto);
     }
 
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var product = await _productRepository.GetByIdAsync(id);
+        var product = await productRepository.GetByIdAsync(id);
         if (product is null)
         {
-            return NotFound($"Product {id} not found");
+            return NotFound($"Product with {id} not found");
         }
 
-        await _productRepository.RemoveAsync(id);
+        await productRepository.RemoveAsync(id);
 
-        var productDTO = _mapper.Map<ProductDTO>(product);
-        return Ok(productDTO);
+        var productDto = mapper.Map<ProductDto>(product);
+        return Ok(productDto);
     }
 }

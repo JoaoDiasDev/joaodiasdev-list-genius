@@ -1,8 +1,8 @@
 using ListGenius.Api.Context;
 using ListGenius.Api.Entities.ProductGroups;
 using ListGenius.Api.Entities.Products;
-using ListGenius.Api.Entities.ProductShareds;
 using ListGenius.Api.Entities.ProductsLists;
+using ListGenius.Api.Entities.ProductsShared;
 using ListGenius.Api.Entities.ProductSubGroups;
 using ListGenius.Api.Entities.Users;
 using ListGenius.Api.Mappings;
@@ -28,8 +28,9 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductSharedRepository, ProductSharedRepository>();
 builder.Services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
 builder.Services.AddScoped<IProductSubGroupRepository, ProductSubGroupRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddRateLimiter(_ => _
+builder.Services.AddRateLimiter(l => l
            .AddSlidingWindowLimiter(policyName: "sliding", options =>
            {
                options.PermitLimit = 30;
@@ -63,9 +64,11 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = @"JWT Authorization header usando o schema Bearer
-                       \r\n\r\n Informe 'Bearer'[space].
-                       Exemplo: \'Bearer 12345abcdef\'",
+        Description = """
+                      JWT Authorization header usando o schema Bearer
+                                             \r\n\r\n Informe 'Bearer'[space].
+                                             Exemplo: \'Bearer 12345had\'
+                      """,
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -89,7 +92,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
              mySqlOptionsAction: b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
 
-builder.Services.AddAutoMapper(typeof(DomainToDTOProfile));
+builder.Services.AddAutoMapper(typeof(DomainToDtoProfile));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
 options =>
@@ -142,7 +145,6 @@ app.UseCors();
 app.UseRateLimiter();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-//app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

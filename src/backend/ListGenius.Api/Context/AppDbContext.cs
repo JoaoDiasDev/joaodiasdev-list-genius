@@ -2,8 +2,8 @@
 using ListGenius.Api.Entities.ProductGroups;
 using ListGenius.Api.Entities.Products;
 using ListGenius.Api.Entities.Products.Enums;
-using ListGenius.Api.Entities.ProductShareds;
 using ListGenius.Api.Entities.ProductsLists;
+using ListGenius.Api.Entities.ProductsShared;
 using ListGenius.Api.Entities.ProductSubGroups;
 using ListGenius.Api.Entities.Users;
 using Microsoft.AspNetCore.Identity;
@@ -12,20 +12,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Context;
 
-public class AppDbContext : IdentityDbContext<ApplicationUser>
+public class AppDbContext(DbContextOptions<AppDbContext> options)
+    : IdentityDbContext<ApplicationUser>(options)
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvider serviceProvider) : base(options)
-    {
-        _serviceProvider = serviceProvider;
-    }
-
-    public DbSet<Product> Products { get; set; }
-    public DbSet<ProductsList> ProductsLists { get; set; }
-    public DbSet<ProductShared> ProductsShared { get; set; }
-    public DbSet<ProductGroup> ProductGroups { get; set; }
-    public DbSet<ProductSubGroup> ProductSubGroups { get; set; }
+    public DbSet<Product> Products { get; init; }
+    public DbSet<ProductsList> ProductsLists { get; init; }
+    public DbSet<ProductShared> ProductsShared { get; init; }
+    public DbSet<ProductGroup> ProductGroups { get; init; }
+    public DbSet<ProductSubGroup> ProductSubGroups { get; init; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

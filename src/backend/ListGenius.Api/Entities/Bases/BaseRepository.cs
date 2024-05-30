@@ -5,49 +5,65 @@ using System.Linq.Expressions;
 namespace ListGenius.Api.Entities.Bases;
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
 {
-    protected readonly AppDbContext _db;
-    protected readonly DbSet<TEntity> DbSet;
+    private readonly AppDbContext _db;
+    private readonly DbSet<TEntity> _dbSet;
     protected BaseRepository(AppDbContext db)
     {
         _db = db;
-        DbSet = db.Set<TEntity>();
+        _dbSet = db.Set<TEntity>();
     }
 
-    public async Task<IEnumerable<TEntity>> SearchAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<IEnumerable<TEntity>> SearchAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
     {
-        return await DbSet.AsNoTracking().Where(predicate).ToListAsync();
+        IQueryable<TEntity> query = _dbSet.AsNoTracking().Where(predicate);
+        return await GetEntitiesWithIncludesAsync(query, includes);
     }
 
-    public async Task<TEntity> GetByIdAsync(int? id)
+    public async Task<TEntity> GetByIdAsync(int id, params Expression<Func<TEntity, object>>[] includes)
     {
-        var entity = await DbSet.FindAsync(id);
-        return entity!;
-    }
-
-    public async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
-    {
-        IQueryable<TEntity> query = DbSet;
-
-        foreach (var include in includes)
-        {
-            query = query.Include(include);
-        }
-
-        return await query.ToListAsync();
+        IQueryable<TEntity> query = _dbSet.Where(e => e.Id == id);
+        return await GetEntityWithIncludesAsync(query, includes) ?? throw new InvalidOperationException($"No entity found with ID {id}.");
     }
 
     public async Task AddAsync(TEntity entity)
     {
-        DbSet.Add(entity);
+        _dbSet.Add(entity);
         await _db.SaveChangesAsync();
     }
 
-    public async Task<bool> UpdateAsync(TEntity entity)
+    public async Task RemoveAsync(int? id)
     {
-        var existingEntity = await _db.Set<TEntity>().FindAsync(entity.Id) ?? throw new DbUpdateConcurrencyException();
+        var entity = await _dbSet.FindAsync(id) ?? throw new InvalidOperationException($"No entity found with ID {id}.");
+        _dbSet.Remove(entity);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<TEntity> Disable(int id)
+    {
+        var entity = await _dbSet.FindAsync(id) ?? throw new InvalidOperationException($"No entity found with ID {id}.");
+        entity.Enabled = false;
+        await _db.SaveChangesAsync();
+        return entity;
+    }
+
+    public void Dispose()
+    {
+        _db?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    public async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
+    {
+        var query = includes.Aggregate<Expression<Func<TEntity, object>>, IQueryable<TEntity>>(_dbSet, (current, include) => current.Include(include));
+
+        return await query.ToListAsync();
+    }
+    public async Task<bool> UpdateAsync(TEntity entity, params Expression<Func<TEntity, object>>[] includes)
+    {
+        var existingEntity = await GetByIdAsync(entity.Id, includes) ?? throw new DbUpdateConcurrencyException();
         _db.Entry(existingEntity).CurrentValues.SetValues(entity);
 
-        if (_db.Entry(existingEntity).State is EntityState.Modified)
+        if (_db.Entry(existingEntity).State == EntityState.Modified)
         {
             await _db.SaveChangesAsync();
             return true;
@@ -58,48 +74,33 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public async Task RemoveAsync(int? id)
+    public async Task<TEntity> FindByProperty<TEntity>(string propertyName, string value, params Expression<Func<TEntity, object>>[] includes) where TEntity : BaseEntity
     {
-        var entity = await DbSet.FindAsync(id);
-        DbSet.Remove(entity!);
-        await _db.SaveChangesAsync();
+        IQueryable<TEntity> query = _db.Set<TEntity>().Where(e => EF.Property<string>(e, propertyName) == value);
+        return await GetEntityWithIncludesAsync(query, includes) ?? throw new InvalidOperationException($"No entity found with the informed value {value} for the property {propertyName}.");
     }
 
-    public void Dispose()
+    public async Task<IEnumerable<TEntity>> FindAllByProperty<TEntity>(string propertyName, string value, params Expression<Func<TEntity, object>>[] includes) where TEntity : BaseEntity
     {
-        _db?.Dispose();
+        IQueryable<TEntity> query = _db.Set<TEntity>().Where(e => EF.Functions.Like(EF.Property<string>(e, propertyName), $"%{value}%"));
+        return await GetEntitiesWithIncludesAsync(query, includes) ?? throw new InvalidOperationException($"No entity found with the informed value {value} for the property {propertyName}.");
     }
 
-    public async Task<TEntity> Disable(int id)
+    public async Task<bool> ExistsAsync<TEntity>(int id, params Expression<Func<TEntity, object>>[] includes) where TEntity : BaseEntity
     {
-        var entity = await DbSet.FindAsync(id);
-        if (entity == null) throw new ArgumentNullException(nameof(entity));
-        entity.Enabled = false;
-        await _db.SaveChangesAsync();
-        return entity;
+        IQueryable<TEntity> query = _db.Set<TEntity>().Where(e => e.Id == id);
+        return await GetEntityWithIncludesAsync(query, includes) != null;
     }
 
-    public async Task<IEnumerable<TEntity>> FindAllByName(string name)
+    private async Task<TEntity> GetEntityWithIncludesAsync<TEntity>(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includes) where TEntity : BaseEntity
     {
-        var entities = await DbSet
-         .Where(e => EF.Functions.Like(e.Name, $"%{name}%"))
-         .ToListAsync();
-
-        if (entities.Count == 0)
-        {
-            throw new ArgumentNullException(nameof(entities), $"No entities containing name '{name}' were found.");
-        }
-
-        return entities;
+        var res = await GetEntitiesWithIncludesAsync(query, includes);
+        return res.FirstOrDefault()!;
     }
 
-    public async Task<TEntity> FindByName<TEntity>(string name) where TEntity : class
+    private async Task<IEnumerable<TEntity>> GetEntitiesWithIncludesAsync<TEntity>(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includes) where TEntity : BaseEntity
     {
-        return await _db.Set<TEntity>().FirstOrDefaultAsync(e => EF.Property<string>(e, "Name") == name);
-    }
-
-    public async Task<bool> ExistsAsync(int id)
-    {
-        return await DbSet.AnyAsync(e => e.Id == id);
+        query = includes.Aggregate(query, (current, include) => current.Include(include));
+        return await query.ToListAsync();
     }
 }

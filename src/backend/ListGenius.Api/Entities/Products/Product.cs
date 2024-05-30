@@ -6,7 +6,7 @@ using ListGenius.Api.Entities.ProductSubGroups;
 
 namespace ListGenius.Api.Entities.Products;
 
-public sealed class Product : BaseProduct
+public class Product : BaseProduct
 {
     public int IdProductsList { get; set; }
 
@@ -14,11 +14,11 @@ public sealed class Product : BaseProduct
 
     public int IdProductSubGroup { get; set; }
 
-    public ProductsList ProductsList { get; set; } = new ProductsList();
+    public virtual ProductsList ProductsList { get; set; } = new();
 
-    public ProductGroup ProductGroup { get; set; } = new ProductGroup();
+    public virtual ProductGroup ProductGroup { get; set; } = new();
 
-    public ProductSubGroup ProductSubGroup { get; set; } = new ProductSubGroup();
+    public virtual ProductSubGroup ProductSubGroup { get; set; } = new();
 
     public Product() { }
 

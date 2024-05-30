@@ -5,12 +5,12 @@ public abstract class BaseEntity
     /// <summary>
     /// Gets or sets the unique identifier for the entity.
     /// </summary>
-    public int Id { get; set; }
+    public int Id { get; }
 
     /// <summary>
     /// Gets or sets the name of the entity.
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; protected init; } = string.Empty;
 
     /// <summary>
     /// Gets or sets a value indicating whether the entity is enabled.
@@ -20,12 +20,12 @@ public abstract class BaseEntity
     /// <summary>
     /// Gets or sets the date and time when the entity was created.
     /// </summary>
-    public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public DateTime CreatedDate { get; protected init; } = DateTime.Now;
 
     /// <summary>
     /// Gets or sets the date and time when the entity was last updated.
     /// </summary>
-    public DateTime UpdatedDate { get; set; } = DateTime.Now;
+    public DateTime UpdatedDate { get; protected set; } = DateTime.Now;
 
     /// <summary>
     /// Updates the UpdatedDate property to the current date and time.
@@ -34,14 +34,17 @@ public abstract class BaseEntity
     {
         UpdatedDate = DateTime.Now;
     }
-
-    public BaseEntity() { }
-
-    public BaseEntity(string name, bool enabled, DateTime createdDate, DateTime updatedDate)
+    protected BaseEntity(string name, bool enabled, DateTime createdDate, DateTime updatedDate)
     {
         Name = name;
         Enabled = enabled;
         CreatedDate = createdDate;
         UpdatedDate = updatedDate;
     }
+
+    protected BaseEntity()
+    {
+
+    }
+
 }

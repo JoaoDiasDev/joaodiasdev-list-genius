@@ -16,9 +16,9 @@ public abstract class BaseProduct : BaseEntity
 
     public UnitsOfMeasurement Unit { get; set; } = UnitsOfMeasurement.Unspecified;
 
-    public BaseProduct() { }
+    protected BaseProduct() { }
 
-    public BaseProduct(string name, bool enabled, DateTime createdDate, DateTime updatedDate,
+    protected BaseProduct(string name, bool enabled, DateTime createdDate, DateTime updatedDate,
                       decimal value, string description, byte[] qrcode, byte[] image, string link, UnitsOfMeasurement unit)
        : base(name, enabled, createdDate, updatedDate)
     {

@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
 using ListGenius.Api.Entities.ProductGroups;
-using ListGenius.Api.Entities.ProductShareds;
+using ListGenius.Api.Entities.ProductsShared;
 using ListGenius.Api.Entities.ProductSubGroups;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +15,10 @@ namespace ListGenius.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ProductSharedController(IProductSharedRepository productSharedRepository, IMapper mapper) : ControllerBase
 {
-    private readonly IProductSharedRepository _productSharedRepository = productSharedRepository;
-    private readonly IMapper _mapper = mapper;
-
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductSharedDTO>>> Get()
+    public async Task<ActionResult<IEnumerable<ProductSharedDto>>> Get()
     {
-        var productShareds = await _productSharedRepository.GetAllAsync(
+        var productShareds = await productSharedRepository.GetAllAsync(
             p => p.ProductGroup,
             p => p.ProductSubGroup);
 
@@ -29,79 +26,80 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
         {
             return NotFound("No Products.");
         }
-        var productSharedsDto = _mapper.Map<IEnumerable<ProductSharedDTO>>(productShareds);
+        var productSharedsDto = mapper.Map<IEnumerable<ProductSharedDto>>(productShareds);
         return Ok(productSharedsDto);
     }
 
     [HttpGet("{id:int}", Name = "GetProductShared")]
-    public async Task<ActionResult<ProductSharedDTO>> Get(int id)
+    public async Task<ActionResult<ProductSharedDto>> Get(int id)
     {
-        var productShared = await _productSharedRepository.GetByIdAsync(id);
+        var productShared = await productSharedRepository.GetByIdAsync(id);
+
         if (productShared is null)
         {
             return NotFound($"ProductShared with id {id} not found");
         }
 
-        var productSharedDto = _mapper.Map<ProductSharedDTO>(productShared);
+        var productSharedDto = mapper.Map<ProductSharedDto>(productShared);
         return Ok(productSharedDto);
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] ProductSharedDTO productSharedDTO)
+    public async Task<ActionResult> Post([FromBody] ProductSharedDto productSharedDto)
     {
-        if (productSharedDTO is null)
+        if (productSharedDto is null)
         {
             return BadRequest("Invalid data.");
         }
 
-        var productShared = _mapper.Map<ProductShared>(productSharedDTO);
+        var productShared = mapper.Map<ProductShared>(productSharedDto);
 
-        var productGroup = await _productSharedRepository.FindByName<ProductGroup>(productSharedDTO.GroupName);
+        var productGroup = await productSharedRepository.FindByProperty<ProductGroup>("Name", productSharedDto.GroupName);
         if (productGroup is null)
         {
-            return BadRequest($"ProductGroup '{productSharedDTO.GroupName}' does not exist.");
+            return BadRequest($"ProductGroup '{productSharedDto.GroupName}' does not exist.");
         }
         productShared.IdProductGroup = productGroup.Id;
         productShared.ProductGroup = productGroup;
 
-        var productSubGroup = await _productSharedRepository.FindByName<ProductSubGroup>(productSharedDTO.SubGroupName);
+        var productSubGroup = await productSharedRepository.FindByProperty<ProductSubGroup>("Name", productSharedDto.SubGroupName);
         if (productSubGroup is null)
         {
-            return BadRequest($"ProductSubGroup '{productSharedDTO.SubGroupName}' does not exist.");
+            return BadRequest($"ProductSubGroup '{productSharedDto.SubGroupName}' does not exist.");
         }
         productShared.IdProductSubGroup = productSubGroup.Id;
         productShared.ProductSubGroup = productSubGroup;
 
-        await _productSharedRepository.AddAsync(productShared);
+        await productSharedRepository.AddAsync(productShared);
 
-        return new CreatedAtRouteResult("GetProductShared", new { id = productSharedDTO.Id }, productSharedDTO);
+        return new CreatedAtRouteResult("GetProductShared", new { id = productSharedDto.Id }, productSharedDto);
     }
 
     [HttpPut]
-    public async Task<ActionResult> Put(int id, [FromBody] ProductSharedDTO productSharedDTO)
+    public async Task<ActionResult> Put(int id, [FromBody] ProductSharedDto productSharedDto)
     {
-        if (id != productSharedDTO.Id)
+        if (id != productSharedDto.Id)
         {
-            return BadRequest($"{id} is different from productShared id {productSharedDTO.Id}");
+            return BadRequest($"{id} is different from productShared id {productSharedDto.Id}");
         }
 
-        if (productSharedDTO is null)
+        if (productSharedDto is null)
         {
             return BadRequest("Invalid data");
         }
 
-        var productShared = await _productSharedRepository.GetByIdAsync(id);
+        var productShared = await productSharedRepository.GetByIdAsync(id);
 
         if (productShared == null)
         {
             return NotFound($"No Product Shared with id {id}.");
         }
 
-        _mapper.Map(productSharedDTO, productShared);
+        mapper.Map(productSharedDto, productShared);
 
         try
         {
-            bool updated = await _productSharedRepository.UpdateAsync(productShared);
+            var updated = await productSharedRepository.UpdateAsync(productShared);
             if (!updated)
             {
                 return Ok("No changes were detected.");
@@ -109,7 +107,7 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!await _productSharedRepository.ExistsAsync(id))
+            if (!await productSharedRepository.ExistsAsync<ProductShared>(id))
             {
                 return NotFound($"No Product Shared with id {id}.");
             }
@@ -119,22 +117,22 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
             }
         }
 
-        return Ok(productSharedDTO);
+        return Ok(productSharedDto);
     }
 
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var productShared = await _productSharedRepository.GetByIdAsync(id);
+        var productShared = await productSharedRepository.GetByIdAsync(id);
         if (productShared is null)
         {
-            return NotFound($"ProductShared {id} not found");
+            return NotFound($"ProductShared with {id} not found");
         }
 
-        await _productSharedRepository.RemoveAsync(id);
+        await productSharedRepository.RemoveAsync(id);
 
-        var productSharedDTO = _mapper.Map<ProductSharedDTO>(productShared);
+        var productSharedDto = mapper.Map<ProductSharedDto>(productShared);
 
-        return Ok(productSharedDTO);
+        return Ok(productSharedDto);
     }
 }

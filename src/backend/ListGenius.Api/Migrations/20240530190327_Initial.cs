@@ -42,7 +42,7 @@ namespace ListGenius.Api.Migrations
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    FullName = table.Column<string>(type: "longtext", nullable: false)
+                    FullName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LogoImage = table.Column<byte[]>(type: "longblob", nullable: false),
                     ProfilePicture = table.Column<byte[]>(type: "longblob", nullable: false),
@@ -229,7 +229,7 @@ namespace ListGenius.Api.Migrations
                     Public = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
                     ExternalLink = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdUser = table.Column<string>(type: "varchar(255)", nullable: false)
+                    IdUser = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -373,14 +373,14 @@ namespace ListGenius.Api.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "LogoImage", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "37846734-172e-4149-8cec-6f43d1eb3f60", 0, "ebb3f168-0fe3-4f3c-87b4-7daab6c93165", "jmmatheus23@gmail.com", true, "JoaoDiasUser", false, null, new byte[0], "JMMATHEUS23@GMAIL.COM", "JMMATHEUS23@GMAIL.COM", "AQAAAAIAAYagAAAAECp8YUXOfG/QpkEQW1KioCFuYGM4SMWaEijWd05gtSO8708l6BJDwdXdh/Km+pZH+w==", null, false, new byte[0], "69c95e87-0141-4da9-907a-0dcf2813855f", false, "jmmatheus23@gmail.com" },
-                    { "38846734-172e-4149-8cec-6f43d1eb3f60", 0, "1ecafad4-8039-479a-91ed-ac429ab9c4e1", "joaodiasworking@gmail.com", true, "JoaoDiasAdmin", false, null, new byte[0], "JOAODIASWORKING@GMAIL.COM", "JOAODIASWORKING@GMAIL.COM", "AQAAAAIAAYagAAAAEJubyjN02YLIxvioCqVCjA72qcJJG6vwZ9aGCQN1hciZ76qoj/C3CPcxa8Zcf11dfA==", null, false, new byte[0], "e8cf8860-dde9-4b8f-9e06-5505b338fdd9", false, "joaodiasworking@gmail.com" }
+                    { "37846734-172e-4149-8cec-6f43d1eb3f60", 0, "73a0ac7d-0afb-4a89-a6b5-4e54dd0695ea", "jmmatheus23@gmail.com", true, "JoaoDiasUser", false, null, new byte[0], "JMMATHEUS23@GMAIL.COM", "JMMATHEUS23@GMAIL.COM", "AQAAAAIAAYagAAAAEPC2Dm6IFecM5mk8GEtzfeo7nIl+uTH8kNwmqHDMVTuEjhcImPpaVg2o6m/+tB1+KA==", null, false, new byte[0], "2eb90b17-ea41-449d-866d-f5a128c8c570", false, "jmmatheus23@gmail.com" },
+                    { "38846734-172e-4149-8cec-6f43d1eb3f60", 0, "69b558fd-079e-480e-9081-0fd9ebabf1fe", "joaodiasworking@gmail.com", true, "JoaoDiasAdmin", false, null, new byte[0], "JOAODIASWORKING@GMAIL.COM", "JOAODIASWORKING@GMAIL.COM", "AQAAAAIAAYagAAAAELhKujrBhQRSsyXyyZtFLDirIouE2QFwXIDHEYZgiwMyI8MYI2BuST6H8d5d8LM7Eg==", null, false, new byte[0], "494f4df6-70e5-4c7e-8b60-44ddb4a4911c", false, "joaodiasworking@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
                 table: "ProductGroups",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "Image", "Name", "UpdatedDate" },
-                values: new object[] { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1475), "GERAL", true, new byte[] { 0 }, "GERAL", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1495) });
+                values: new object[] { 1, new DateTime(2024, 5, 30, 16, 3, 25, 744, DateTimeKind.Local).AddTicks(9643), "GERAL", true, new byte[] { 0 }, "GERAL", new DateTime(2024, 5, 30, 16, 3, 25, 744, DateTimeKind.Local).AddTicks(9659) });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -394,15 +394,15 @@ namespace ListGenius.Api.Migrations
             migrationBuilder.InsertData(
                 table: "ProductSubGroups",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "Image", "Name", "UpdatedDate" },
-                values: new object[] { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1564), "GERAL", true, 1, new byte[] { 0 }, "GERAL", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1565) });
+                values: new object[] { 1, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6354), "GERAL", true, 1, new byte[] { 0 }, "GERAL", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6369) });
 
             migrationBuilder.InsertData(
                 table: "ProductsLists",
                 columns: new[] { "Id", "CreatedDate", "Description", "ExternalLink", "IdUser", "Image", "Name", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1617), "Description for Shopping List 1", "", "37846734-172e-4149-8cec-6f43d1eb3f60", new byte[] { 0 }, "Shopping List 1", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1617) },
-                    { 2, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1620), "Description for Shopping List 2", "", "37846734-172e-4149-8cec-6f43d1eb3f60", new byte[] { 0 }, "Shopping List 2", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1620) }
+                    { 1, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6598), "Description for Shopping List 1", "", "37846734-172e-4149-8cec-6f43d1eb3f60", new byte[] { 0 }, "Shopping List 1", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6600) },
+                    { 2, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6602), "Description for Shopping List 2", "", "37846734-172e-4149-8cec-6f43d1eb3f60", new byte[] { 0 }, "Shopping List 2", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6602) }
                 });
 
             migrationBuilder.InsertData(
@@ -410,56 +410,56 @@ namespace ListGenius.Api.Migrations
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "IdProductSubGroup", "IdProductsList", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2262), "TESTE 1", true, 1, 1, 1, new byte[] { 0 }, "", "Teste 1", new byte[] { 0 }, "Meter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2268), 22.05m },
-                    { 2, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2275), "TESTE 2", true, 1, 1, 1, new byte[] { 0 }, "", "Teste 2", new byte[] { 0 }, "SquareMeter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2276), 33.33m }
+                    { 1, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6744), "TESTE 1", true, 1, 1, 1, new byte[] { 0 }, "", "Teste 1", new byte[] { 0 }, "Meter", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6745), 22.05m },
+                    { 2, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6834), "TESTE 2", true, 1, 1, 1, new byte[] { 0 }, "", "Teste 2", new byte[] { 0 }, "SquareMeter", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6834), 33.33m }
                 });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "CreatedDate", "Description", "IdProductGroup", "IdProductSubGroup", "IdProductsList", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
-                values: new object[] { 3, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2277), "TESTE 3", 1, 1, 1, new byte[] { 0 }, "", "Teste 3", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2278), 42.33m });
+                values: new object[] { 3, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6835), "TESTE 3", 1, 1, 1, new byte[] { 0 }, "", "Teste 3", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6836), 42.33m });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "IdProductSubGroup", "IdProductsList", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
                 values: new object[,]
                 {
-                    { 4, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2394), "TESTE 4", true, 1, 1, 2, new byte[] { 0 }, "", "Teste 4", new byte[] { 0 }, "CubicMeter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2395), 77.77m },
-                    { 5, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2396), "TESTE 5", true, 1, 1, 2, new byte[] { 0 }, "", "Teste 5", new byte[] { 0 }, "Unit", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2414), 66.66m }
+                    { 4, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6837), "TESTE 4", true, 1, 1, 2, new byte[] { 0 }, "", "Teste 4", new byte[] { 0 }, "CubicMeter", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6837), 77.77m },
+                    { 5, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6838), "TESTE 5", true, 1, 1, 2, new byte[] { 0 }, "", "Teste 5", new byte[] { 0 }, "Unit", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6850), 66.66m }
                 });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "CreatedDate", "Description", "IdProductGroup", "IdProductSubGroup", "IdProductsList", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
-                values: new object[] { 6, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2424), "TESTE 6", 1, 1, 2, new byte[] { 0 }, "", "Teste 6", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(2424), 35.31m });
+                values: new object[] { 6, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6858), "TESTE 6", 1, 1, 2, new byte[] { 0 }, "", "Teste 6", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6858), 35.31m });
 
             migrationBuilder.InsertData(
                 table: "ProductsShared",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "IdProductSubGroup", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1652), "TESTE 1", true, 1, 1, new byte[] { 0 }, "", "Teste 1", new byte[] { 0 }, "Meter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1653), 22.05m },
-                    { 2, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1657), "TESTE 2", true, 1, 1, new byte[] { 0 }, "", "Teste 2", new byte[] { 0 }, "SquareMeter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1657), 33.33m }
+                    { 1, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6667), "TESTE 1", true, 1, 1, new byte[] { 0 }, "", "Teste 1", new byte[] { 0 }, "Meter", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6667), 22.05m },
+                    { 2, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6674), "TESTE 2", true, 1, 1, new byte[] { 0 }, "", "Teste 2", new byte[] { 0 }, "SquareMeter", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6675), 33.33m }
                 });
 
             migrationBuilder.InsertData(
                 table: "ProductsShared",
                 columns: new[] { "Id", "CreatedDate", "Description", "IdProductGroup", "IdProductSubGroup", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
-                values: new object[] { 3, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1659), "TESTE 3", 1, 1, new byte[] { 0 }, "", "Teste 3", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1659), 42.33m });
+                values: new object[] { 3, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6676), "TESTE 3", 1, 1, new byte[] { 0 }, "", "Teste 3", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6676), 42.33m });
 
             migrationBuilder.InsertData(
                 table: "ProductsShared",
                 columns: new[] { "Id", "CreatedDate", "Description", "Enabled", "IdProductGroup", "IdProductSubGroup", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
                 values: new object[,]
                 {
-                    { 4, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1660), "TESTE 4", true, 1, 1, new byte[] { 0 }, "", "Teste 4", new byte[] { 0 }, "CubicMeter", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1660), 77.77m },
-                    { 5, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1661), "TESTE 5", true, 1, 1, new byte[] { 0 }, "", "Teste 5", new byte[] { 0 }, "Unit", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1662), 66.66m }
+                    { 4, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6677), "TESTE 4", true, 1, 1, new byte[] { 0 }, "", "Teste 4", new byte[] { 0 }, "CubicMeter", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6677), 77.77m },
+                    { 5, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6678), "TESTE 5", true, 1, 1, new byte[] { 0 }, "", "Teste 5", new byte[] { 0 }, "Unit", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6679), 66.66m }
                 });
 
             migrationBuilder.InsertData(
                 table: "ProductsShared",
                 columns: new[] { "Id", "CreatedDate", "Description", "IdProductGroup", "IdProductSubGroup", "Image", "Link", "Name", "Qrcode", "Unit", "UpdatedDate", "Value" },
-                values: new object[] { 6, new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1663), "TESTE 6", 1, 1, new byte[] { 0 }, "", "Teste 6", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 28, 20, 6, 43, 179, DateTimeKind.Local).AddTicks(1663), 35.31m });
+                values: new object[] { 6, new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6680), "TESTE 6", 1, 1, new byte[] { 0 }, "", "Teste 6", new byte[] { 0 }, "Unspecified", new DateTime(2024, 5, 30, 16, 3, 25, 748, DateTimeKind.Local).AddTicks(6680), 35.31m });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using ListGenius.Api.Entities.ProductGroups;
 using ListGenius.Api.Entities.Products;
-using ListGenius.Api.Entities.ProductShareds;
 using ListGenius.Api.Entities.ProductsLists;
+using ListGenius.Api.Entities.ProductsShared;
 using ListGenius.Api.Entities.ProductSubGroups;
 
 namespace ListGenius.Api.Mappings;
 
-public class DomainToDTOProfile : Profile
+public class DomainToDtoProfile : Profile
 {
-    public DomainToDTOProfile()
+    public DomainToDtoProfile()
     {
-        CreateMap<Product, ProductDTO>()
+        CreateMap<Product, ProductDto>()
             .ForMember(dto => dto.GroupName, opt => opt.MapFrom(src => src.ProductGroup.Name))
             .ForMember(dto => dto.SubGroupName, opt => opt.MapFrom(src => src.ProductSubGroup.Name))
             .ForMember(dto => dto.ShoppingListName, opt => opt.MapFrom(src => src.ProductsList.Name))
@@ -21,11 +21,11 @@ public class DomainToDTOProfile : Profile
             .ForPath(src => src.ProductSubGroup, opt => opt.Ignore())
             .ForPath(src => src.ProductsList, opt => opt.Ignore());
 
-        CreateMap<ProductsList, ProductsListDTO>()
+        CreateMap<ProductsList, ProductsListDto>()
             .ForMember(dto => dto.UserName, opt => opt.MapFrom(src => src.User.FullName))
             .ReverseMap();
 
-        CreateMap<ProductShared, ProductSharedDTO>()
+        CreateMap<ProductShared, ProductSharedDto>()
             .ForMember(dto => dto.GroupName, opt => opt.MapFrom(src => src.ProductGroup.Name))
             .ForMember(dto => dto.SubGroupName, opt => opt.MapFrom(src => src.ProductSubGroup.Name))
             .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Unit))
@@ -33,9 +33,9 @@ public class DomainToDTOProfile : Profile
             .ForPath(src => src.ProductGroup, opt => opt.Ignore())
             .ForPath(src => src.ProductSubGroup, opt => opt.Ignore());
 
-        CreateMap<ProductGroup, ProductGroupDTO>().ReverseMap();
+        CreateMap<ProductGroup, ProductGroupDto>().ReverseMap();
 
-        CreateMap<ProductSubGroup, ProductSubGroupDTO>()
+        CreateMap<ProductSubGroup, ProductSubGroupDto>()
             .ForMember(dto => dto.GroupName, opt => opt.MapFrom(src => src.ProductGroup.Name))
             .ReverseMap();
     }

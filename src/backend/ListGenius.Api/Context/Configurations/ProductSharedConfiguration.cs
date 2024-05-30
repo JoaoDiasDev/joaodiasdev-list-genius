@@ -1,4 +1,4 @@
-﻿using ListGenius.Api.Entities.ProductShareds;
+﻿using ListGenius.Api.Entities.ProductsShared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

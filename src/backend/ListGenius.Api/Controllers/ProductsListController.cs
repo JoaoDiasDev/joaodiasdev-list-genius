@@ -12,15 +12,12 @@ namespace ListGenius.Api.Controllers;
 [ApiController]
 [Authorize(AuthenticationSchemes = "Bearer")]
 [Route("api/v{version:apiVersion}/[controller]")]
-public class ProductsListController(IProductsListRepository productsListRepository, IMapper mapper) : ControllerBase
+public class ProductsListController(IProductsListRepository productsListRepository, IUserRepository userRepository, IMapper mapper) : ControllerBase
 {
-    private readonly IProductsListRepository _productsListRepository = productsListRepository;
-    private readonly IMapper _mapper = mapper;
-
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductsListDTO>>> Get()
+    public async Task<ActionResult<IEnumerable<ProductsListDto>>> Get()
     {
-        var productsLists = await _productsListRepository.GetAllAsync(
+        var productsLists = await productsListRepository.GetAllAsync(
             pl => pl.User);
 
         if (productsLists is null)
@@ -28,71 +25,71 @@ public class ProductsListController(IProductsListRepository productsListReposito
             return NotFound("No Products Lists.");
         }
 
-        var productsListsDto = _mapper.Map<IEnumerable<ProductsListDTO>>(productsLists);
+        var productsListsDto = mapper.Map<IEnumerable<ProductsListDto>>(productsLists);
         return Ok(productsListsDto);
     }
 
     [HttpGet("{id:int}", Name = "GetProductsList")]
-    public async Task<ActionResult<ProductsListDTO>> Get(int id)
+    public async Task<ActionResult<ProductsListDto>> Get(int id)
     {
-        var productsList = await _productsListRepository.GetByIdAsync(id);
+        var productsList = await productsListRepository.GetByIdAsync(id);
 
         if (productsList is null)
         {
             return NotFound($"ProductsList with id {id} not found");
         }
 
-        var productsListDto = _mapper.Map<ProductsListDTO>(productsList);
+        var productsListDto = mapper.Map<ProductsListDto>(productsList);
         return Ok(productsListDto);
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] ProductsListDTO productsListDTO)
+    public async Task<ActionResult> Post([FromBody] ProductsListDto productsListDto)
     {
-        if (productsListDTO is null)
+        if (productsListDto is null)
         {
             return BadRequest("Invalid data.");
         }
-        var productsList = _mapper.Map<ProductsList>(productsListDTO);
+        var productsList = mapper.Map<ProductsList>(productsListDto);
 
-        var user = await _productsListRepository.FindByName<ApplicationUser>(productsListDTO.UserName);
+        var user = await userRepository.FindByFullNameAsync(productsList.User.FullName);
         if (user is null)
         {
-            return BadRequest($"User '{productsListDTO.UserName}' does not exist.");
+            return BadRequest($"User '{productsListDto.UserName}' does not exist.");
         }
         productsList.IdUser = user.Id;
         productsList.User = user;
 
-        await _productsListRepository.AddAsync(productsList);
+        await productsListRepository.AddAsync(productsList);
 
-        return new CreatedAtRouteResult("GetProductsList", new { id = productsListDTO.Id }, productsListDTO);
+        return new CreatedAtRouteResult("GetProductsList", new { id = productsListDto.Id }, productsListDto);
     }
 
     [HttpPut]
-    public async Task<ActionResult> Put(int id, [FromBody] ProductsListDTO productsListDTO)
+    public async Task<ActionResult> Put(int id, [FromBody] ProductsListDto productsListDto)
     {
-        if (id != productsListDTO.Id)
+        if (id != productsListDto.Id)
         {
-            return BadRequest($"{id} is different from Products List id {productsListDTO.Id}");
+            return BadRequest($"{id} is different from Products List id {productsListDto.Id}");
         }
 
-        if (productsListDTO is null)
+        if (productsListDto is null)
         {
             return BadRequest("Invalid data");
         }
 
-        var productsList = await _productsListRepository.GetByIdAsync(id);
+        var productsList = await productsListRepository.GetByIdAsync(id);
 
         if (productsList == null)
         {
             return NotFound($"No Products List with id {id}.");
         }
 
-        _mapper.Map(productsListDTO, productsList);
+        mapper.Map(productsListDto, productsList);
 
         try
         {
-            bool updated = await _productsListRepository.UpdateAsync(productsList);
+            var updated = await productsListRepository.UpdateAsync(productsList);
             if (!updated)
             {
                 return Ok("No changes were detected.");
@@ -100,7 +97,7 @@ public class ProductsListController(IProductsListRepository productsListReposito
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!await _productsListRepository.ExistsAsync(id))
+            if (!await productsListRepository.ExistsAsync<ProductsList>(id))
             {
                 return NotFound($"No Products List with id {id}.");
             }
@@ -110,22 +107,22 @@ public class ProductsListController(IProductsListRepository productsListReposito
             }
         }
 
-        return Ok(productsListDTO);
+        return Ok(productsListDto);
     }
 
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var productsList = await _productsListRepository.GetByIdAsync(id);
+        var productsList = await productsListRepository.GetByIdAsync(id);
         if (productsList is null)
         {
-            return NotFound($"ProductsList {id} not found");
+            return NotFound($"ProductsList with {id} not found");
         }
 
-        await _productsListRepository.RemoveAsync(id);
+        await productsListRepository.RemoveAsync(id);
 
-        var productsListDTO = _mapper.Map<ProductsListDTO>(productsList);
+        var productsListDto = mapper.Map<ProductsListDto>(productsList);
 
-        return Ok(productsListDTO);
+        return Ok(productsListDto);
     }
 }

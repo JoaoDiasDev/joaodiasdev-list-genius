@@ -15,28 +15,23 @@ public class UserController(UserManager<ApplicationUser> userManager,
     RoleManager<IdentityRole> roleManager,
     IConfiguration configuration) : ControllerBase
 {
-    private readonly UserManager<ApplicationUser> _userManager = userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-    private readonly RoleManager<IdentityRole> _roleManager = roleManager;
-    private readonly IConfiguration _configuration = configuration;
-
     [HttpPost("Register")]
     public async Task<IActionResult> CreateUser([FromBody] UserRegister model)
     {
-        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName };
+        var user = new ApplicationUser { UserName = UserRegister.Email, Email = UserRegister.Email, FullName = UserRegister.FullName };
 
-        var result = await _userManager.CreateAsync(user, model.Password ?? string.Empty);
+        var result = await userManager.CreateAsync(user, model.Password);
 
         if (result.Succeeded)
         {
-            string defaultRole = "User";
+            const string defaultRole = "User";
 
-            if (!await _roleManager.RoleExistsAsync(defaultRole))
+            if (!await roleManager.RoleExistsAsync(defaultRole))
             {
-                await _roleManager.CreateAsync(new IdentityRole(defaultRole));
+                await roleManager.CreateAsync(new IdentityRole(defaultRole));
             }
 
-            await _userManager.AddToRoleAsync(user, defaultRole);
+            await userManager.AddToRoleAsync(user, defaultRole);
             return Ok(model);
         }
         else
@@ -48,7 +43,7 @@ public class UserController(UserManager<ApplicationUser> userManager,
     [HttpPost("Login")]
     public async Task<ActionResult<UserToken>> Login([FromBody] User userInfo)
     {
-        var result = await _signInManager.PasswordSignInAsync(userInfo.Email,
+        var result = await signInManager.PasswordSignInAsync(userInfo.Email,
                          userInfo.Password, isPersistent: false, lockoutOnFailure: false);
 
         if (result.Succeeded)
@@ -68,12 +63,12 @@ public class UserController(UserManager<ApplicationUser> userManager,
         {
             new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
             new Claim("joaodiasdev", "http://joaodiasdev.com"),
-            new Claim(JwtRegisteredClaimNames.Aud, _configuration["Jwt:Audience"] ?? string.Empty),
-            new Claim(JwtRegisteredClaimNames.Iss, _configuration["Jwt:Issuer"] ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Aud, configuration["Jwt:Audience"] ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Iss, configuration["Jwt:Issuer"] ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"] ?? string.Empty));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:key"] ?? string.Empty));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var expiration = DateTime.UtcNow.AddDays(7);

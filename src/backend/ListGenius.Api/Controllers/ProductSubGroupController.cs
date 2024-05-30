@@ -1,8 +1,10 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
+using ListGenius.Api.Entities.ProductGroups;
 using ListGenius.Api.Entities.ProductSubGroups;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Controllers;
 
@@ -12,80 +14,116 @@ namespace ListGenius.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ProductSubGroupController(IProductSubGroupRepository productSubGroupRepository, IMapper mapper) : ControllerBase
 {
-    private readonly IProductSubGroupRepository _productSubGroupRepository = productSubGroupRepository;
-    private readonly IMapper _mapper = mapper;
-
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductSubGroupDTO>>> Get()
+    public async Task<ActionResult<IEnumerable<ProductSubGroupDto>>> Get()
     {
-        var productSubGroups = await _productSubGroupRepository.GetAllAsync();
+        var productSubGroups = await productSubGroupRepository.GetAllAsync(
+            psg => psg.ProductGroup);
+
         if (productSubGroups is null)
         {
             return NotFound("No Product Sub Groups.");
         }
-        var productSubGroupsDto = _mapper.Map<IEnumerable<ProductSubGroupDTO>>(productSubGroups);
+        var productSubGroupsDto = mapper.Map<IEnumerable<ProductSubGroupDto>>(productSubGroups);
         return Ok(productSubGroupsDto);
     }
 
     [HttpGet("{id:int}", Name = "GetProductSubGroup")]
-    public async Task<ActionResult<ProductSubGroupDTO>> Get(int id)
+    public async Task<ActionResult<ProductSubGroupDto>> Get(int id)
     {
-        var productSubGroup = await _productSubGroupRepository.GetByIdAsync(id);
+        var productSubGroup = await productSubGroupRepository.GetByIdAsync(id);
         if (productSubGroup is null)
         {
-            return NotFound($"ProductSubGroup with {id} not found");
+            return NotFound($"ProductSubGroup with id {id} not found");
         }
 
-        var productSubGroupDto = _mapper.Map<ProductSubGroupDTO>(productSubGroup);
+        var productSubGroupDto = mapper.Map<ProductSubGroupDto>(productSubGroup);
         return Ok(productSubGroupDto);
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] ProductSubGroupDTO productSubGroupDTO)
+    public async Task<ActionResult> Post([FromBody] ProductSubGroupDto productSubGroupDto)
     {
-        if (productSubGroupDTO is null)
+        if (productSubGroupDto is null)
         {
             return BadRequest("Invalid data.");
         }
+        var productSubGroup = mapper.Map<ProductSubGroup>(productSubGroupDto);
 
-        var productSubGroup = _mapper.Map<ProductSubGroup>(productSubGroupDTO);
+        var productGroup = await productSubGroupRepository.FindByProperty<ProductGroup>("Name", productSubGroupDto.GroupName);
+        if (productGroup is null)
+        {
+            return BadRequest($"ProductGroup '{productSubGroupDto.GroupName}' does not exist.");
+        }
+        productSubGroup.IdProductGroup = productGroup.Id;
+        productSubGroup.ProductGroup = productGroup;
 
-        await _productSubGroupRepository.AddAsync(productSubGroup);
+        await productSubGroupRepository.AddAsync(productSubGroup);
 
-        return new CreatedAtRouteResult("GetProductSubGroup", new { id = productSubGroupDTO.Id }, productSubGroupDTO);
+        return new CreatedAtRouteResult("GetProductSubGroup", new { id = productSubGroupDto.Id }, productSubGroupDto);
     }
 
     [HttpPut]
-    public async Task<ActionResult> Put(int id, [FromBody] ProductSubGroupDTO productSubGroupDTO)
+    public async Task<ActionResult> Put(int id, [FromBody] ProductSubGroupDto productSubGroupDto)
     {
-        if (id != productSubGroupDTO.Id)
+        if (id != productSubGroupDto.Id)
         {
-            return BadRequest($"{id} is different from productSubGroup id {productSubGroupDTO.Id}");
+            return BadRequest($"id on query param is {id} different from productSubGroup id {productSubGroupDto.Id}");
         }
 
-        if (productSubGroupDTO is null)
+        if (productSubGroupDto is null)
         {
             return BadRequest("Invalid data");
         }
 
-        var productSubGroup = _mapper.Map<ProductSubGroup>(productSubGroupDTO);
+        var productSubGroup = await productSubGroupRepository.GetByIdAsync(id);
 
-        await _productSubGroupRepository.UpdateAsync(productSubGroup);
+        if (productSubGroup is null)
+        {
+            return NotFound($"No Product Sub Group with id {id}.");
+        }
 
-        return Ok(productSubGroupDTO);
+        mapper.Map(productSubGroupDto, productSubGroup);
+
+
+        try
+        {
+            var updated = await productSubGroupRepository.UpdateAsync(productSubGroup);
+            if (!updated)
+            {
+                return Ok("No changes were detected.");
+            }
+
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await productSubGroupRepository.ExistsAsync<ProductSubGroup>(id))
+            {
+                return NotFound($"No Product Sub Group with id {id}.");
+            }
+            else
+            {
+                return Conflict("Concurrency conflict occurred while updating the product sub group. Please try again.");
+            }
+        }
+
+        return Ok(productSubGroupDto);
     }
 
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var productSubGroup = await _productSubGroupRepository.GetByIdAsync(id);
+        var productSubGroup = await productSubGroupRepository.GetByIdAsync(id);
+
         if (productSubGroup is null)
         {
-            return NotFound($"ProductSubGroup {id} not found");
+            return NotFound($"Product Sub Group with {id} not found");
         }
 
-        await _productSubGroupRepository.RemoveAsync(id);
+        await productSubGroupRepository.RemoveAsync(id);
 
-        return Ok(productSubGroup);
+        var productSubGroupDto = mapper.Map<ProductSubGroupDto>(productSubGroup);
+
+        return Ok(productSubGroupDto);
     }
 }

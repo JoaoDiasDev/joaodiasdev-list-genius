@@ -2,7 +2,7 @@
 
 public class UserRegister
 {
-    public string FullName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
+    public static string FullName => string.Empty;
+    public static string Email => string.Empty;
     public string Password { get; set; } = string.Empty;
 }
