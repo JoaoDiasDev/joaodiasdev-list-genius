@@ -1,57 +1,52 @@
 ﻿namespace ListGenius.Web.Components.ProductGroups;
 
-public class ProductGroupService : IProductGroupService;
-private readonly IHttpClientFactory _httpClientFactory;
-public ILogger<ProductGroupService> _logger;
-private const string apiEndpoint = "/api/categorias/";
-
-private CategoriaDTO? categoria;
-private IEnumerable<CategoriaDTO>? categorias;
-
-public ProductGroupService(IHttpClientFactory httpClientFactory,
-    ILogger<ProductGroupService> logger)
+public class ProductGroupService(
+    IHttpClientFactory httpClientFactory,
+    ILogger<ProductGroupService> logger,
+    IEnumerable<ProductGroupDto>? productGroups,
+    ProductGroupDto? productGroup)
+    : IProductGroupService
 {
-    _httpClientFactory = httpClientFactory;
-    _logger = logger;
-}
+    private const string ApiEndpoint = "/api/productgroup/";
 
-public async Task<CategoriaDTO> GetCategoria(int id)
-{
-    try
+    public async Task<ProductGroupDto> GetById(int id)
     {
-        var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-        var response = await httpClient.GetAsync(apiEndpoint + id);
-
-        if (response.IsSuccessStatusCode)
+        try
         {
-            categoria = await response.Content.ReadFromJsonAsync<CategoriaDTO>();
-            return categoria;
-        }
-        else
-        {
-            var message = await response.Content.ReadAsStringAsync();
-            _logger.LogError($"Erro ao obter a categoria pelo id= {id} - {message}");
-            throw new Exception($"Status Code : {response.StatusCode} - {message}");
-        }
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError($"Erro ao obter a categoria pelo id={id} \n\n {ex.Message} ");
-        throw new UnauthorizedAccessException();
-    }
-}
-public async Task<List<CategoriaDTO>> GetCategorias()
-{
-    try
-    {
-        var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-        var result = await httpClient.GetFromJsonAsync<List<CategoriaDTO>>(apiEndpoint);
-        return result;
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError($"Erro ao acessar categorias: {apiEndpoint} " + ex.Message);
-        throw new UnauthorizedAccessException();
-    }
-}
+            var httpClient = httpClientFactory.CreateClient("ApiMangas");
+            var response = await httpClient.GetAsync(ApiEndpoint + id);
 
+            if (response.IsSuccessStatusCode)
+            {
+                productGroup = await response.Content.ReadFromJsonAsync<ProductGroupDto>();
+                return productGroup ?? new ProductGroupDto();
+            }
+            else
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                logger.LogError($"Erro ao obter a Product Group pelo id= {id} - {message}");
+                throw new Exception($"Status Code : {response.StatusCode} - {message}");
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"Erro ao obter a Product Group pelo id={id} \n\n {ex.Message} ");
+            throw new UnauthorizedAccessException();
+        }
+    }
+
+    public async Task<List<ProductGroupDto>> GetAll()
+    {
+        try
+        {
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
+            var result = await httpClient.GetFromJsonAsync<List<ProductGroupDto>>(ApiEndpoint);
+            return result ?? [];
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"Erro ao acessar Product Group: {ApiEndpoint} " + ex.Message);
+            throw new UnauthorizedAccessException();
+        }
+    }
+}

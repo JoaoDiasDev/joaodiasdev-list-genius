@@ -16,7 +16,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         _dbSet = db.Set<TEntity>();
         _cache = cache;
         _cacheOptions = new MemoryCacheEntryOptions()
-            .SetSlidingExpiration(TimeSpan.FromMinutes(30)); // Adjust the expiration time as needed
+            .SetSlidingExpiration(TimeSpan.FromMinutes(30));
     }
 
     public async Task<IEnumerable<TEntity>?> SearchAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
@@ -24,7 +24,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         var cacheKey = $"SearchAsync_{predicate}_{string.Join(",", includes.Select(i => i.ToString()))}";
         if (!_cache.TryGetValue(cacheKey, out IEnumerable<TEntity>? cachedEntities))
         {
-            IQueryable<TEntity> query = _dbSet.AsNoTracking().AsSplitQuery().Where(predicate);
+            IQueryable<TEntity> query = _dbSet.AsNoTracking().Where(predicate);
             cachedEntities = await GetEntitiesWithIncludesAsync(query, includes);
             _cache.Set(cacheKey, cachedEntities, _cacheOptions);
         }
@@ -79,7 +79,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (!_cache.TryGetValue(cacheKey, out IEnumerable<TEntity>? cachedEntities))
         {
             var query = includes.Aggregate(_dbSet.AsNoTracking(), (current, include) => current.Include(include));
-            cachedEntities = await query.AsSplitQuery().ToListAsync();
+            cachedEntities = await query.ToListAsync();
             _cache.Set(cacheKey, cachedEntities, _cacheOptions);
         }
         return cachedEntities;
@@ -149,7 +149,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     private async Task<IEnumerable<TEntity>> GetEntitiesWithIncludesAsync<TEntity>(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includes) where TEntity : BaseEntity
     {
         query = includes.Aggregate(query, (current, include) => current.Include(include));
-        return await query.AsSplitQuery().ToListAsync();
+        return await query.ToListAsync();
     }
 
     private async Task ClearCacheAsync()
