@@ -1,9 +1,5 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
-using ListGenius.Api.Entities.ProductGroups;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Controllers;
 

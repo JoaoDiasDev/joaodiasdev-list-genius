@@ -1,12 +1,5 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
-using ListGenius.Api.Entities.ProductGroups;
-using ListGenius.Api.Entities.Products;
-using ListGenius.Api.Entities.ProductsLists;
-using ListGenius.Api.Entities.ProductSubGroups;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Controllers;
 
@@ -61,7 +54,6 @@ public class ProductController(IProductRepository productRepository, IMapper map
             return BadRequest($"ProductGroup '{productDto.GroupName}' does not exist.");
         }
         product.IdProductGroup = productGroup.Id;
-        product.ProductGroup = productGroup;
 
         var productSubGroup = await productRepository.FindByProperty<ProductSubGroup>("Name", productDto.SubGroupName);
         if (productSubGroup is null)
@@ -69,7 +61,6 @@ public class ProductController(IProductRepository productRepository, IMapper map
             return BadRequest($"ProductSubGroup '{productDto.SubGroupName}' does not exist.");
         }
         product.IdProductSubGroup = productSubGroup.Id;
-        product.ProductSubGroup = productSubGroup;
 
         var productsList = await productRepository.FindByProperty<ProductsList>("Name", productDto.ShoppingListName);
         if (productsList is null)
@@ -77,7 +68,6 @@ public class ProductController(IProductRepository productRepository, IMapper map
             return BadRequest($"ProductsList '{productDto.ShoppingListName}' does not exist.");
         }
         product.IdProductsList = productsList.Id;
-        product.ProductsList = productsList;
 
         await productRepository.AddAsync(product);
 

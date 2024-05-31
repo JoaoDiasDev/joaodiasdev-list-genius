@@ -1,8 +1,4 @@
-﻿using ListGenius.Api.Entities.Bases;
-using ListGenius.Api.Entities.ProductGroups;
-using ListGenius.Api.Entities.Products.Enums;
-using ListGenius.Api.Entities.ProductsLists;
-using ListGenius.Api.Entities.ProductSubGroups;
+﻿using ListGenius.Api.Entities.Products.Enums;
 
 namespace ListGenius.Api.Entities.Products;
 

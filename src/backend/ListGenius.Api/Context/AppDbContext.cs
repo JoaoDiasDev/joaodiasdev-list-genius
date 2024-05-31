@@ -1,14 +1,8 @@
 ﻿using ListGenius.Api.Context.Configurations;
-using ListGenius.Api.Entities.ProductGroups;
-using ListGenius.Api.Entities.Products;
 using ListGenius.Api.Entities.Products.Enums;
-using ListGenius.Api.Entities.ProductsLists;
-using ListGenius.Api.Entities.ProductsShared;
-using ListGenius.Api.Entities.ProductSubGroups;
 using ListGenius.Api.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Context;
 

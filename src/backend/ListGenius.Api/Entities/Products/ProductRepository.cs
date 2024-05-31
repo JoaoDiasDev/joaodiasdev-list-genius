@@ -1,7 +1,6 @@
-﻿using ListGenius.Api.Context;
-using ListGenius.Api.Entities.Bases;
+﻿using Microsoft.Extensions.Caching.Memory;
 
 namespace ListGenius.Api.Entities.Products;
 
-public class ProductRepository(AppDbContext context)
-    : BaseRepository<Product>(context), IProductRepository;
+public class ProductRepository(AppDbContext context, IMemoryCache iMemoryCache)
+    : BaseRepository<Product>(context, iMemoryCache), IProductRepository;

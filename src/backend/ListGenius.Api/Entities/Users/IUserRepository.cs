@@ -2,6 +2,6 @@
 {
     public interface IUserRepository
     {
-        Task<ApplicationUser> FindByFullNameAsync(string fullName);
+        Task<ApplicationUser?> FindByFullNameAsync(string fullName);
     }
 }

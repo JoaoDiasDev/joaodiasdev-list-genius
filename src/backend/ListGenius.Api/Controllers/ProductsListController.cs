@@ -1,10 +1,6 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
-using ListGenius.Api.Entities.ProductsLists;
 using ListGenius.Api.Entities.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Controllers;
 
@@ -58,7 +54,6 @@ public class ProductsListController(IProductsListRepository productsListReposito
             return BadRequest($"User '{productsListDto.UserName}' does not exist.");
         }
         productsList.IdUser = user.Id;
-        productsList.User = user;
 
         await productsListRepository.AddAsync(productsList);
 

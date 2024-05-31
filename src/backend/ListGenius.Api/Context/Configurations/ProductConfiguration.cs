@@ -1,6 +1,4 @@
-﻿using ListGenius.Api.Entities.Products;
-using ListGenius.Api.Entities.Products.Enums;
-using Microsoft.EntityFrameworkCore;
+﻿using ListGenius.Api.Entities.Products.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ListGenius.Api.Context.Configurations;

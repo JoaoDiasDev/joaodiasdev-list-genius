@@ -1,8 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-namespace ListGenius.Api.Entities.ProductGroups;
+﻿namespace ListGenius.Api.Entities.ProductGroups;
 public class ProductGroupDto
 {
     [JsonPropertyName("id")]

@@ -1,6 +1,5 @@
 ﻿using ListGenius.Api.Entities.Users;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,7 +17,7 @@ public class UserController(UserManager<ApplicationUser> userManager,
     [HttpPost("Register")]
     public async Task<IActionResult> CreateUser([FromBody] UserRegister model)
     {
-        var user = new ApplicationUser { UserName = UserRegister.Email, Email = UserRegister.Email, FullName = UserRegister.FullName };
+        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName };
 
         var result = await userManager.CreateAsync(user, model.Password);
 

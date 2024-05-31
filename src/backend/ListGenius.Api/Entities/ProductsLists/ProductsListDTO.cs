@@ -1,8 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-namespace ListGenius.Api.Entities.ProductsLists;
+﻿namespace ListGenius.Api.Entities.ProductsLists;
 
 public class ProductsListDto
 {

@@ -1,19 +1,11 @@
-using ListGenius.Api.Context;
-using ListGenius.Api.Entities.ProductGroups;
-using ListGenius.Api.Entities.Products;
-using ListGenius.Api.Entities.ProductsLists;
-using ListGenius.Api.Entities.ProductsShared;
-using ListGenius.Api.Entities.ProductSubGroups;
 using ListGenius.Api.Entities.Users;
 using ListGenius.Api.Mappings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +14,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddScoped<IProductsListRepository, ProductsListRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -143,6 +136,7 @@ else
 app.UseAntiforgery();
 app.UseCors();
 app.UseRateLimiter();
+app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthentication();

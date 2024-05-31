@@ -1,11 +1,5 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
-using ListGenius.Api.Entities.ProductGroups;
-using ListGenius.Api.Entities.ProductsShared;
-using ListGenius.Api.Entities.ProductSubGroups;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ListGenius.Api.Controllers;
 
@@ -60,7 +54,6 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
             return BadRequest($"ProductGroup '{productSharedDto.GroupName}' does not exist.");
         }
         productShared.IdProductGroup = productGroup.Id;
-        productShared.ProductGroup = productGroup;
 
         var productSubGroup = await productSharedRepository.FindByProperty<ProductSubGroup>("Name", productSharedDto.SubGroupName);
         if (productSubGroup is null)
@@ -68,7 +61,6 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
             return BadRequest($"ProductSubGroup '{productSharedDto.SubGroupName}' does not exist.");
         }
         productShared.IdProductSubGroup = productSubGroup.Id;
-        productShared.ProductSubGroup = productSubGroup;
 
         await productSharedRepository.AddAsync(productShared);
 

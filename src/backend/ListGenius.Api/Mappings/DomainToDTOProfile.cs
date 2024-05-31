@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using ListGenius.Api.Entities.ProductGroups;
-using ListGenius.Api.Entities.Products;
-using ListGenius.Api.Entities.ProductsLists;
-using ListGenius.Api.Entities.ProductsShared;
-using ListGenius.Api.Entities.ProductSubGroups;
-
-namespace ListGenius.Api.Mappings;
+﻿namespace ListGenius.Api.Mappings;
 
 public class DomainToDtoProfile : Profile
 {

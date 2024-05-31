@@ -1,14 +1,26 @@
-﻿using ListGenius.Api.Context;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Extensions.Caching.Memory;
 
 namespace ListGenius.Api.Entities.Users;
-public class UserRepository(AppDbContext db) : IUserRepository
+
+public class UserRepository(AppDbContext db, IMemoryCache cache) : IUserRepository
 {
-    public async Task<ApplicationUser> FindByFullNameAsync(string fullName)
+    private readonly MemoryCacheEntryOptions _cacheOptions = new MemoryCacheEntryOptions()
+        .SetSlidingExpiration(TimeSpan.FromMinutes(60));
+
+    public async Task<ApplicationUser?> FindByFullNameAsync(string fullName)
     {
-        var result = await db.Users.FirstOrDefaultAsync(u => u.FullName == fullName);
-        return result ?? throw new InvalidDataException($"No user found with {fullName}");
+        var cacheKey = $"UserFullName_{fullName}";
+
+        if (cache.TryGetValue(cacheKey, out ApplicationUser? cachedUser))
+        {
+            return cachedUser;
+        }
+
+        var user = await db.Users.AsSplitQuery().FirstOrDefaultAsync(u => u.FullName == fullName)
+                   ?? throw new InvalidDataException($"No user found with {fullName}");
+
+        cache.Set(cacheKey, user, _cacheOptions);
+
+        return user;
     }
-
 }
-

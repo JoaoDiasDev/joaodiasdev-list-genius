@@ -1,6 +1,4 @@
-﻿using ListGenius.Api.Entities.ProductsLists;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace ListGenius.Api.Entities.Users;
 

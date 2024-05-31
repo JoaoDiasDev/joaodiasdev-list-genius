@@ -1,9 +1,4 @@
-﻿using ListGenius.Api.Entities.Bases;
-using ListGenius.Api.Entities.ProductGroups;
-using ListGenius.Api.Entities.Products;
-using ListGenius.Api.Entities.ProductsShared;
-
-namespace ListGenius.Api.Entities.ProductSubGroups;
+﻿namespace ListGenius.Api.Entities.ProductSubGroups;
 
 
 public class ProductSubGroup : BaseEntity

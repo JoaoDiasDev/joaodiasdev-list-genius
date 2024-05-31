@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace ListGenius.Api.Entities.Products.Enums
+﻿namespace ListGenius.Api.Entities.Products.Enums
 {
     public enum UnitsOfMeasurement
     {
