@@ -16,5 +16,5 @@ public class ProductsList : BaseEntity
 
     public virtual ICollection<Product> Products { get; set; } = [];
 
-    public virtual ApplicationUser User { get; set; } = new();
+    public virtual ApplicationUser? User { get; set; } = new();
 }

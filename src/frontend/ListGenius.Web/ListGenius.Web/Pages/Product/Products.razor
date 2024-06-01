@@ -43,12 +43,12 @@ else
     <DisplayMessage ErrorMessage="@errorMessage" />
 }
 
-<Confirma @ref="confirma" onCancela="CancelaConfirma" onConfirma="DeletaConfirma">
+<Confirma @ref="confirma" OnCancel="CancelaConfirma" OnConfirmation="DeletaConfirma">
     <div>Deseja realmente excluir este item ?</div>
 </Confirma>
 
-<Paginacao QuantidadeTotalPaginas="QuantidadeTotalPaginas" paginaAtual="paginaAtual"
-           Raio="3" PaginaSelecionada="PaginaSelecionada">
+<Paginacao TotalPages="TotalPages" _currentPage="_currentPage"
+           PerPage="3" SelectedPage="SelectedPage">
 </Paginacao>
 
 

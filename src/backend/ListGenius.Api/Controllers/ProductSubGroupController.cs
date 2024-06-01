@@ -26,7 +26,8 @@ public class ProductSubGroupController(IProductSubGroupRepository productSubGrou
     [HttpGet("{id:int}", Name = "GetProductSubGroup")]
     public async Task<ActionResult<ProductSubGroupDto>> Get(int id)
     {
-        var productSubGroup = await productSubGroupRepository.GetByIdAsync(id);
+        var productSubGroup = await productSubGroupRepository.GetByIdAsync(id,
+            psg => psg.ProductGroup);
         if (productSubGroup is null)
         {
             return NotFound($"ProductSubGroup with id {id} not found");
@@ -51,6 +52,7 @@ public class ProductSubGroupController(IProductSubGroupRepository productSubGrou
             return BadRequest($"ProductGroup '{productSubGroupDto.GroupName}' does not exist.");
         }
         productSubGroup.IdProductGroup = productGroup.Id;
+        productSubGroup.ProductGroup = null!;
 
         await productSubGroupRepository.AddAsync(productSubGroup);
 

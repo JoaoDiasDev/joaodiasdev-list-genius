@@ -27,7 +27,9 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
     [HttpGet("{id:int}", Name = "GetProductShared")]
     public async Task<ActionResult<ProductSharedDto>> Get(int id)
     {
-        var productShared = await productSharedRepository.GetByIdAsync(id);
+        var productShared = await productSharedRepository.GetByIdAsync(id,
+            p => p.ProductGroup,
+            p => p.ProductSubGroup);
 
         if (productShared is null)
         {
@@ -54,6 +56,7 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
             return BadRequest($"ProductGroup '{productSharedDto.GroupName}' does not exist.");
         }
         productShared.IdProductGroup = productGroup.Id;
+        productShared.ProductGroup = null!;
 
         var productSubGroup = await productSharedRepository.FindByProperty<ProductSubGroup>("Name", productSharedDto.SubGroupName);
         if (productSubGroup is null)
@@ -61,6 +64,7 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
             return BadRequest($"ProductSubGroup '{productSharedDto.SubGroupName}' does not exist.");
         }
         productShared.IdProductSubGroup = productSubGroup.Id;
+        productShared.ProductSubGroup = null!;
 
         await productSharedRepository.AddAsync(productShared);
 

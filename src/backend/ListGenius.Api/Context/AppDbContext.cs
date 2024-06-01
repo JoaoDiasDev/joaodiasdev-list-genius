@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ListGenius.Api.Context;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options)
-    : IdentityDbContext<ApplicationUser>(options)
+public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
     public DbSet<Product> Products { get; init; }
     public DbSet<ProductsList> ProductsLists { get; init; }

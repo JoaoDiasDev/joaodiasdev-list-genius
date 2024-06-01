@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using ListGenius.Web.Components.Auth;
 using ListGenius.Web.Components.ProductGroups;
+using ListGenius.Web.Util;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -19,6 +20,6 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IProductGroupService, ProductGroupService>();
+builder.Services.AddScoped<IProductsListService, ProductsListService>();
 
 await builder.Build().RunAsync();

@@ -1,42 +1,43 @@
 ﻿@page "/fileuploader"
-@inject IFileUploadService _fileUploadService;
+
+@inject IUploadService _fileUploadService;
 
 <h3>Enviar Arquivos para o servidor</h3>
 
 <p>
-    Selecione até 3 arquivos: <InputFile OnChange="@SelectFile" multiple />
+    Selecione até o arquivo: <InputFile OnChange="@SelectFile" multiple />
 </p>
 <p>
     Tamanho máximo do arquivo : 100 KB (102400 bytes)
 </p>
-@if (nomeArquivos.Count > 0)
+@if (_filesName.Count > 0)
 {
     <ul>
-        @foreach (var _nomeArquivo in nomeArquivos)
+        @foreach (var nomeArquivo in _filesName)
         {
-            <li>Arquivo/Tamanho : @_nomeArquivo </li>
+            <li>Arquivo/Tamanho : @nomeArquivo </li>
         }
     </ul>
 }
-@if (resultadoUploads.Count > 0)
+@if (_resultadoUploads.Count > 0)
 {
     <div class="card">
         <div class="card-body btn-success">
             <ul>
-                @foreach (var _arquivo in resultadoUploads)
+                @foreach (var arquivo in _resultadoUploads)
                 {
                     <li>
-                        @if (_arquivo.ErrorCode == 0)
+                        @if (arquivo.ErrorCode == 0)
                         {
                             <b>
-                                Enviado: @_arquivo.FileName
+                                Enviado: @arquivo.FileName
                             </b>
                         }
                         else
                         {
                             <i>
-                                Não Enviado :  @_arquivo.FileName
-                                (Erro : @_arquivo.ErrorCode)
+                                Não Enviado :  @arquivo.FileName
+                                (Erro : @arquivo.ErrorCode)
                             </i>
                         }
                     </li>
@@ -47,46 +48,40 @@
 }
 
 @code {
-    private int numeroMaximoArquivos = 3;
-    private long tamanhoMaximoArquivo = long.MaxValue;
-    private List<string> nomeArquivos = new();
-    private List<UploadResult> resultadoUploads = new();
-    private const string apiEndpoint = "/FileUpload/upload";
+    private const int MaximumFileCount = 1;
+    private const long MaximumAllowedSize = long.MaxValue;
+    private readonly List<string> _filesName = [];
+    private List<UploadResult> _resultadoUploads = [];
+    private const string ApiEndpoint = "/FileUpload/upload";
 
     private async Task SelectFile(InputFileChangeEventArgs e)
     {
         using var content = new MultipartFormDataContent();
 
-        foreach (var _arquivo in e.GetMultipleFiles(numeroMaximoArquivos))
+        foreach (var arquivo in e.GetMultipleFiles(MaximumFileCount))
         {
-            var fileContent = new StreamContent(_arquivo.OpenReadStream(tamanhoMaximoArquivo));
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue(_arquivo.ContentType);
+            var fileContent = new StreamContent(arquivo.OpenReadStream(MaximumAllowedSize));
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(arquivo.ContentType);
 
-            nomeArquivos.Add($"{_arquivo.Name} - {_arquivo.Size} bytes");
+            _filesName.Add($"{arquivo.Name} - {arquivo.Size} bytes");
 
             content.Add(
                 content: fileContent,
                 name: "\"files\"",
-                fileName: _arquivo.Name);
+                fileName: arquivo.Name);
         }
-        try
-        {
-            var response = await _fileUploadService.UploadFileAsync(apiEndpoint, content);
 
-            if (response.IsSuccessStatusCode)
+        var response = await _fileUploadService.UploadFileAsync(ApiEndpoint, content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var uploadResult = await response.Content
+                .ReadFromJsonAsync<List<UploadResult>>();
+
+            if (uploadResult is not null)
             {
-                var novoUploadResultado = await response.Content
-                                          .ReadFromJsonAsync<List<UploadResult>>();
-
-                if (novoUploadResultado is not null)
-                {
-                    resultadoUploads = resultadoUploads.Concat(novoUploadResultado).ToList();
-                }
+                _resultadoUploads = _resultadoUploads.Concat(uploadResult).ToList();
             }
-        }
-        catch (Exception)
-        {
-            throw;
         }
     }
 }

@@ -2,8 +2,7 @@
 
 public class ProductsListDto
 {
-    [JsonPropertyName("id")]
-    public long Id { get; init; }
+    [JsonPropertyName("id")] public long Id { get; init; }
 
     [JsonPropertyName("name")]
     [DisplayName("Nome")]
@@ -52,4 +51,8 @@ public class ProductsListDto
     [JsonPropertyName("username")]
     [DisplayName("Nome Usuário")]
     public string UserName { get; init; } = string.Empty;
+
+    [JsonPropertyName("products")]
+    [DisplayName("Produtos")]
+    public ICollection<ProductDto> Products { get; set; } = [];
 }

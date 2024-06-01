@@ -1,4 +1,4 @@
-﻿@page "/MangaDetalhes/{Id:int}"
+﻿@page "/ProductsListDetails/{Id:int}"
 
 @if (Manga is null && MensagemErro is null)
 {
@@ -10,7 +10,7 @@ else if (MensagemErro is not null)
 }
 else
 {
-    <h3 class="mb-5">Detalhes do Manga</h3>
+    <h3 class="mb-5">Detalhes do Product</h3>
     <div class="row">
         <div class="col-md-3 mb-3">
             <img class="figure-img" src="@Manga.Imagem" width="220" height="350">

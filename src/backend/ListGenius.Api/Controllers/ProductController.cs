@@ -17,7 +17,7 @@ public class ProductController(IProductRepository productRepository, IMapper map
             p => p.ProductSubGroup,
             p => p.ProductsList);
 
-        if (products is null)
+        if (products is null || !products.Any())
         {
             return NotFound("No products.");
         }
@@ -28,7 +28,10 @@ public class ProductController(IProductRepository productRepository, IMapper map
     [HttpGet("{id:int}", Name = "GetProduct")]
     public async Task<ActionResult<ProductDto>> Get(int id)
     {
-        var product = await productRepository.GetByIdAsync(id);
+        var product = await productRepository.GetByIdAsync(id,
+            p => p.ProductGroup,
+        p => p.ProductSubGroup,
+        p => p.ProductsList);
         if (product is null)
         {
             return NotFound($"Product with id {id} not found");
@@ -54,6 +57,7 @@ public class ProductController(IProductRepository productRepository, IMapper map
             return BadRequest($"ProductGroup '{productDto.GroupName}' does not exist.");
         }
         product.IdProductGroup = productGroup.Id;
+        product.ProductGroup = null!;
 
         var productSubGroup = await productRepository.FindByProperty<ProductSubGroup>("Name", productDto.SubGroupName);
         if (productSubGroup is null)
@@ -61,6 +65,7 @@ public class ProductController(IProductRepository productRepository, IMapper map
             return BadRequest($"ProductSubGroup '{productDto.SubGroupName}' does not exist.");
         }
         product.IdProductSubGroup = productSubGroup.Id;
+        product.ProductSubGroup = null!;
 
         var productsList = await productRepository.FindByProperty<ProductsList>("Name", productDto.ShoppingListName);
         if (productsList is null)
@@ -68,6 +73,22 @@ public class ProductController(IProductRepository productRepository, IMapper map
             return BadRequest($"ProductsList '{productDto.ShoppingListName}' does not exist.");
         }
         product.IdProductsList = productsList.Id;
+        product.ProductsList = null!;
+
+        Product existentProduct = new Product();
+        try
+        {
+            existentProduct = await productRepository.FindByProperty<Product>("Name", productDto.Name);
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        if (existentProduct.Id is not 0)
+        {
+            return BadRequest($"Product with name {productDto.Name} already exists.");
+        }
 
         await productRepository.AddAsync(product);
 

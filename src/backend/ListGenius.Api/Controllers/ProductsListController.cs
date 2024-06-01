@@ -14,7 +14,8 @@ public class ProductsListController(IProductsListRepository productsListReposito
     public async Task<ActionResult<IEnumerable<ProductsListDto>>> Get()
     {
         var productsLists = await productsListRepository.GetAllAsync(
-            pl => pl.User);
+            pl => pl.User!,
+            pl => pl.Products);
 
         if (productsLists is null)
         {
@@ -28,7 +29,9 @@ public class ProductsListController(IProductsListRepository productsListReposito
     [HttpGet("{id:int}", Name = "GetProductsList")]
     public async Task<ActionResult<ProductsListDto>> Get(int id)
     {
-        var productsList = await productsListRepository.GetByIdAsync(id);
+        var productsList = await productsListRepository.GetByIdAsync(id,
+            pl => pl.User!,
+            pl => pl.Products);
 
         if (productsList is null)
         {
@@ -46,16 +49,23 @@ public class ProductsListController(IProductsListRepository productsListReposito
         {
             return BadRequest("Invalid data.");
         }
+
         var productsList = mapper.Map<ProductsList>(productsListDto);
 
-        var user = await userRepository.FindByFullNameAsync(productsList.User.FullName);
+        var user = await userRepository.FindByFullNameAsync(productsList?.User?.FullName ?? string.Empty);
         if (user is null)
         {
             return BadRequest($"User '{productsListDto.UserName}' does not exist.");
         }
-        productsList.IdUser = user.Id;
 
-        await productsListRepository.AddAsync(productsList);
+        if (productsList is not null)
+        {
+            productsList.IdUser = user.Id;
+            productsList.User = null;
+
+
+            await productsListRepository.AddAsync(productsList);
+        }
 
         return new CreatedAtRouteResult("GetProductsList", new { id = productsListDto.Id }, productsListDto);
     }

@@ -1,4 +1,4 @@
-﻿@page "/catalogo"
+﻿@page "/Catalog"
 @inject IMangaService _mangaService
 @inject NavigationManager NavigationManager
 
@@ -22,9 +22,9 @@ else
 
     <h3 class="mb-5">Mangás</h3>
     @if (Mangas.Count() > 0)
-    { 
+    {
         <div class="row mt-3">
-           <ExibirMangas Mangas="@Mangas"></ExibirMangas>
+           <ExibirProductsLists ProductsLists="@Mangas"></ExibirProductsLists>
         </div>
     }
 }

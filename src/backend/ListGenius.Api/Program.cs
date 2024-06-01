@@ -136,7 +136,7 @@ else
 app.UseAntiforgery();
 app.UseCors();
 app.UseRateLimiter();
-app.UseResponseCaching();
+//app.UseResponseCaching();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthentication();
