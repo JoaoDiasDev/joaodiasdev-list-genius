@@ -50,10 +50,10 @@ public class ProductSharedService : IProductService
             throw;
         }
     }
-    public async Task<MangaPaginacaoResponseDTO> GetMangasPaginacao(int pagina,
-        int quantidadePorPagina)
+    public async Task<MangaPaginacaoResponseDTO> GetPagination(int page,
+        int perPage)
     {
-        var caminho = $"paginacao?pagina={pagina}&quantidadePorPagina={quantidadePorPagina}";
+        var caminho = $"paginacao?page={page}&perPage={perPage}";
         var apiUrl = apiEndpoint + caminho;
         try
         {

@@ -1,6 +1,6 @@
 ﻿namespace ListGenius.Web.Components.ProductGroups;
 
-public class ProductsListService(
+public class ProductGroupService(
     IHttpClientFactory httpClientFactory,
     ILogger<ProductsListService> logger,
     IEnumerable<ProductGroupDto>? productGroups,

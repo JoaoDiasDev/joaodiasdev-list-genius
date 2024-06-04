@@ -21,6 +21,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Pages\ProductGroups\" />
+	  <Folder Include="Pages\ProductShared\" />
 	  <Folder Include="Pages\ProductSubGroups\" />
 	</ItemGroup>
 

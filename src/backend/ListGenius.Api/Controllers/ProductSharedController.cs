@@ -66,6 +66,21 @@ public class ProductSharedController(IProductSharedRepository productSharedRepos
         productShared.IdProductSubGroup = productSubGroup.Id;
         productShared.ProductSubGroup = null!;
 
+        var existentProductShared = new ProductShared();
+        try
+        {
+            existentProductShared = await productSharedRepository.FindByProperty<ProductShared>("Name", productSharedDto.Name);
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        if (existentProductShared.Id is not 0)
+        {
+            return BadRequest($"Product Shared with name {productSharedDto.Name} already exists.");
+        }
+
         await productSharedRepository.AddAsync(productShared);
 
         return new CreatedAtRouteResult("GetProductShared", new { id = productSharedDto.Id }, productSharedDto);

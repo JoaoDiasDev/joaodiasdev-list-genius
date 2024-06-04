@@ -1,6 +1,10 @@
 ﻿namespace ListGenius.Web.Components.ProductsLists;
+
 public interface IProductsListService
 {
-    Task<List<ProductsListDto>> GetAll();
-    Task<ProductsListDto> GetById(int id);
+    Task<IEnumerable<ProductsListDto>> GetAllProductsListsAsync();
+    Task<ProductsListDto> GetProductsListByIdAsync(int id);
+    Task AddProductsListAsync(ProductsListDto productsList);
+    Task UpdateProductsListAsync(int id, ProductsListDto productsList);
+    Task DeleteProductsListAsync(int id);
 }

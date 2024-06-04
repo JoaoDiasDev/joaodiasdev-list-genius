@@ -45,6 +45,21 @@ public class ProductGroupController(IProductGroupRepository productGroupReposito
 
         var productGroup = mapper.Map<ProductGroup>(productGroupDto);
 
+        var existentProductGroup = new ProductGroup();
+        try
+        {
+            existentProductGroup = await productGroupRepository.FindByProperty<ProductGroup>("Name", productGroupDto.Name);
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        if (existentProductGroup.Id is not 0)
+        {
+            return BadRequest($"Product Group with name {productGroupDto.Name} already exists.");
+        }
+
         await productGroupRepository.AddAsync(productGroup);
 
         return new CreatedAtRouteResult("GetProductGroup", new { id = productGroupDto.Id }, productGroupDto);

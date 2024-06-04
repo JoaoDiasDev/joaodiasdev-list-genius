@@ -59,18 +59,18 @@ namespace ListGenius.Api.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ProductGroups");
+                    b.ToTable("product_groups", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6366),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7504),
                             Description = "GERAL",
                             Enabled = true,
                             Image = new byte[] { 0 },
                             Name = "GERAL",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6378)
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7516)
                         });
                 });
 
@@ -118,19 +118,19 @@ namespace ListGenius.Api.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ProductSubGroups");
+                    b.ToTable("product_sub_groups", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6531),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7563),
                             Description = "GERAL",
                             Enabled = true,
                             IdProductGroup = 1,
                             Image = new byte[] { 0 },
                             Name = "GERAL",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6532)
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7563)
                         });
                 });
 
@@ -207,13 +207,13 @@ namespace ListGenius.Api.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Products");
+                    b.ToTable("products", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6635),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7740),
                             Description = "TESTE 1",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -224,13 +224,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 1",
                             Qrcode = new byte[] { 0 },
                             Unit = "Meter",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6636),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7741),
                             Value = 22.05m
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6639),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7743),
                             Description = "TESTE 2",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -241,13 +241,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 2",
                             Qrcode = new byte[] { 0 },
                             Unit = "SquareMeter",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6639),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7743),
                             Value = 33.33m
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6642),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7745),
                             Description = "TESTE 3",
                             Enabled = false,
                             IdProductGroup = 1,
@@ -258,13 +258,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 3",
                             Qrcode = new byte[] { 0 },
                             Unit = "Unspecified",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6642),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7745),
                             Value = 42.33m
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6645),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7746),
                             Description = "TESTE 4",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -275,13 +275,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 4",
                             Qrcode = new byte[] { 0 },
                             Unit = "CubicMeter",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6645),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7746),
                             Value = 77.77m
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6646),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7747),
                             Description = "TESTE 5",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -292,13 +292,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 5",
                             Qrcode = new byte[] { 0 },
                             Unit = "Unit",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6647),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7748),
                             Value = 66.66m
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6648),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7749),
                             Description = "TESTE 6",
                             Enabled = false,
                             IdProductGroup = 1,
@@ -309,7 +309,7 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 6",
                             Qrcode = new byte[] { 0 },
                             Unit = "Unspecified",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6649),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7749),
                             Value = 35.31m
                         });
                 });
@@ -370,30 +370,30 @@ namespace ListGenius.Api.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ProductsLists");
+                    b.ToTable("products_lists", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6560),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7589),
                             Description = "Description for Shopping List 1",
                             ExternalLink = "",
                             IdUser = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             Image = new byte[] { 0 },
                             Name = "Shopping List 1",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6560)
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7590)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6563),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7591),
                             Description = "Description for Shopping List 2",
                             ExternalLink = "",
                             IdUser = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             Image = new byte[] { 0 },
                             Name = "Shopping List 2",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6563)
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7591)
                         });
                 });
 
@@ -465,13 +465,13 @@ namespace ListGenius.Api.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("ProductsShared");
+                    b.ToTable("products_shared", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6585),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7612),
                             Description = "TESTE 1",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -481,13 +481,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 1",
                             Qrcode = new byte[] { 0 },
                             Unit = "Meter",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6585),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7613),
                             Value = 22.05m
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6589),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7618),
                             Description = "TESTE 2",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -497,13 +497,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 2",
                             Qrcode = new byte[] { 0 },
                             Unit = "SquareMeter",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6590),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7619),
                             Value = 33.33m
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6592),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7620),
                             Description = "TESTE 3",
                             Enabled = false,
                             IdProductGroup = 1,
@@ -513,13 +513,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 3",
                             Qrcode = new byte[] { 0 },
                             Unit = "Unspecified",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6592),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7620),
                             Value = 42.33m
                         },
                         new
                         {
                             Id = 4,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6593),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7621),
                             Description = "TESTE 4",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -529,13 +529,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 4",
                             Qrcode = new byte[] { 0 },
                             Unit = "CubicMeter",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6594),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7622),
                             Value = 77.77m
                         },
                         new
                         {
                             Id = 5,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6595),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7697),
                             Description = "TESTE 5",
                             Enabled = true,
                             IdProductGroup = 1,
@@ -545,13 +545,13 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 5",
                             Qrcode = new byte[] { 0 },
                             Unit = "Unit",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6596),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7698),
                             Value = 66.66m
                         },
                         new
                         {
                             Id = 6,
-                            CreatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6597),
+                            CreatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7699),
                             Description = "TESTE 6",
                             Enabled = false,
                             IdProductGroup = 1,
@@ -561,7 +561,7 @@ namespace ListGenius.Api.Migrations
                             Name = "Teste 6",
                             Qrcode = new byte[] { 0 },
                             Unit = "Unspecified",
-                            UpdatedDate = new DateTime(2024, 6, 1, 14, 6, 56, 278, DateTimeKind.Local).AddTicks(6597),
+                            UpdatedDate = new DateTime(2024, 6, 4, 18, 32, 46, 127, DateTimeKind.Local).AddTicks(7700),
                             Value = 35.31m
                         });
                 });
@@ -647,7 +647,7 @@ namespace ListGenius.Api.Migrations
                         {
                             Id = "37846734-172e-4149-8cec-6f43d1eb3f60",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "081bc99b-9a0b-491e-838c-f711423720b9",
+                            ConcurrencyStamp = "ddcce1c5-dedc-4b15-bd0d-2459eae1eca3",
                             Email = "jmmatheus23@gmail.com",
                             EmailConfirmed = true,
                             FullName = "JoaoDiasUser",
@@ -655,10 +655,10 @@ namespace ListGenius.Api.Migrations
                             LogoImage = new byte[0],
                             NormalizedEmail = "JMMATHEUS23@GMAIL.COM",
                             NormalizedUserName = "JMMATHEUS23@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJ1Jtrw5IYuAqLnNmOQVwmrX66PkwhJgBcbrATue7r5QpWdNgrIDqPbTH4PYGHPdDA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELyEP47grXttIRiAMMJQ+1VhMK7etybhEwlVEXNxiY72zvE1MFZdDCVj8+EPS2iIEA==",
                             PhoneNumberConfirmed = false,
                             ProfilePicture = new byte[0],
-                            SecurityStamp = "065821fd-5a68-4786-bc3c-1f8d1e23e56b",
+                            SecurityStamp = "019fb84c-b01c-47dd-8e24-cba7bde88427",
                             TwoFactorEnabled = false,
                             UserName = "jmmatheus23@gmail.com"
                         },
@@ -666,7 +666,7 @@ namespace ListGenius.Api.Migrations
                         {
                             Id = "38846734-172e-4149-8cec-6f43d1eb3f60",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d020301a-c569-4124-9140-5fa601bc53bd",
+                            ConcurrencyStamp = "35668527-62b2-4c59-8b7c-44e5e16143a8",
                             Email = "joaodiasworking@gmail.com",
                             EmailConfirmed = true,
                             FullName = "JoaoDiasAdmin",
@@ -674,10 +674,10 @@ namespace ListGenius.Api.Migrations
                             LogoImage = new byte[0],
                             NormalizedEmail = "JOAODIASWORKING@GMAIL.COM",
                             NormalizedUserName = "JOAODIASWORKING@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOrocbvh/SY+pZJBmqE1AjqwPX9M9Mf7KJ8ry5bOOhOk7J3eoUQQIxcfBLCzFSol2A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIii4mVINuVD04Umus7e/reoOzNZNy0404aq55WvWxIU+gtXCbM0JXz5xHjd1DAQJw==",
                             PhoneNumberConfirmed = false,
                             ProfilePicture = new byte[0],
-                            SecurityStamp = "d7d6676a-bd24-47a7-a38d-04248da9c5e8",
+                            SecurityStamp = "7163a134-2c7d-4bdd-ac47-b81aeafc8948",
                             TwoFactorEnabled = false,
                             UserName = "joaodiasworking@gmail.com"
                         });

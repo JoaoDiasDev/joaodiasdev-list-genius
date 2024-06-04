@@ -63,11 +63,28 @@ public class ProductsListController(IProductsListRepository productsListReposito
             productsList.IdUser = user.Id;
             productsList.User = null;
 
+            var existentProductsList = new ProductsList();
+            try
+            {
+                existentProductsList = await productsListRepository.FindByProperty<ProductsList>("Name", productsListDto.Name);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            if (existentProductsList.Id is not 0)
+            {
+                return BadRequest($"Products List with name {productsListDto.Name} already exists.");
+            }
 
             await productsListRepository.AddAsync(productsList);
+
+
+            return new CreatedAtRouteResult("GetProductsList", new { id = productsListDto.Id }, productsListDto);
         }
 
-        return new CreatedAtRouteResult("GetProductsList", new { id = productsListDto.Id }, productsListDto);
+        return BadRequest($"Invalid Data.");
     }
 
     [HttpPut]

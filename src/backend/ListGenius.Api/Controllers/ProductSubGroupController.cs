@@ -54,6 +54,21 @@ public class ProductSubGroupController(IProductSubGroupRepository productSubGrou
         productSubGroup.IdProductGroup = productGroup.Id;
         productSubGroup.ProductGroup = null!;
 
+        var existentProductSubGroup = new ProductSubGroup();
+        try
+        {
+            existentProductSubGroup = await productSubGroupRepository.FindByProperty<ProductSubGroup>("Name", productSubGroupDto.Name);
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
+
+        if (existentProductSubGroup.Id is not 0)
+        {
+            return BadRequest($"Product Sub Group with name {productSubGroupDto.Name} already exists.");
+        }
+
         await productSubGroupRepository.AddAsync(productSubGroup);
 
         return new CreatedAtRouteResult("GetProductSubGroup", new { id = productSubGroupDto.Id }, productSubGroupDto);

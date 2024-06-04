@@ -5,6 +5,7 @@ public class ProductSharedConfiguration : IEntityTypeConfiguration<ProductShared
 {
     public void Configure(EntityTypeBuilder<ProductShared> builder)
     {
+        builder.ToTable("products_shared");
         builder.HasKey(p => p.Id);
         builder.HasIndex(p => p.Name).IsUnique();
         builder.Property(p => p.Name).IsRequired().HasMaxLength(100);

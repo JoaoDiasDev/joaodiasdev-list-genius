@@ -1,52 +1,31 @@
 ﻿namespace ListGenius.Web.Components.ProductsLists;
 
-public class ProductsListService(
-    IHttpClientFactory httpClientFactory,
-    ILogger<ProductsListService> logger,
-    IEnumerable<ProductsListDto>? productsLists,
-    ProductsListDto? productsList)
-    : IProductsListService
+public class ProductsListService(HttpClient httpClient) : IProductsListService
 {
-    private const string ApiEndpoint = "/api/ProductsList/";
+    private readonly string _baseUrl = "api/v1/ProductsList";
 
-    public async Task<ProductsListDto> GetById(int id)
+    public async Task<IEnumerable<ProductsListDto>> GetAllProductsListsAsync()
     {
-        try
-        {
-            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
-            var response = await httpClient.GetAsync(ApiEndpoint + id);
-
-            if (response.IsSuccessStatusCode)
-            {
-                productsList = await response.Content.ReadFromJsonAsync<ProductsListDto>();
-                return productsList ?? new ProductsListDto();
-            }
-            else
-            {
-                var message = await response.Content.ReadAsStringAsync();
-                logger.LogError($"Erro ao obter a Products List pelo id= {id} - {message}");
-                throw new Exception($"Status Code : {response.StatusCode} - {message}");
-            }
-        }
-        catch (Exception ex)
-        {
-            logger.LogError($"Erro ao obter a Products List pelo id={id} \n\n {ex.Message} ");
-            throw new UnauthorizedAccessException();
-        }
+        return await httpClient.GetFromJsonAsync<IEnumerable<ProductsListDto>>($"{_baseUrl}");
     }
 
-    public async Task<List<ProductsListDto>> GetAll()
+    public async Task<ProductsListDto> GetProductsListByIdAsync(int id)
     {
-        try
-        {
-            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
-            var result = await httpClient.GetFromJsonAsync<List<ProductsListDto>>(ApiEndpoint);
-            return result ?? [];
-        }
-        catch (Exception ex)
-        {
-            logger.LogError($"Erro ao acessar Products List: {ApiEndpoint} " + ex.Message);
-            throw new UnauthorizedAccessException();
-        }
+        return await httpClient.GetFromJsonAsync<ProductsListDto>($"{_baseUrl}/{id}");
+    }
+
+    public async Task AddProductsListAsync(ProductsListDto productsList)
+    {
+        await httpClient.PostAsJsonAsync($"{_baseUrl}", productsList);
+    }
+
+    public async Task UpdateProductsListAsync(int id, ProductsListDto productsList)
+    {
+        await httpClient.PutAsJsonAsync($"{_baseUrl}/{id}", productsList);
+    }
+
+    public async Task DeleteProductsListAsync(int id)
+    {
+        await httpClient.DeleteAsync($"{_baseUrl}/{id}");
     }
 }

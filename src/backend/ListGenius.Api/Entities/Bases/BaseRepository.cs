@@ -129,6 +129,5 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     private void InvalidateCache()
     {
         _cache.Remove($"{typeof(TEntity).Name}_All");
-        // Additional cache keys can be invalidated as necessary
     }
 }

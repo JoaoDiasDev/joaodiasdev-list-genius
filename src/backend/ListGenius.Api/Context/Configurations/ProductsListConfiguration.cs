@@ -6,6 +6,7 @@ namespace ListGenius.Api.Context.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductsList> builder)
         {
+            builder.ToTable("products_lists");
             builder.HasKey(p => p.Id);
             builder.Property(p => p.IdUser).IsRequired().HasMaxLength(100);
             builder.HasIndex(p => p.Name).IsUnique();

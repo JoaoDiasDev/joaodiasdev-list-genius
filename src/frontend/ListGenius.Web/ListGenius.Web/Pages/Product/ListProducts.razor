@@ -1,0 +1,19 @@
+﻿@page "/products"
+@inject ProductService ProductService
+
+<h3>Products</h3>
+<ul>
+    @foreach (var product in _products)
+    {
+        <li>@product.Name - @product.Value</li>
+    }
+</ul>
+
+@code {
+    private List<ProductDto> _products = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _products = (await ProductService.GetAllProductsAsync()).ToList();
+    }
+}

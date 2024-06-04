@@ -15,7 +15,7 @@ public class DomainToDtoProfile : Profile
             .ForPath(src => src.ProductsList, opt => opt.Ignore());
 
         CreateMap<ProductsList, ProductsListDto>()
-            .ForMember(dto => dto.UserName, opt => opt.MapFrom(src => src.User.FullName))
+            .ForMember(dto => dto.UserName, opt => opt.MapFrom(src => src.User!.FullName))
             .ReverseMap();
 
         CreateMap<ProductShared, ProductSharedDto>()

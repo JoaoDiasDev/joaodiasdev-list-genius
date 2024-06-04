@@ -6,6 +6,7 @@ public class ProductGroupConfiguration : IEntityTypeConfiguration<ProductGroup>
 {
     public void Configure(EntityTypeBuilder<ProductGroup> builder)
     {
+        builder.ToTable("product_groups");
         builder.HasKey(p => p.Id);
         builder.HasIndex(p => p.Name).IsUnique();
         builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
