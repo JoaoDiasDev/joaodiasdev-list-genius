@@ -1,11 +1,13 @@
-﻿namespace ListGenius.Web.Components.ProductGroups;
+﻿using ListGenius.Web.Components.ProductsLists;
+
+namespace ListGenius.Web.Components.ProductGroups;
 
 public class ProductGroupService(
     IHttpClientFactory httpClientFactory,
     ILogger<ProductsListService> logger,
     IEnumerable<ProductGroupDto>? productGroups,
     ProductGroupDto? productGroup)
-    : IProductsListService
+    : IProductGroupService
 {
     private const string ApiEndpoint = "/api/productgroup/";
 

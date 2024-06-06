@@ -1,228 +1,80 @@
-﻿using ListGenius.Web.Components.Products;
-using System.Net;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace ListGenius.Web.Components.ProductsShared;
 
-public class ProductSharedService : IProductService
+public class ProductSharedService(IHttpClientFactory httpClientFactory, ILogger<ProductSharedService> logger)
+    : IProductSharedService
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    public ILogger<CategoriaService> _logger;
-    private const string apiEndpoint = "/api/mangas/";
-    private readonly JsonSerializerOptions _options;
+    private readonly string _baseUrl = "api/v1/ProductShared";
+    private readonly JsonSerializerOptions _options = new() { PropertyNameCaseInsensitive = true };
 
-    private MangaDTO? manga;
-    private List<MangaDTO>? mangas;
-
-    private int QuantidadeTotalPaginas;
-    private MangaPaginacaoResponseDTO? responsePaginacaoDTO;
-
-    public ProductSharedService(IHttpClientFactory httpClientFactory,
-        ILogger<CategoriaService> logger)
-    {
-        _httpClientFactory = httpClientFactory;
-        _logger = logger;
-        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-    }
-
-    public async Task<IEnumerable<MangaDTO>> GetMangasPorTitulo(string titulo)
+    public async Task<IEnumerable<ProductSharedDto>> GetAllProductSharedAsync()
     {
         try
         {
-            var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-            var response = await httpClient.GetAsync(apiEndpoint + "search/" + titulo);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<IEnumerable<MangaDTO>>();
-            }
-            else
-            {
-                var message = await response.Content.ReadAsStringAsync();
-                _logger.LogError($"Erro ao obter mangás com titulo {titulo} - {message}");
-                throw new Exception($"Status Code : {response.StatusCode} - {message}");
-            }
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
+            return await httpClient.GetFromJsonAsync<IEnumerable<ProductSharedDto>>($"{_baseUrl}") ?? Array.Empty<ProductSharedDto>();
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            _logger.LogError($"Erro ao obter o mangá pelo titulo={titulo} \n\n {ex.Message}");
-            throw;
-        }
-    }
-    public async Task<MangaPaginacaoResponseDTO> GetPagination(int page,
-        int perPage)
-    {
-        var caminho = $"paginacao?page={page}&perPage={perPage}";
-        var apiUrl = apiEndpoint + caminho;
-        try
-        {
-            var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-            var httpResponse = await httpClient.GetAsync(apiUrl);
-
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                var responseString = await httpResponse.Content.ReadAsStringAsync();
-                responsePaginacaoDTO =
-                    JsonSerializer.Deserialize<MangaPaginacaoResponseDTO>
-                    (responseString, _options);
-
-                QuantidadeTotalPaginas = responsePaginacaoDTO.TotalPaginas;
-                mangas = responsePaginacaoDTO.Mangas;
-            }
-            else
-            {
-                _logger.LogWarning("O request para a API falhou com o status: "
-                    + httpResponse.StatusCode);
-            }
-            return responsePaginacaoDTO;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Erro ao acessar categorias: " +
-                $"{apiEndpoint}/paginacao" + ex.Message);
-            throw new UnauthorizedAccessException();
-        }
-    }
-
-    public async Task<IEnumerable<MangaDTO>> GetMangas()
-    {
-        try
-        {
-            var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-            var result = await httpClient.GetFromJsonAsync<IEnumerable<MangaDTO>>(apiEndpoint);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Erro ao acessar categorias: {apiEndpoint} " + ex.Message);
-            throw new UnauthorizedAccessException();
-        }
-    }
-
-    public async Task<MangaDTO> CreateManga(MangaDTO mangaDto)
-    {
-        var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-
-        StringContent content = new StringContent(JsonSerializer.Serialize(mangaDto),
-                                                  Encoding.UTF8, "application/json");
-
-        using (var response = await httpClient.PostAsync(apiEndpoint, content))
-        {
-            if (response.IsSuccessStatusCode)
-            {
-                var apiResponse = await response.Content.ReadAsStreamAsync();
-
-                manga = await JsonSerializer
-                           .DeserializeAsync<MangaDTO>(apiResponse, _options);
-            }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new UnauthorizedAccessException();
-            }
-            else
-            {
-                return null;
-            }
-        }
-        return manga;
-    }
-
-    public async Task<bool> DeleteManga(int id)
-    {
-        var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-
-        using (var response = await httpClient.DeleteAsync(apiEndpoint + id))
-        {
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new UnauthorizedAccessException();
-            }
-        }
-        return false;
-    }
-
-    public async Task<MangaDTO> GetManga(int id)
-    {
-        try
-        {
-            var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-            var response = await httpClient.GetAsync(apiEndpoint + id);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<MangaDTO>();
-            }
-            else
-            {
-                var message = await response.Content.ReadAsStringAsync();
-                _logger.LogError($"Erro ao obter o mangá pelo id= {id} - {message}");
-                throw new Exception($"Status Code : {response.StatusCode} - {message}");
-            }
-        }
-        catch (UnauthorizedAccessException)
-        {
-            throw new UnauthorizedAccessException();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Erro ao obter o mangá pelo id={id} \n\n {ex.Message}");
+            logger.LogError($"Erro ao obter produtos: {e.Message}");
             throw;
         }
     }
 
-    public async Task<IEnumerable<MangaDTO>> GetMangasPorCategoria(int id)
+    public async Task<ProductSharedDto> GetProductSharedByIdAsync(int id)
     {
         try
         {
-            var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-            var response = await httpClient.GetAsync(apiEndpoint + "get-mangas-by-category/" + id);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<IEnumerable<MangaDTO>>();
-            }
-            else
-            {
-                var message = await response.Content.ReadAsStringAsync();
-                _logger.LogError($"Erro ao obter os mangás pelo id= {id} - {message}");
-                throw new Exception($"Status Code : {response.StatusCode} - {message}");
-            }
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
+            return await httpClient.GetFromJsonAsync<ProductSharedDto>($"{_baseUrl}/{id}") ?? new ProductSharedDto();
         }
-        catch (UnauthorizedAccessException)
+        catch (Exception e)
         {
-            throw new UnauthorizedAccessException();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Erro ao obter os mangás pelo id={id} \n\n {ex.Message}");
+            logger.LogError($"Erro ao obter produto com o id {id}: {e.Message}");
             throw;
         }
     }
 
-    public async Task<MangaDTO> UpdateManga(int id, MangaDTO mangaDto)
+    public async Task AddProductSharedAsync(ProductSharedDto product)
     {
-        var httpClient = _httpClientFactory.CreateClient("ApiMangas");
-
-        MangaDTO mangaUpdated = new MangaDTO();
-
-        using (var response = await httpClient.PutAsJsonAsync(apiEndpoint + id, mangaDto))
+        try
         {
-            if (response.IsSuccessStatusCode)
-            {
-                var apiResponse = await response.Content.ReadAsStreamAsync();
-                mangaUpdated = await JsonSerializer
-                                    .DeserializeAsync<MangaDTO>(apiResponse, _options);
-            }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new UnauthorizedAccessException();
-            }
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
+            await httpClient.PostAsJsonAsync($"{_baseUrl}", product);
         }
-        return mangaUpdated;
+        catch (Exception e)
+        {
+            logger.LogError($"Erro ao criar o produto {product.Name}: {e.Message}");
+            throw;
+        }
+    }
+
+    public async Task UpdateProductSharedAsync(int id, ProductSharedDto product)
+    {
+        try
+        {
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
+            await httpClient.PutAsJsonAsync($"{_baseUrl}/{id}", product);
+        }
+        catch (Exception e)
+        {
+            logger.LogError($"Erro ao atualizar o produto {product.Name}: {e.Message}");
+            throw;
+        }
+    }
+
+    public async Task DeleteProductSharedAsync(int id)
+    {
+        try
+        {
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
+            await httpClient.DeleteAsync($"{_baseUrl}/{id}");
+        }
+        catch (Exception e)
+        {
+            logger.LogError($"Erro ao deletar o produto com id {id}: {e.Message}");
+            throw;
+        }
     }
 }

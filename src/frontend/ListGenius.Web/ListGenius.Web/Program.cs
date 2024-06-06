@@ -4,6 +4,7 @@ using ListGenius.Web.Components.Products;
 using ListGenius.Web.Util;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor.Services;
 using IProductsListService = ListGenius.Web.Components.ProductsLists.IProductsListService;
 using ProductsListService = ListGenius.Web.Components.ProductsLists.ProductsListService;
 
@@ -19,6 +20,7 @@ builder.Services.AddHttpClient("ApiListGenius", options =>
 builder.Services.AddScoped<CustomHttpHandler>();
 
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddMudServices();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 builder.Services.AddScoped<IAuthService, AuthService>();

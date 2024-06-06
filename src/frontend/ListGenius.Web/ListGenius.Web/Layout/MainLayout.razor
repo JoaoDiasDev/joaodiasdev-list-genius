@@ -1,18 +1,53 @@
-﻿
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
+
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => OpenCloseMenu())"/>
+        <MudText Typo="Typo.h5" Class="ml-3">List Genius</MudText>
+        <MudSwitch @Value="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Mudar Tema Light/Dark Mode" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_openedMenu" ClipMode="DrawerClipMode.Always" Variant="@DrawerVariant.Mini" Elevation="2">
         <NavMenu />
-    </div>
+    </MudDrawer>
 
-    <main>
-        <div class="top-row px-4">
-            <LoginDisplay />
-            <a href="https://joaodiasdev.com/" target="_blank">JoaoDiasDev</a>
-        </div>
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+    <MudMainContent Class="mt-16 pa-4">
+            <MudContainer Class="top-row px-4">
+                <LoginDisplay />
+            </MudContainer>
+                @Body
+    </MudMainContent>
+</MudLayout>
+
+@code
+{
+    private bool _openedMenu = true;
+    private readonly MudTheme _theme = new();
+    private bool _isDarkMode;
+    private MudThemeProvider _mudThemeProvider = new();
+
+    private void OpenCloseMenu()
+    {
+        _openedMenu = !_openedMenu;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+            StateHasChanged();
+        }
+    }
+
+    private Task OnSystemPreferenceChanged(bool newValue)
+    {
+        _isDarkMode = newValue;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+}

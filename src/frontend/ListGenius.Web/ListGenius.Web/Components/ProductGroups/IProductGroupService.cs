@@ -1,5 +1,5 @@
 ﻿namespace ListGenius.Web.Components.ProductGroups;
-public interface IProductsListService
+public interface IProductGroupService
 {
     Task<List<ProductGroupDto>> GetAll();
     Task<ProductGroupDto> GetById(int id);
