@@ -1,0 +1,20 @@
+﻿@page "/ProductsLists"
+
+@inject IProductsListService ProductsListService
+
+<h3>Products Lists</h3>
+<ul>
+    @foreach (var productsList in _productsLists)
+    {
+        <li>@productsList.Name - Total Products: @productsList.Products.Count - Total Value: @productsList.Products.Sum(p => p.Value)</li>
+    }
+</ul>
+
+@code {
+    private List<ProductsListDto> _productsLists = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _productsLists = (await ProductsListService.GetAllProductsListsAsync()).ToList();
+    }
+}

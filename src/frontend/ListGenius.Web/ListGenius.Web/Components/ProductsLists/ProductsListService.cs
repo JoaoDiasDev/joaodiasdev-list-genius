@@ -6,12 +6,12 @@ public class ProductsListService(HttpClient httpClient) : IProductsListService
 
     public async Task<IEnumerable<ProductsListDto>> GetAllProductsListsAsync()
     {
-        return await httpClient.GetFromJsonAsync<IEnumerable<ProductsListDto>>($"{_baseUrl}");
+        return await httpClient.GetFromJsonAsync<IEnumerable<ProductsListDto>>($"{_baseUrl}") ?? Array.Empty<ProductsListDto>();
     }
 
     public async Task<ProductsListDto> GetProductsListByIdAsync(int id)
     {
-        return await httpClient.GetFromJsonAsync<ProductsListDto>($"{_baseUrl}/{id}");
+        return await httpClient.GetFromJsonAsync<ProductsListDto>($"{_baseUrl}/{id}") ?? new ProductsListDto();
     }
 
     public async Task AddProductsListAsync(ProductsListDto productsList)

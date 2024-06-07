@@ -15,7 +15,7 @@ public class ProductSubGroupService(
     {
         try
         {
-            var httpClient = httpClientFactory.CreateClient("ApiMangas");
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
             var response = await httpClient.GetAsync(ApiEndpoint + id);
 
             if (response.IsSuccessStatusCode)

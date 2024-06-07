@@ -1,0 +1,9 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <MudText Typo="Typo.body1">@context?.User?.Identity?.Name</MudText>
+        <MudLink Href="LogOut">Log out</MudLink>
+    </Authorized>
+    <NotAuthorized>
+        <MudLink Href="Login">Log in</MudLink>
+    </NotAuthorized>
+</AuthorizeView>

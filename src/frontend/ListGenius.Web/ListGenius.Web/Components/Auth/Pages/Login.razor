@@ -1,0 +1,61 @@
+﻿@page "/Login"
+
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+
+<MudPaper Class="pa-4" Elevation="4">
+    <MudText Typo="Typo.h5">Login</MudText>
+
+    @if (_showErrors)
+    {
+        <MudAlert Severity="Severity.Error">@_error</MudAlert>
+    }
+
+    <MudCard>
+        <MudCardContent>
+            <MudText Typo="Typo.h6">Credenciais</MudText>
+            <EditForm Model="_loginModel" OnValidSubmit="HandleLogin">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <MudTextField T="string" Label="Email" @bind-Value="_loginModel.Email" Required="true" />
+                <ValidationMessage For="@(() => _loginModel.Email)" />
+
+                <MudTextField T="string" Label="Password" InputType="InputType.Password" @bind-Value="_loginModel.Password" Required="true" />
+                <ValidationMessage For="@(() => _loginModel.Password)" />
+
+                <MudButton Type="Submit" Color="Color.Primary" Class="mt-2">Enviar</MudButton>
+            </EditForm>
+        </MudCardContent>
+    </MudCard>
+</MudPaper>
+
+@code {
+    private readonly UserModel _loginModel = new();
+    private bool _showErrors;
+    private string _error = string.Empty;
+
+    private async Task HandleLogin()
+    {
+        _showErrors = false;
+        try
+        {
+            var result = await AuthService.Login(_loginModel);
+
+            if (result?.Token is not null)
+            {
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                _error = "Login inválido";
+                _showErrors = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            _error = "Não foi possível fazer o Login : " + ex.Message;
+            _showErrors = true;
+        }
+    }
+}

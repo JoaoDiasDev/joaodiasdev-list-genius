@@ -4,88 +4,110 @@ using System.Diagnostics;
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace ListGenius.Web.Components.Auth;
-
-public class ApiAuthenticationStateProvider(ILocalStorageService localStorage) : AuthenticationStateProvider
+namespace ListGenius.Web.Components.Auth
 {
-    public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+    public class ApiAuthenticationStateProvider : AuthenticationStateProvider
     {
-        var savedToken = await localStorage.GetItemAsync<string>("authToken");
-        await localStorage.GetItemAsync<string>("tokenExpiration");
+        private readonly ILocalStorageService _localStorage;
 
-        if (string.IsNullOrWhiteSpace(savedToken))
+        public ApiAuthenticationStateProvider(ILocalStorageService localStorage)
         {
-            MarkUserAsLoggedOut();
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            _localStorage = localStorage;
         }
 
-        return new AuthenticationState(new ClaimsPrincipal(
-           new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
-    }
-
-    public void MarkUserAsAuthenticated(string email)
-    {
-        var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[]
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-           new Claim(ClaimTypes.Name, email)
-        }, "apiauth"));
-
-        var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
-        NotifyAuthenticationStateChanged(authState);
-    }
-
-    public void MarkUserAsLoggedOut()
-    {
-        var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
-        var authState = Task.FromResult(new AuthenticationState(anonymousUser));
-        NotifyAuthenticationStateChanged(authState);
-    }
-
-    private bool TokenExpirou(string dataToken)
-    {
-        DateTime actualDateUtc = DateTime.UtcNow;
-        DateTime expirationDate =
-            DateTime.ParseExact(dataToken, "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'", null,
-            System.Globalization.DateTimeStyles.RoundtripKind);
-
-        return expirationDate < actualDateUtc;
-    }
-    private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
-    {
-        var claims = new List<Claim>();
-        var payload = jwt.Split('.')[1];
-        var jsonBytes = ParseBase64WithoutPadding(payload);
-        var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
-
-        Debug.Assert(keyValuePairs != null, nameof(keyValuePairs) + " != null");
-        keyValuePairs.TryGetValue(ClaimTypes.Role, out var roles);
-
-        if (roles != null)
-        {
-            if (roles.ToString()!.Trim().StartsWith("["))
+            try
             {
-                var parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString()!);
-                claims.AddRange(parsedRoles!.Select(parsedRole => new Claim(ClaimTypes.Role, parsedRole)));
+                var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+                var tokenExpiration = await _localStorage.GetItemAsync<string>("tokenExpiration");
+
+                if (string.IsNullOrWhiteSpace(savedToken) || TokenHasExpired(tokenExpiration))
+                {
+                    MarkUserAsLoggedOut();
+                    return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+                }
+
+                var claims = ParseClaimsFromJwt(savedToken);
+                var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt"));
+                return new AuthenticationState(authenticatedUser);
             }
-            else
+            catch (Exception ex)
             {
-                claims.Add(new Claim(ClaimTypes.Role, roles.ToString()!));
+                Debug.WriteLine($"Error in {nameof(GetAuthenticationStateAsync)}: {ex.Message}");
+                MarkUserAsLoggedOut();
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
-            keyValuePairs.Remove(ClaimTypes.Role);
         }
 
-        claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()!)));
-
-        return claims;
-    }
-
-    private static byte[] ParseBase64WithoutPadding(string base64)
-    {
-        switch (base64.Length % 4)
+        public void MarkUserAsAuthenticated(string email)
         {
-            case 2: base64 += "=="; break;
-            case 3: base64 += "="; break;
+            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, email)
+            }, "apiauth"));
+
+            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+            NotifyAuthenticationStateChanged(authState);
         }
-        return Convert.FromBase64String(base64);
+
+        public void MarkUserAsLoggedOut()
+        {
+            var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
+            var authState = Task.FromResult(new AuthenticationState(anonymousUser));
+            NotifyAuthenticationStateChanged(authState);
+        }
+
+        private bool TokenHasExpired(string tokenExpiration)
+        {
+            if (DateTime.TryParse(tokenExpiration, out var expirationDate))
+            {
+                return expirationDate < DateTime.UtcNow;
+            }
+            return true; // If the date is not parsable, treat it as expired
+        }
+
+        private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+        {
+            var claims = new List<Claim>();
+            var payload = jwt.Split('.')[1];
+            var jsonBytes = ParseBase64WithoutPadding(payload);
+            var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+
+            if (keyValuePairs == null) return claims;
+
+            keyValuePairs.TryGetValue(ClaimTypes.Role, out var roles);
+
+            if (roles != null)
+            {
+                if (roles.ToString()!.Trim().StartsWith("["))
+                {
+                    var parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString()!);
+                    if (parsedRoles != null)
+                    {
+                        claims.AddRange(parsedRoles.Select(parsedRole => new Claim(ClaimTypes.Role, parsedRole)));
+                    }
+                }
+                else
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, roles.ToString()!));
+                }
+                keyValuePairs.Remove(ClaimTypes.Role);
+            }
+
+            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()!)));
+
+            return claims;
+        }
+
+        private static byte[] ParseBase64WithoutPadding(string base64)
+        {
+            switch (base64.Length % 4)
+            {
+                case 2: base64 += "=="; break;
+                case 3: base64 += "="; break;
+            }
+            return Convert.FromBase64String(base64);
+        }
     }
 }

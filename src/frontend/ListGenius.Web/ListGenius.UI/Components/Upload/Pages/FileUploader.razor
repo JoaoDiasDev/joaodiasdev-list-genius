@@ -1,0 +1,87 @@
+﻿@page "/fileuploader"
+
+@inject IUploadService _fileUploadService;
+
+<h3>Enviar Arquivos para o servidor</h3>
+
+<p>
+    Selecione até o arquivo: <InputFile OnChange="@SelectFile" multiple />
+</p>
+<p>
+    Tamanho máximo do arquivo : 100 KB (102400 bytes)
+</p>
+@if (_filesName.Count > 0)
+{
+    <ul>
+        @foreach (var nomeArquivo in _filesName)
+        {
+            <li>Arquivo/Tamanho : @nomeArquivo </li>
+        }
+    </ul>
+}
+@if (_resultadoUploads.Count > 0)
+{
+    <div class="card">
+        <div class="card-body btn-success">
+            <ul>
+                @foreach (var arquivo in _resultadoUploads)
+                {
+                    <li>
+                        @if (arquivo.ErrorCode == 0)
+                        {
+                            <b>
+                                Enviado: @arquivo.FileName
+                            </b>
+                        }
+                        else
+                        {
+                            <i>
+                                Não Enviado :  @arquivo.FileName
+                                (Erro : @arquivo.ErrorCode)
+                            </i>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@code {
+    private const int MaximumFileCount = 1;
+    private const long MaximumAllowedSize = long.MaxValue;
+    private readonly List<string> _filesName = [];
+    private List<UploadResult> _resultadoUploads = [];
+    private const string ApiEndpoint = "/FileUpload/upload";
+
+    private async Task SelectFile(InputFileChangeEventArgs e)
+    {
+        using var content = new MultipartFormDataContent();
+
+        foreach (var arquivo in e.GetMultipleFiles(MaximumFileCount))
+        {
+            var fileContent = new StreamContent(arquivo.OpenReadStream(MaximumAllowedSize));
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(arquivo.ContentType);
+
+            _filesName.Add($"{arquivo.Name} - {arquivo.Size} bytes");
+
+            content.Add(
+                content: fileContent,
+                name: "\"files\"",
+                fileName: arquivo.Name);
+        }
+
+        var response = await _fileUploadService.UploadFileAsync(ApiEndpoint, content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var uploadResult = await response.Content
+                .ReadFromJsonAsync<List<UploadResult>>();
+
+            if (uploadResult is not null)
+            {
+                _resultadoUploads = _resultadoUploads.Concat(uploadResult).ToList();
+            }
+        }
+    }
+}

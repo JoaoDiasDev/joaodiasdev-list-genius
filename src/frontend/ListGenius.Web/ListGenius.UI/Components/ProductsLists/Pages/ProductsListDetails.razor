@@ -1,0 +1,34 @@
+﻿@page "/productslist/{id:int}"
+@inject ProductsListService ProductsListService
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private ProductsListDto _productsList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _productsList = await ProductsListService.GetProductsListByIdAsync(Id);
+    }
+}
+
+<h3>Products List Details</h3>
+@if (_productsList != null)
+{
+    <div>
+        <h4>@_productsList.Name</h4>
+        <p>Description: @_productsList.Description</p>
+        <p>Created Date: @_productsList.CreatedDate</p>
+        <p>Updated Date: @_productsList.UpdatedDate</p>
+        <p>User Name: @_productsList.UserName</p>
+        <p>Total Products: @_productsList.Products.Count</p>
+        <p>Total Value: @_productsList.Products.Sum(p => p.Value)</p>
+
+        <h4>Products:</h4>
+        <ul>
+            @foreach (var product in _productsList.Products)
+            {
+                <li>@product.Name - @product.Value</li>
+            }
+        </ul>
+    </div>
+}

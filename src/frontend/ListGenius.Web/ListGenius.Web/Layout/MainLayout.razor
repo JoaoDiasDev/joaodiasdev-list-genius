@@ -1,53 +1,38 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
-
+<MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
-<MudLayout>
-    <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => OpenCloseMenu())"/>
-        <MudText Typo="Typo.h5" Class="ml-3">List Genius</MudText>
-        <MudSwitch @Value="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Mudar Tema Light/Dark Mode" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="_openedMenu" ClipMode="DrawerClipMode.Always" Variant="@DrawerVariant.Mini" Elevation="2">
-        <NavMenu />
-    </MudDrawer>
 
-    <MudMainContent Class="mt-16 pa-4">
-            <MudContainer Class="top-row px-4">
-                <LoginDisplay />
-            </MudContainer>
-                @Body
-    </MudMainContent>
-</MudLayout>
+<div class="page mud-layout">
 
-@code
-{
-    private bool _openedMenu = true;
-    private readonly MudTheme _theme = new();
-    private bool _isDarkMode;
-    private MudThemeProvider _mudThemeProvider = new();
+    <div class="sidebar mud-elevation-1">
+        <div class="top-row mud-drawer-head">
+            <div>
+                <a class="navbar-brand" href="/">List Genius</a>
+            </div>
+        </div>
 
-    private void OpenCloseMenu()
-    {
-        _openedMenu = !_openedMenu;
-    }
+        <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+        <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+            <NavMenu />
+        </div>
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
-            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
-            StateHasChanged();
-        }
-    }
+    </div>
 
-    private Task OnSystemPreferenceChanged(bool newValue)
-    {
-        _isDarkMode = newValue;
-        StateHasChanged();
-        return Task.CompletedTask;
-    }
-}
+    <main>
+        <div class="top-row px-4">
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Style="color: white;" Href="https://joaodiasdev.com" Target="_blank" />
+        </div>
+
+        <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="my-2 pt-2">
+            @Body
+        </MudContainer>
+    </main>
+</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>

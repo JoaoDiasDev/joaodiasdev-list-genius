@@ -1,0 +1,28 @@
+﻿@page "/product/{id:int}"
+@inject ProductService ProductService
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private ProductDto _product = new ();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _product = await ProductService.GetProductByIdAsync(Id);
+    }
+}
+
+<h3>Product Details</h3>
+@if (_product != null)
+{
+    <div>
+        <h4>@_product.Name</h4>
+        <p>Price: @_product.Value</p>
+        <p>Description: @_product.Description</p>
+        <p>Created Date: @_product.CreatedDate</p>
+        <p>Updated Date: @_product.UpdatedDate</p>
+        <p>Unit: @_product.Unit</p>
+        <p>Shopping List Name: @_product.ShoppingListName</p>
+        <p>Group Name: @_product.GroupName</p>
+        <p>Sub Group Name: @_product.SubGroupName</p>
+    </div>
+}

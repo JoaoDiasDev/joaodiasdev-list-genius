@@ -1,0 +1,81 @@
+﻿<div class="p-xl-2">
+    <nav aria-label="Paginacao">
+        <ul class="pagination justify-content-center">
+            @foreach (var link in _links!)
+            {
+                <li @onclick="@(()=> SelectedPageLink(link))"
+                    style="cursor: pointer;"
+                    class="page-item @(link.Enabled ? null : "disabled") @(link.Active ? "active" : null)">
+                    <span class="page-link" href="#">@link.Text</span>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+@code {
+
+    [Parameter] public int CurrentPage { get; set; } = 1;
+    [Parameter] public int TotalPages { get; set; }
+    [Parameter] public int PerPage { get; set; } = 3;
+    [Parameter] public EventCallback<int> SelectedPage { get; set; }
+
+    List<LinkModel>? _links;
+
+    class LinkModel(int page, bool enabled, string text)
+    {
+        public LinkModel(int page, bool enabled = true) : this(page, enabled, page.ToString())
+        { }
+
+        public string Text { get; set; } = text;
+        public int Page { get; set; } = page;
+        public bool Enabled { get; set; } = enabled;
+        public bool Active { get; init; } = false;
+    }
+
+    private async Task SelectedPageLink(LinkModel link)
+    {
+        if (link.Page == CurrentPage)
+        {
+            return;
+        }
+        if (!link.Enabled)
+        {
+            return;
+        }
+        CurrentPage = link.Page;
+        await SelectedPage.InvokeAsync(link.Page);
+    }
+
+    protected override void OnParametersSet()
+    {
+        LoadPages();
+    }
+
+
+    private void LoadPages()
+    {
+        _links = new List<LinkModel>();
+
+        var isLinkPreviousPageEnabled = CurrentPage != 1;
+        var previousPage = CurrentPage - 1;
+
+        _links.Add(new LinkModel(previousPage, isLinkPreviousPageEnabled, "Anterior"));
+
+        for (int i = 1; i <= TotalPages; i++)
+        {
+            if (i >= CurrentPage - PerPage && i <= CurrentPage + PerPage)
+            {
+                _links.Add(new LinkModel(i)
+                    {
+                        Active = CurrentPage == i
+                    });
+            }
+        }
+
+        var isLinkNextPageEnabled = CurrentPage != TotalPages;
+        var nextPage = CurrentPage + 1;
+
+        _links.Add(new LinkModel(nextPage, isLinkNextPageEnabled, "Próximo"));
+    }
+}
