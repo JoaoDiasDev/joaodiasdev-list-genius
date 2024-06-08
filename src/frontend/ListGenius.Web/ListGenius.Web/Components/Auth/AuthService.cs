@@ -40,15 +40,14 @@ namespace ListGenius.Web.Components.Auth
                 await localStorage.SetItemAsync("authToken", loginResult.Token);
                 await localStorage.SetItemAsync("tokenExpiration", loginResult.Expiration);
 
-                ((ApiAuthenticationStateProvider)authenticationStateProvider)
-                    .MarkUserAsAuthenticated(loginModel.Email);
+                ((ApiAuthenticationStateProvider)authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email);
 
                 httpClient.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", loginResult.Token);
 
                 return loginResult;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -62,6 +61,65 @@ namespace ListGenius.Web.Components.Auth
 
             ((ApiAuthenticationStateProvider)authenticationStateProvider).MarkUserAsLoggedOut();
             httpClient.DefaultRequestHeaders.Authorization = null;
+        }
+
+        public async Task<UserProfile?> GetUserProfile()
+        {
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
+
+            var authState = await ((ApiAuthenticationStateProvider)authenticationStateProvider).GetAuthenticationStateAsync();
+            var email = authState.User.FindFirst("unique_name")?.Value;
+
+            var response = await httpClient.GetAsync($"api/User/UserProfile?email={email}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var userProfile = JsonSerializer.Deserialize<UserProfile>(
+                await response.Content.ReadAsStringAsync(),
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (userProfile?.FullName is null)
+            {
+                return null;
+            }
+
+            return userProfile;
+
+        }
+
+        public async Task<AuthenticationState> GetAuthenticationState()
+        {
+            return await ((ApiAuthenticationStateProvider)authenticationStateProvider).GetAuthenticationStateAsync();
+        }
+
+        public async Task<bool> VerifyLoggedUser()
+        {
+            return await ((ApiAuthenticationStateProvider)authenticationStateProvider).VerifyLoggedUser();
+        }
+
+        public async Task<bool> UpdateLogoImage(UserUpdateImage userUpdateImage)
+        {
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
+            var loginAsJson = JsonSerializer.Serialize(userUpdateImage);
+            var requestContent = new StringContent(loginAsJson, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync("api/User/UpdateLogoImage", requestContent);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdateProfileImage(UserUpdateImage userUpdateImage)
+        {
+            var httpClient = httpClientFactory.CreateClient("ApiListGenius");
+            var loginAsJson = JsonSerializer.Serialize(userUpdateImage);
+            var requestContent = new StringContent(loginAsJson, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync("api/User/UpdateProfileImage", requestContent);
+
+            return response.IsSuccessStatusCode;
         }
     }
 }

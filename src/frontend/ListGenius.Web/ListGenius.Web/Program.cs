@@ -1,12 +1,11 @@
 using Blazored.LocalStorage;
 using ListGenius.Web.Components.Auth;
 using ListGenius.Web.Components.Products;
+using ListGenius.Web.Components.ProductsLists;
 using ListGenius.Web.Util;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
-using IProductsListService = ListGenius.Web.Components.ProductsLists.IProductsListService;
-using ProductsListService = ListGenius.Web.Components.ProductsLists.ProductsListService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -36,11 +35,5 @@ builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStatePr
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductsListService, ProductsListService>();
-
-// Add CascadingAuthenticationState
-builder.Services.AddScoped(sp => new HttpClient
-{
-    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
-});
 
 await builder.Build().RunAsync();

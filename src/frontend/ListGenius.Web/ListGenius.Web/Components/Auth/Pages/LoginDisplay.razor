@@ -1,9 +1,23 @@
 ﻿<AuthorizeView>
     <Authorized>
-        <MudText Typo="Typo.body1">@context?.User?.Identity?.Name</MudText>
-        <MudLink Href="LogOut">Log out</MudLink>
+        <MudText Typo="Typo.body1" Class="mr-2">@context?.User?.Identity?.Name</MudText>
+        <MudButton Variant="Variant.Filled"
+                   EndIcon="@Icons.Material.Filled.Logout"
+                   ButtonType="ButtonType.Button"
+                   Href="LogOut"
+                   Color="Color.Secondary"
+                   Size="Size.Small"
+                   IconSize="Size.Small"
+                   IconColor="Color.Default">Log out</MudButton>
     </Authorized>
     <NotAuthorized>
-        <MudLink Href="Login">Log in</MudLink>
+        <MudButton Variant="Variant.Filled"
+                   EndIcon="@Icons.Material.Filled.Login"
+                   ButtonType="ButtonType.Button"
+                   Href="Login"
+                   Color="Color.Success"
+                   Size="Size.Small"
+                   IconSize="Size.Small"
+                   IconColor="Color.Default">Log in</MudButton>
     </NotAuthorized>
 </AuthorizeView>

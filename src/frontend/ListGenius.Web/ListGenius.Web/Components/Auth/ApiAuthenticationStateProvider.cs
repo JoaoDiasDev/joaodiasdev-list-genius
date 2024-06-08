@@ -6,23 +6,16 @@ using System.Text.Json;
 
 namespace ListGenius.Web.Components.Auth
 {
-    public class ApiAuthenticationStateProvider : AuthenticationStateProvider
+    public class ApiAuthenticationStateProvider(ILocalStorageService localStorage) : AuthenticationStateProvider
     {
-        private readonly ILocalStorageService _localStorage;
-
-        public ApiAuthenticationStateProvider(ILocalStorageService localStorage)
-        {
-            _localStorage = localStorage;
-        }
-
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             try
             {
-                var savedToken = await _localStorage.GetItemAsync<string>("authToken");
-                var tokenExpiration = await _localStorage.GetItemAsync<string>("tokenExpiration");
+                var savedToken = await localStorage.GetItemAsync<string>("authToken");
+                var tokenExpiration = await localStorage.GetItemAsync<string>("tokenExpiration");
 
-                if (string.IsNullOrWhiteSpace(savedToken) || TokenHasExpired(tokenExpiration))
+                if (string.IsNullOrWhiteSpace(savedToken) || TokenHasExpired(tokenExpiration ?? string.Empty))
                 {
                     MarkUserAsLoggedOut();
                     return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
@@ -40,15 +33,50 @@ namespace ListGenius.Web.Components.Auth
             }
         }
 
+        public async Task<bool> VerifyLoggedUser()
+        {
+            try
+            {
+                var savedToken = await localStorage.GetItemAsync<string>("authToken");
+                var tokenExpiration = await localStorage.GetItemAsync<string>("tokenExpiration");
+
+                if (string.IsNullOrWhiteSpace(savedToken) || TokenHasExpired(tokenExpiration ?? string.Empty))
+                {
+                    return false;
+                }
+
+                var claims = ParseClaimsFromJwt(savedToken);
+
+                var email = claims
+                    .FirstOrDefault(c =>
+                        c.Type.Equals("unique_name", StringComparison.OrdinalIgnoreCase))?.Value;
+
+
+                if (email is null)
+                {
+                    return false;
+                }
+
+                MarkUserAsAuthenticated(email);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in {nameof(VerifyLoggedUser)}: {ex.Message}");
+                return false;
+            }
+        }
+
         public void MarkUserAsAuthenticated(string email)
         {
-            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[]
-            {
-                new Claim(ClaimTypes.Name, email)
-            }, "apiauth"));
+            //var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[]
+            //{
+            //    new Claim(ClaimTypes.Name, email)
+            //}, "apiauth"));
 
-            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
-            NotifyAuthenticationStateChanged(authState);
+            //var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+            //NotifyAuthenticationStateChanged(authState);
         }
 
         public void MarkUserAsLoggedOut()
@@ -64,7 +92,7 @@ namespace ListGenius.Web.Components.Auth
             {
                 return expirationDate < DateTime.UtcNow;
             }
-            return true; // If the date is not parsable, treat it as expired
+            return true;
         }
 
         private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)

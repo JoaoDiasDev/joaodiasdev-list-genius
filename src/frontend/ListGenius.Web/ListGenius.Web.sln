@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListGenius.Web", "ListGenius.Web\ListGenius.Web.csproj", "{D0DFE89F-1799-4713-9D71-33623C2F5981}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListGenius.Web.Tests", "ListGenius.Web.Tests\ListGenius.Web.Tests.csproj", "{BBE43C5A-568E-4799-83E0-FB94543AFA61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListGenius.Web.Tests", "ListGenius.Web.Tests\ListGenius.Web.Tests.csproj", "{BBE43C5A-568E-4799-83E0-FB94543AFA61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

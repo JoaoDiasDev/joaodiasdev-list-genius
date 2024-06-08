@@ -24,7 +24,7 @@
                 <MudTextField T="string" Label="Password" InputType="InputType.Password" @bind-Value="_loginModel.Password" Required="true" />
                 <ValidationMessage For="@(() => _loginModel.Password)" />
 
-                <MudButton Type="Submit" Color="Color.Primary" Class="mt-2">Enviar</MudButton>
+                <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Class="mt-2">Enviar</MudButton>
             </EditForm>
         </MudCardContent>
     </MudCard>

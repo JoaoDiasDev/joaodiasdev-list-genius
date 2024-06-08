@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using ListGenius.Api.Entities.Users.Enums;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ListGenius.Api.Entities.Users;
 
@@ -22,5 +23,10 @@ public class UserRepository(AppDbContext db, IMemoryCache cache) : IUserReposito
         cache.Set(cacheKey, user, _cacheOptions);
 
         return user;
+    }
+
+    public async Task<bool> UpdateImage(byte[] image, ImageType imageType)
+    {
+
     }
 }

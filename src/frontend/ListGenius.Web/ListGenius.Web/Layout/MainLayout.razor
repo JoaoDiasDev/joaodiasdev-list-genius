@@ -1,38 +1,67 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<div class="page mud-layout">
 
-    <div class="sidebar mud-elevation-1">
-        <div class="top-row mud-drawer-head">
-            <div>
-                <a class="navbar-brand" href="/">List Genius</a>
-            </div>
-        </div>
+<MudLayout>
+    <!-- AppBar at the top -->
+    <MudAppBar Color="Color.Primary" Elevation="4">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h6" Class="ml-2">List Genius</MudText>
+        <MudSpacer />
+        <LoginDisplay />
+        <MudSwitch @bind-Value="@_isDarkMode" Color="Color.Inherit" Class="ma-4" T="bool" Label="Mudar Tema Claro/Escuro" />
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Style="color: white;" Href="https://joaodiasdev.com" Target="_blank" />
+    </MudAppBar>
 
-        <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-        <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-            <NavMenu />
-        </div>
+    <!-- NavMenu Drawer -->
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+    <NavMenu />
+    </MudDrawer>
 
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Style="color: white;" Href="https://joaodiasdev.com" Target="_blank" />
-        </div>
-
+    <!-- Main content area -->
+    <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="my-2 pt-2">
             @Body
         </MudContainer>
-    </main>
-</div>
+    </MudMainContent>
+</MudLayout>
+
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    private bool _isDarkMode;
+    private MudThemeProvider _mudThemeProvider = new();
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+            StateHasChanged();
+        }
+    }
+
+    private Task OnSystemPreferenceChanged(bool newValue)
+    {
+        _isDarkMode = newValue;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+
+}

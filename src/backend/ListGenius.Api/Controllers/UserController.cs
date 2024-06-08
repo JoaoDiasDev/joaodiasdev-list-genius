@@ -1,4 +1,5 @@
 ﻿using ListGenius.Api.Entities.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -47,7 +48,7 @@ public class UserController(UserManager<ApplicationUser> userManager,
 
         if (result.Succeeded)
         {
-            return BuildToken(userInfo);
+            return await BuildToken(userInfo);
         }
         else
         {
@@ -56,11 +57,74 @@ public class UserController(UserManager<ApplicationUser> userManager,
         }
     }
 
-    private UserToken BuildToken(User userInfo)
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpGet("UserProfile")]
+    public async Task<ActionResult<UserProfile>> UserProfile([FromQuery] string email)
     {
+        var applicationUser = await GetApplicationUserByEmail(email);
+
+        if (applicationUser.Email is null)
+        {
+            return NotFound();
+        }
+
+        var userProfile = new UserProfile
+        {
+            Email = applicationUser.Email ?? string.Empty,
+            FullName = applicationUser.FullName,
+            LogoImage = applicationUser.LogoImage,
+            Password = applicationUser.PasswordHash ?? string.Empty,
+            ProfilePicture = applicationUser.ProfilePicture
+        };
+
+        return Ok(userProfile);
+    }
+
+    [HttpPost("UpdateLogoImage")]
+    public async Task<IActionResult> UpdateLogoImage([FromBody] UserUpdateImage request)
+    {
+        var logoImage = Convert.FromBase64String(request.ImageBase64);
+        var result = await _authService.UpdateLogoImage(request.Email, logoImage);
+        if (!result)
+        {
+            return BadRequest("Failed to update logo image.");
+        }
+
+        return Ok();
+    }
+
+    [HttpPost("UpdateProfileImage")]
+    public async Task<IActionResult> UpdateProfileImage([FromBody] UserUpdateImage request)
+    {
+        var profilePicture = Convert.FromBase64String(request.ImageBase64);
+        var result = await _authService.UpdateProfilePicture(request.Email, profilePicture);
+        if (!result)
+        {
+            return BadRequest("Failed to update profile picture.");
+        }
+
+        return Ok();
+    }
+
+    private async Task<ApplicationUser> GetApplicationUserByEmail(string email)
+    {
+        return await userManager.FindByEmailAsync(email) ?? new ApplicationUser();
+    }
+
+    private async Task<UserToken> BuildToken(User userInfo)
+    {
+        var applicationUser = await GetApplicationUserByEmail(userInfo.Email);
+        var userRole = await userManager.GetRolesAsync(applicationUser);
+
+        if (applicationUser.Email is null)
+        {
+            return new UserToken();
+        }
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
+            new Claim(JwtRegisteredClaimNames.Name, applicationUser.FullName),
+            new Claim(ClaimTypes.Role,userRole.First() ),
             new Claim("joaodiasdev", "http://joaodiasdev.com"),
             new Claim(JwtRegisteredClaimNames.Aud, configuration["Jwt:Audience"] ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Iss, configuration["Jwt:Issuer"] ?? string.Empty),

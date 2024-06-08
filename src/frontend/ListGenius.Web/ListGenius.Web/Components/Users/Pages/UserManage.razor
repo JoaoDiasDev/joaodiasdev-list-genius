@@ -1,0 +1,111 @@
+﻿@page "/User/Manage"
+@inject IAuthService AuthService
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="my-5">
+    <MudText Variant="H4" GutterBottom="true">Manage Account</MudText>
+
+    @if (!string.IsNullOrEmpty(UserProfile?.FullName))
+    {
+        <MudCard Class="my-4">
+            <MudCardHeader>
+                <MudAvatar Size="Size.Large" Src="@(UserProfile.ProfilePicture.Length > 0 ? $"data:image/png;base64,{Convert.ToBase64String(UserProfile.ProfilePicture)}" : "images/noimage.png")" />
+                <MudText Typo="Typo.h5">@UserProfile.FullName</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudGrid Container>
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.subtitle1">Email:</MudText>
+                        <MudText Typo="Typo.body1">@UserProfile.Email</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.subtitle1">Full Name:</MudText>
+                        <MudText Typo="Typo.body1">@UserProfile.FullName</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.subtitle1">Logo Image:</MudText>
+                        <img src="@(UserProfile.LogoImage.Length > 0 ? $"data:image/png;base64,{Convert.ToBase64String(UserProfile.LogoImage)}" : "images/noimage.png")" alt="Logo Image" style="max-width: 100px;" />
+                        <MudFileUpload T="IBrowserFile" Accept=".png, .jpg" OnFilesChanged="@(e => UploadFile(e, "Logo"))" MaximumFileCount="100">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context.Id">
+                                    Somente imagens
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.subtitle1">Profile Picture:</MudText>
+                        <img src="@(UserProfile.ProfilePicture.Length > 0 ? $"data:image/png;base64,{Convert.ToBase64String(UserProfile.ProfilePicture)}" : "noimage.png")" alt="Profile Picture" style="max-width: 100px;" />
+                        <MudFileUpload T="IBrowserFile" Accept=".png, .jpg" OnFilesChanged="@(e => UploadFile(e, "Profile"))" MaximumFileCount="100">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context.Id">
+                                    Somente imagens
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    }
+    else
+    {
+        <MudText>You are not authenticated.</MudText>
+    }
+</MudContainer>
+
+@code {
+    private UserProfile UserProfile { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserProfile = await AuthService.GetUserProfile() ?? new UserProfile();
+    }
+
+    private async Task UploadFile(InputFileChangeEventArgs e, string type)
+    {
+        var file = e.File;
+
+        if (file != null)
+        {
+            using var stream = new MemoryStream();
+            await file.OpenReadStream().CopyToAsync(stream);
+            var bytes = stream.ToArray();
+
+            var request = new UserUpdateImage
+                {
+                    Email = UserProfile.Email,
+                    ImageBase64 = Convert.ToBase64String(bytes)
+                };
+
+            switch (type)
+            {
+                case "Logo":
+                    {
+                        var response = await AuthService.UpdateLogoImage(request);
+                        if (response)
+                        {
+                            UserProfile.LogoImage = bytes;
+                        }
+                        break;
+                    }
+                case "Profile":
+                    {
+                        var response = await AuthService.UpdateProfileImage(request);
+                        if (response)
+                        {
+                            UserProfile.ProfilePicture = bytes;
+                        }
+                        break;
+                    }
+            }
+        }
+    }
+}
