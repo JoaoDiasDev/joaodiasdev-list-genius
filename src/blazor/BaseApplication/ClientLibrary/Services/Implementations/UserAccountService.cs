@@ -27,8 +27,12 @@ public class UserAccountService(GetHttpClient getHttpClient) : IUserAccountServi
         return (await result.Content.ReadFromJsonAsync<LoginResponse>())!;
     }
 
-    public Task<LoginResponse> RefreshTokenAsync(RefreshTokenDto refreshToken)
+    public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenDto refreshToken)
     {
-        throw new NotImplementedException();
+        var httpClient = getHttpClient.GetPublicHttpClient();
+        var result = await httpClient.PostAsJsonAsync($"{AuthUrl}/refresh-token", refreshToken);
+        if (!result.IsSuccessStatusCode) return new LoginResponse(false, " Error occurred");
+
+        return (await result.Content.ReadFromJsonAsync<LoginResponse>())!;
     }
 }
