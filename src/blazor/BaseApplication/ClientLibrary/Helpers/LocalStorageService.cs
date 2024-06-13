@@ -2,7 +2,7 @@
 
 namespace ClientLibrary.Helpers;
 
-public abstract class LocalStorageService(ILocalStorageService localStorageService)
+public class LocalStorageService(ILocalStorageService localStorageService)
 {
     private const string StorageKey = "authentication-token";
     public async Task<string> GetToken() => (await localStorageService.GetItemAsStringAsync(StorageKey))!;
