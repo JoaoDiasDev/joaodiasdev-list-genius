@@ -1,12 +1,27 @@
 ﻿@page "/identity/account/login"
+@layout AuthenticationLayout
 <div class="container">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-5"></div>
+        <div class="col-lg-2">
             <EditForm Enhance Model="User" OnValidSubmit="HandleLogin">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
-                <div class="card">
-                    <div class="card-header">Fill this form to Login</div>
+                <div class="card bg-dark" style="opacity: 0.5; margin-top: 50%; border-radius: 10px;
+                                                 color: white;
+                                                 font-weight: bold">
+                    <div class="card-header text-center fs-5 mb-2">Fill this form to Login</div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 d-flex justify-content-center">
+                                <img style="border-radius: 20px"
+                                     src="images/company-logos/joaodiasdev.jpg" height="50"
+                                     width="50" alt="JoaoDiasDev logo"/>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="form-group mt-3">
                             <label class="form-label">Email</label>
@@ -23,6 +38,7 @@
                 </div>
             </EditForm>
         </div>
+        <div class="col-lg-5"></div>
     </div>
 </div>
 
@@ -37,9 +53,9 @@
         {
             var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
             await customAuthStateProvider.UpdateAuthenticationState(new UserSession()
-                {Token = result.Token, RefreshToken = result.RefreshToken});
+                { Token = result.Token, RefreshToken = result.RefreshToken });
 
-            NavigationManager.NavigateTo("/",forceLoad:true);
+            NavigationManager.NavigateTo("/", forceLoad: true);
         }
     }
 }
