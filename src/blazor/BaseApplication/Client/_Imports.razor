@@ -13,8 +13,11 @@
 @using Blazored.LocalStorage
 @using ClientLibrary.Helpers
 @using ClientLibrary.Services.Contracts
+@using Client.Pages.Shared
+@using Client.Pages.Admin
+@using MudBlazor
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IUserAccountService UserAccountService
 @inject NavigationManager NavigationManager
-@* @inject ILocalStorageService localStorage *@
+@inject IDialogService DialogService

@@ -1,4 +1,13 @@
 ﻿@inherits LayoutComponentBase
+<MudThemeProvider/>
+<MudDialogProvider FullWidth="true"
+                   MaxWidth="MaxWidth.Small"
+                   CloseButton="true"
+                   DisableBackdropClick="true"
+                   NoHeader="false"
+                   Position="DialogPosition.Center"
+                   CloseOnEscapeKey="true" />
+<MudSnackbarProvider/>
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -10,10 +19,6 @@
                 <Authorized>
                     <a class="btn btn-none text-danger" @onclick="Logout">Logout</a>
                 </Authorized>
-                <NotAuthorized>
-                    <a class="btn btn-none text-success" href="identity/account/login">Login</a>
-                    <a class="btn btn-none" href="identity/account/register">Register</a>
-                </NotAuthorized>
             </AuthorizeView>
         </div>
 
@@ -33,4 +38,5 @@
         NavigationManager.NavigateTo("/", forceLoad: true);
 
     }
+
 }

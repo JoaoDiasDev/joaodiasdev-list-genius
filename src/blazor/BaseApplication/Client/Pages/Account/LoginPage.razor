@@ -2,53 +2,74 @@
 @layout AuthenticationLayout
 <div class="container">
     <div class="row">
-        <div class="col-lg-5"></div>
-        <div class="col-lg-2">
-            <EditForm Enhance Model="User" OnValidSubmit="HandleLogin">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <EditForm Enhance Model="_user" OnValidSubmit="HandleLogin">
                 <DataAnnotationsValidator />
-                <ValidationSummary />
                 <div class="card bg-dark" style="opacity: 0.5; margin-top: 50%; border-radius: 10px;
                                                  color: white;
                                                  font-weight: bold">
                     <div class="card-header text-center fs-5 mb-2">Fill this form to Login</div>
                     <div class="container">
                         <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-4"></div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 d-flex justify-content-center">
+                            <div class="col-lg-2 col-md-4 col-sm-4"></div>
+                            <div class="col-lg-8 col-md-4 col-sm-4 d-flex justify-content-center">
                                 <img style="border-radius: 20px"
                                      src="images/company-logos/joaodiasdev.jpg" height="50"
                                      width="50" alt="JoaoDiasDev logo"/>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4"></div>
+                            <div class="col-lg-2 col-md-4 col-sm-4"></div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="form-group mt-3">
                             <label class="form-label">Email</label>
-                            <InputText @bind-Value="User.Email" class="form-control"></InputText>
+                            <InputText @bind-Value="_user.Email" class="form-control"></InputText>
                         </div>
                         <div class="form-group mt-3">
                             <label class="form-label">Password</label>
-                            <input type="password" @bind="User.Password" class="form-control">
+                            <input type="password" @bind="_user.Password" class="form-control">
                         </div>
                         <div class="form-group mt-3">
-                            <button class="btn btn-outline-primary float-end" type="submit">Login</button>
+                            @if(ShowLoadingButton)
+                            {
+                                <ButtonLoadingSpinner/>
+                            }
+                            else
+                            {
+                                <button class="btn btn-outline-primary float-end" type="submit">Login</button>
+                            }
                         </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="text-center">
+                            Don't have an account?
+                            <a class="btn-link" href="/identity/account/register">Register</a>
+                        </span>
+                        <ValidationSummary/>
                     </div>
                 </div>
             </EditForm>
         </div>
-        <div class="col-lg-5"></div>
+        <div class="col-lg-3"></div>
     </div>
 </div>
 
 
 @code {
-    Login User = new();
+    [CascadingParameter] public required Task<AuthenticationState> AuthenticationState { get; set; }
+    private bool ShowLoadingButton { get; set; }
+    private readonly Login _user = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CheckUserAuthentication();
+    }
 
     async Task HandleLogin()
     {
-        var result = await UserAccountService.SignInAsync(User);
+        ShowLoadingButton = true;
+        var result = await UserAccountService.SignInAsync(_user);
         if (result.Flag)
         {
             var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
@@ -57,5 +78,40 @@
 
             NavigationManager.NavigateTo("/", forceLoad: true);
         }
+        else
+        {
+            await DisplayDialog(title: "Error occurred",
+                contentText: result.Message,
+                buttonText: "Close",
+                color: Color.Secondary
+                );
+        }
+        ShowLoadingButton = false;
     }
+
+    private async Task DisplayDialog(string title,
+       string contentText,
+       string buttonText,
+       Color color,
+       bool showCancelButton = false)
+    {
+        var parameters = new DialogParameters<BaseDialog>
+        {
+            { nameof(BaseDialog.ContentText), contentText },
+            { nameof(BaseDialog.ButtonText), buttonText },
+            { nameof(BaseDialog.Color), color },
+            { nameof(BaseDialog.ShowCancelButton), showCancelButton }
+        };
+        await DialogService.ShowAsync<BaseDialog>(title: title, parameters: parameters);
+    }
+
+    private async Task CheckUserAuthentication()
+    {
+        var user = (await AuthenticationState).User;
+        if (user.Identity!.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/home/dashboard");
+        }
+    }
+
 }
