@@ -1,6 +1,4 @@
-﻿using Blazored.LocalStorage;
-
-namespace ClientLibrary.Helpers;
+﻿namespace ClientLibrary.Helpers;
 
 public class LocalStorageService(ILocalStorageService localStorageService)
 {

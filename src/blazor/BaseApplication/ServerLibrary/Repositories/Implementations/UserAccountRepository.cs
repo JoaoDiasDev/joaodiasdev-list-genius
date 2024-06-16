@@ -1,23 +1,8 @@
-﻿using BaseLibrary.DTOs;
-using BaseLibrary.Entities;
-using BaseLibrary.Responses;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using ServerLibrary.Data;
-using ServerLibrary.Helpers;
-using ServerLibrary.Repositories.Contracts;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using Constants = ServerLibrary.Helpers.Constants;
-
-namespace ServerLibrary.Repositories.Implementations;
+﻿namespace ServerLibrary.Repositories.Implementations;
 
 public class UserAccountRepository(IOptions<JwtSection> configJwt, AppDbContext appDbContext) : IUserAccountRepository
 {
-    public async Task<GeneralResponse> CreateAsync(Register user)
+    public async Task<GeneralResponse> CreateAsync(RegisterDto user)
     {
         if (user is null)
         {
@@ -75,7 +60,7 @@ public class UserAccountRepository(IOptions<JwtSection> configJwt, AppDbContext 
         return (await appDbContext.ApplicationUsers.FirstOrDefaultAsync(u => u.Email!.ToLower()!.Equals(email!)))!;
     }
 
-    public async Task<LoginResponse> SignInAsync(Login user)
+    public async Task<LoginResponse> SignInAsync(LoginDto user)
     {
         if (user is null)
         {

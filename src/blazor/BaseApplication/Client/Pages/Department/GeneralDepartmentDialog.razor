@@ -2,7 +2,7 @@
 
 <MudDialog>
     <DialogContent>
-        <MudTextField @bind-Value="Name" Label="Name" Variant="Variant.Outlined"></MudTextField>
+        <MudTextField @bind-Value="Department.Name" Label="Name" Variant="Variant.Outlined"></MudTextField>
     </DialogContent>
     <DialogActions>
         @if (ShowCancelButton)
@@ -15,8 +15,7 @@
 
 @code
 {
-    [Parameter] public GeneralDepartmentDto Department { get; set; } = new();
-    public required string Name { get; set; }
+    [Parameter] public GeneralDepartment Department { get; set; } = new();
 
     private void Cancel() => CustomMudDialog.Cancel();
 

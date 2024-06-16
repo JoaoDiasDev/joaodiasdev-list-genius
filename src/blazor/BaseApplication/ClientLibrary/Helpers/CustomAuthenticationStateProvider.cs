@@ -1,9 +1,4 @@
-﻿using BaseLibrary.DTOs;
-using Microsoft.AspNetCore.Components.Authorization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-
-namespace ClientLibrary.Helpers;
+﻿namespace ClientLibrary.Helpers;
 
 public class CustomAuthenticationStateProvider(LocalStorageService localStorageService) : AuthenticationStateProvider
 {
@@ -13,7 +8,7 @@ public class CustomAuthenticationStateProvider(LocalStorageService localStorageS
         var stringToken = await localStorageService.GetToken();
         if (string.IsNullOrEmpty(stringToken)) return await Task.FromResult(new AuthenticationState(_anonymous));
 
-        var deserializeToken = Serializations.DeserializeJsonString<UserSession>(stringToken);
+        var deserializeToken = Serializations.DeserializeJsonString<UserSessionDto>(stringToken);
         if (deserializeToken is null) return await Task.FromResult(new AuthenticationState(_anonymous));
 
         var getUserClaims = DecryptToken(deserializeToken.Token!);
@@ -23,7 +18,7 @@ public class CustomAuthenticationStateProvider(LocalStorageService localStorageS
         return await Task.FromResult(new AuthenticationState(claimsPrincipal));
     }
 
-    public async Task UpdateAuthenticationState(UserSession userSession)
+    public async Task UpdateAuthenticationState(UserSessionDto userSession)
     {
         ClaimsPrincipal claimsPrincipal = new();
         if (userSession.Token is not null || userSession.RefreshToken is not null)
@@ -40,7 +35,7 @@ public class CustomAuthenticationStateProvider(LocalStorageService localStorageS
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
     }
 
-    private static ClaimsPrincipal SetClaimsPrincipal(CustomUserClaims claims)
+    private static ClaimsPrincipal SetClaimsPrincipal(CustomUserClaimsDto claims)
     {
         if (claims.Email is null) return new ClaimsPrincipal();
         var claimsList = new List<Claim>
@@ -54,9 +49,9 @@ public class CustomAuthenticationStateProvider(LocalStorageService localStorageS
             claimsList, "JwtAuth"));
     }
 
-    private static CustomUserClaims DecryptToken(string jwtToken)
+    private static CustomUserClaimsDto DecryptToken(string jwtToken)
     {
-        if (string.IsNullOrEmpty(jwtToken)) return new CustomUserClaims();
+        if (string.IsNullOrEmpty(jwtToken)) return new CustomUserClaimsDto();
 
         var handler = new JwtSecurityTokenHandler();
         var token = handler.ReadJwtToken(jwtToken);
@@ -64,7 +59,7 @@ public class CustomAuthenticationStateProvider(LocalStorageService localStorageS
         var name = token.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Name));
         var email = token.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email));
         var role = token.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Role));
-        return new CustomUserClaims(userId!.Value,
+        return new CustomUserClaimsDto(userId!.Value,
             name!.Value,
             email!.Value,
             role!.Value);

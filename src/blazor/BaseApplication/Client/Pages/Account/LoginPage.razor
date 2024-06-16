@@ -59,7 +59,7 @@
 @code {
     [CascadingParameter] public required Task<AuthenticationState> AuthenticationState { get; set; }
     private bool ShowLoadingButton { get; set; }
-    private readonly Login _user = new();
+    private readonly LoginDto _user = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,7 +73,7 @@
         if (result.Flag)
         {
             var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
-            await customAuthStateProvider.UpdateAuthenticationState(new UserSession()
+            await customAuthStateProvider.UpdateAuthenticationState(new UserSessionDto()
                 { Token = result.Token, RefreshToken = result.RefreshToken });
 
             NavigationManager.NavigateTo("/", forceLoad: true);

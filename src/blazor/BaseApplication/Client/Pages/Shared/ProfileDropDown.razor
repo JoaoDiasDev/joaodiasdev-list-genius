@@ -35,7 +35,7 @@
 
     async Task LogoutClicked()
     {
-        var logouModel = new UserSession();
+        var logouModel = new UserSessionDto();
         var customAuthStateProvider = (CustomAuthenticationStateProvider) AuthenticationStateProvider;
         await customAuthStateProvider.UpdateAuthenticationState(logouModel);
         NavigationManager.NavigateTo("/identity/account/login", replace:true, forceLoad: true);

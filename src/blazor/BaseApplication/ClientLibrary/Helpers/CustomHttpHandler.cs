@@ -1,8 +1,4 @@
-﻿using BaseLibrary.DTOs;
-using ClientLibrary.Services.Contracts;
-using System.Net;
-
-namespace ClientLibrary.Helpers;
+﻿namespace ClientLibrary.Helpers;
 
 public class CustomHttpHandler(LocalStorageService localStorageService,
     IUserAccountService userAccountService) : DelegatingHandler
@@ -37,7 +33,7 @@ public class CustomHttpHandler(LocalStorageService localStorageService,
                 //Ignored
             }
 
-            var deserializedToken = Serializations.DeserializeJsonString<UserSession>(stringToken);
+            var deserializedToken = Serializations.DeserializeJsonString<UserSessionDto>(stringToken);
             if (deserializedToken is null) return result;
 
             if (string.IsNullOrEmpty(token))
@@ -62,7 +58,7 @@ public class CustomHttpHandler(LocalStorageService localStorageService,
     private async Task<string> GetRefreshToken(string refreshToken)
     {
         var result = await userAccountService.RefreshTokenAsync(new RefreshTokenDto() { RefreshToken = refreshToken });
-        var serializedToken = Serializations.SerializeObj(new UserSession()
+        var serializedToken = Serializations.SerializeObj(new UserSessionDto()
         {
             Token = result.Token,
             RefreshToken = result.RefreshToken

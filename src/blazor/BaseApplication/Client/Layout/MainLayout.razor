@@ -31,7 +31,7 @@
 {
     async Task Logout()
     {
-        var logoutModel = new UserSession();
+        var logoutModel = new UserSessionDto();
         var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
         await customAuthStateProvider.UpdateAuthenticationState(logoutModel);
         NavigationManager.NavigateTo("/", forceLoad: true);

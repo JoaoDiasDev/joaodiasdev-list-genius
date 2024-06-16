@@ -1,7 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BaseLibrary.DTOs;
-public class AccountBase
+﻿namespace BaseLibrary.DTOs;
+public class AccountBaseDto
 {
     [DataType(DataType.EmailAddress)]
     [EmailAddress]

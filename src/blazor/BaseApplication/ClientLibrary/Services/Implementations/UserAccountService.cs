@@ -1,15 +1,9 @@
-﻿using BaseLibrary.DTOs;
-using BaseLibrary.Responses;
-using ClientLibrary.Helpers;
-using ClientLibrary.Services.Contracts;
-using System.Net.Http.Json;
-
-namespace ClientLibrary.Services.Implementations;
+﻿namespace ClientLibrary.Services.Implementations;
 
 public class UserAccountService(GetHttpClient getHttpClient) : IUserAccountService
 {
     private const string AuthUrl = "api/authentication";
-    public async Task<GeneralResponse> CreateAsync(Register user)
+    public async Task<GeneralResponse> CreateAsync(RegisterDto user)
     {
         var httpClient = getHttpClient.GetPublicHttpClient();
         var result = await httpClient.PostAsJsonAsync($"{AuthUrl}/register", user);
@@ -18,7 +12,7 @@ public class UserAccountService(GetHttpClient getHttpClient) : IUserAccountServi
         return (await result.Content.ReadFromJsonAsync<GeneralResponse>())!;
     }
 
-    public async Task<LoginResponse> SignInAsync(Login user)
+    public async Task<LoginResponse> SignInAsync(LoginDto user)
     {
         var httpClient = getHttpClient.GetPublicHttpClient();
         var result = await httpClient.PostAsJsonAsync($"{AuthUrl}/login", user);

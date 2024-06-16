@@ -1,9 +1,4 @@
-﻿using BaseLibrary.DTOs;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using ServerLibrary.Repositories.Contracts;
-
-namespace Server.Controllers;
+﻿namespace Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -11,7 +6,7 @@ namespace Server.Controllers;
 public class AuthenticationController(IUserAccountRepository accountInterface) : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<IActionResult> CreateAsync(Register user)
+    public async Task<IActionResult> CreateAsync(RegisterDto user)
     {
         if (user is null)
         {
@@ -22,7 +17,7 @@ public class AuthenticationController(IUserAccountRepository accountInterface) :
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> SignInAsync(Login user)
+    public async Task<IActionResult> SignInAsync(LoginDto user)
     {
         if (user is null)
         {

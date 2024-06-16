@@ -51,11 +51,11 @@
         </div>
     </div>
 }
-<GeneralDepartmentDialog @ref="generalDepartmentDialog" />
+<GeneralDepartmentDialog @ref="_generalDepartmentDialog" />
 @code
 {
-    GeneralDepartmentDialog? generalDepartmentDialog;
-    GeneralDepartmentDto Department = new();
+    GeneralDepartmentDialog? _generalDepartmentDialog;
+    GeneralDepartment _department = new();
 
     protected override void OnInitialized()
     {
@@ -64,7 +64,7 @@
 
     void OpenDialog()
     {
-        generalDepartmentDialog?.OpenDialog();
+        _generalDepartmentDialog?.OpenDialog();
     }
 
     public void Dispose()

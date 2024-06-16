@@ -1,25 +1,30 @@
 ﻿
+using BaseLibrary.Entities.Base;
+
 namespace BaseLibrary.Entities;
-public class Employee
+public class Employee : GenericBaseEntity
 {
-    public int Id { get; set; }
-    public string? Name { get; set; }
-    public string? CivilId { get; set; }
-    public string? FileNumber { get; set; }
-    public string? Fullname { get; set; }
-    public string? JobName { get; set; }
-    public string? Address { get; set; }
-    public string? TelephoneNumber { get; set; }
-    public string? Photo { get; set; }
+    [Required]
+    public string CivilId { get; set; } = string.Empty;
+    [Required]
+    public string FileNumber { get; set; } = string.Empty;
+    [Required]
+    public string Fullname { get; set; } = string.Empty;
+    [Required]
+    public string JobName { get; set; } = string.Empty;
+    [Required]
+    public string Address { get; set; } = string.Empty;
+    [Required, DataType(DataType.PhoneNumber)]
+    public string TelephoneNumber { get; set; } = string.Empty;
+    [Required]
+    public string Photo { get; set; } = string.Empty;
     public string? Other { get; set; }
 
-    // Relationship: Many to One
-    public GeneralDepartment? GeneralDepartment { get; set; }
-    public int GeneralDepartmentId { get; set; }
-    public Department? Department { get; set; }
-    public int DepartmentId { get; set; }
+    //Many to one with Branch
     public Branch? Branch { get; set; }
     public int BranchId { get; set; }
+
+    //Many to one with Town
     public Town? Town { get; set; }
     public int TownId { get; set; }
 }

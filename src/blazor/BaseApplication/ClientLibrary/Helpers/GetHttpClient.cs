@@ -1,7 +1,4 @@
-﻿using BaseLibrary.DTOs;
-using System.Net.Http.Headers;
-
-namespace ClientLibrary.Helpers;
+﻿namespace ClientLibrary.Helpers;
 
 public class GetHttpClient(IHttpClientFactory httpClientFactory,
     LocalStorageService localStorageDevice)
@@ -14,7 +11,7 @@ public class GetHttpClient(IHttpClientFactory httpClientFactory,
         var stringToken = await localStorageDevice.GetToken();
         if (string.IsNullOrEmpty(stringToken)) return client;
 
-        var userSession = Serializations.DeserializeJsonString<UserSession>(stringToken);
+        var userSession = Serializations.DeserializeJsonString<UserSessionDto>(stringToken);
         if (userSession is null) return client;
 
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",

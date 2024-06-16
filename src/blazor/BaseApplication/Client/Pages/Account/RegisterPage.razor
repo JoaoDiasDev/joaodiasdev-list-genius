@@ -67,7 +67,7 @@
 @code {
     [CascadingParameter] public required Task<AuthenticationState> AuthenticationState { get; set; }
     private bool ShowLoadingButton { get; set; } = false;
-    private Register _user = new();
+    private RegisterDto _user = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -80,7 +80,7 @@
         var result = await UserAccountService.CreateAsync(_user);
         if (result.Flag)
         {
-            _user = new Register();
+            _user = new RegisterDto();
             await DisplayDialog(title: "Register successful", contentText: result.Message, buttonText: "Ok", Color.Success);
         }
         else

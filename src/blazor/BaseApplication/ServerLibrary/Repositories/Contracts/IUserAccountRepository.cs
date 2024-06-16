@@ -1,11 +1,8 @@
-﻿using BaseLibrary.DTOs;
-using BaseLibrary.Responses;
-
-namespace ServerLibrary.Repositories.Contracts;
+﻿namespace ServerLibrary.Repositories.Contracts;
 
 public interface IUserAccountRepository
 {
-    Task<GeneralResponse> CreateAsync(Register user);
-    Task<LoginResponse> SignInAsync(Login user);
+    Task<GeneralResponse> CreateAsync(RegisterDto user);
+    Task<LoginResponse> SignInAsync(LoginDto user);
     Task<LoginResponse> RefreshTokenAsync(RefreshTokenDto token);
 }
