@@ -1,0 +1,87 @@
+﻿@inherits BaseDialog
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="Name" Label="Name" Variant="Variant.Outlined"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        @if (ShowCancelButton)
+        {
+            <MudButton OnClick="@Cancel">Cancel</MudButton>
+        }
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="@SubmitHandler">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code
+{
+    [Parameter] public GeneralDepartmentDto Department { get; set; } = new();
+    public required string Name { get; set; }
+
+    private void Cancel() => CustomMudDialog.Cancel();
+
+    public async void OpenDialog()
+    {
+        await DisplayGeneralDepartmentDialog(title: "Add Department",
+                contentText: "You need to provide Department name.",
+                buttonText: "Save",
+                color: Color.Success,
+                showCancelButton: true);
+        StateHasChanged();
+    }
+
+    protected override void SubmitHandler()
+    {
+        Save();
+    }
+
+    async void Save()
+    {
+        if (string.IsNullOrEmpty(Department.Name))
+        {
+            await DisplayBaseDialog(title: "Error",
+                contentText: "You need to provide Department name.",
+                buttonText: "Close",
+                color: Color.Secondary,
+                showCancelButton: false);
+        }
+        // else
+        // {
+        //     await DepartmentService.AddDepartment(Department);
+        //     await CustomMudDialog.ShowAsync<BaseDialog>("Success", "Department added successfully", "Close", Color.Primary);
+        //     IsVisible = false;
+        // }
+    }
+
+    private async Task DisplayBaseDialog(string title,
+      string contentText,
+      string buttonText,
+      Color color,
+      bool showCancelButton = false)
+    {
+        var parameters = new DialogParameters<BaseDialog>
+        {
+            { nameof(ContentText), contentText },
+            { nameof(ButtonText), buttonText },
+            { nameof(Color), color },
+            { nameof(ShowCancelButton), showCancelButton }
+        };
+        await DialogService.ShowAsync<BaseDialog>(title: title, parameters: parameters);
+    }
+
+    private async Task DisplayGeneralDepartmentDialog(string title,
+      string contentText,
+      string buttonText,
+      Color color,
+      bool showCancelButton = false)
+    {
+        var parameters = new DialogParameters<BaseDialog>
+        {
+            { nameof(ContentText), contentText },
+            { nameof(ButtonText), buttonText },
+            { nameof(Color), color },
+            { nameof(ShowCancelButton), showCancelButton }
+        };
+        await DialogService.ShowAsync<GeneralDepartmentDialog>(title: title, parameters: parameters);
+    }
+}

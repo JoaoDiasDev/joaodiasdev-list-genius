@@ -7,17 +7,21 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Http
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization
 @using Client
 @using Client.Layout
 @using BaseLibrary.DTOs
 @using Blazored.LocalStorage
+@using Client.ApplicationStates
 @using ClientLibrary.Helpers
 @using ClientLibrary.Services.Contracts
 @using Client.Pages.Shared
 @using Client.Pages.Admin
+@using Client.Pages.Department
 @using MudBlazor
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IUserAccountService UserAccountService
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
+@inject DepartmentState DepartmentState

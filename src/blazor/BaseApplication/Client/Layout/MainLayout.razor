@@ -1,5 +1,7 @@
 ﻿@inherits LayoutComponentBase
-<MudThemeProvider/>
+@attribute [Authorize]
+
+<MudThemeProvider />
 <MudDialogProvider FullWidth="true"
                    MaxWidth="MaxWidth.Small"
                    CloseButton="true"
@@ -7,7 +9,8 @@
                    NoHeader="false"
                    Position="DialogPosition.Center"
                    CloseOnEscapeKey="true" />
-<MudSnackbarProvider/>
+<MudSnackbarProvider />
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -15,11 +18,7 @@
 
     <main>
         <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized>
-                    <a class="btn btn-none text-danger" @onclick="Logout">Logout</a>
-                </Authorized>
-            </AuthorizeView>
+            <ProfileDropDown></ProfileDropDown>
         </div>
 
         <article class="content px-4">

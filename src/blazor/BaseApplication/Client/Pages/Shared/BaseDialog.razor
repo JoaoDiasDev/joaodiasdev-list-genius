@@ -5,13 +5,13 @@
     <DialogActions>
         @if (ShowCancelButton)
         {
-            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton OnClick="@Cancel">Cancel</MudButton>
         }
-        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="@SubmitHandler">@ButtonText</MudButton>
     </DialogActions>
 </MudDialog>
 @code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = new();
+    [CascadingParameter] public MudDialogInstance CustomMudDialog { get; set; } = new();
 
     [Parameter] public string? ContentText { get; set; }
 
@@ -21,6 +21,8 @@
 
     [Parameter] public bool ShowCancelButton { get; set; }
 
-    void Submit() => MudDialog.Close(DialogResult.Ok(true));
-    void Cancel() => MudDialog.Cancel();
+    protected virtual void SubmitHandler() => Submit();
+
+    private void Submit() => CustomMudDialog.Close(DialogResult.Ok(true));
+    private void Cancel() => CustomMudDialog.Cancel();
 }
