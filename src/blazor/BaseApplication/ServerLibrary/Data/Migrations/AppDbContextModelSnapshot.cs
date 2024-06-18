@@ -41,7 +41,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationUsers");
+                    b.ToTable("ApplicationUsers", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Branch", b =>
@@ -63,7 +63,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Branches");
+                    b.ToTable("Branches", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.City", b =>
@@ -85,7 +85,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Country", b =>
@@ -102,7 +102,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Department", b =>
@@ -124,7 +124,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasIndex("GeneralDepartmentId");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Doctor", b =>
@@ -159,7 +159,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Employee", b =>
@@ -217,7 +217,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasIndex("TownId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.GeneralDepartment", b =>
@@ -234,7 +234,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GeneralDepartments");
+                    b.ToTable("GeneralDepartments", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Overtime", b =>
@@ -269,7 +269,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasIndex("OvertimeTypeId");
 
-                    b.ToTable("Overtimes");
+                    b.ToTable("Overtimes", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.OvertimeType", b =>
@@ -286,7 +286,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OvertimeTypes");
+                    b.ToTable("OvertimeTypes", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.RefreshTokenInfo", b =>
@@ -305,7 +305,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RefreshTokenInfos");
+                    b.ToTable("RefreshTokenInfos", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Sanction", b =>
@@ -344,7 +344,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasIndex("SanctionTypeId");
 
-                    b.ToTable("Sanctions");
+                    b.ToTable("Sanctions", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.SanctionType", b =>
@@ -361,7 +361,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SanctionTypes");
+                    b.ToTable("SanctionTypes", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.SystemRole", b =>
@@ -377,7 +377,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemRoles");
+                    b.ToTable("SystemRoles", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Town", b =>
@@ -399,7 +399,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Towns");
+                    b.ToTable("Towns", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.UserRole", b =>
@@ -418,7 +418,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Vacation", b =>
@@ -453,7 +453,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasIndex("VacationTypeId");
 
-                    b.ToTable("Vacations");
+                    b.ToTable("Vacations", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.VacationType", b =>
@@ -470,7 +470,7 @@ namespace ServerLibrary.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VacationTypes");
+                    b.ToTable("VacationTypes", (string)null);
                 });
 
             modelBuilder.Entity("BaseLibrary.Entities.Branch", b =>

@@ -22,7 +22,16 @@
 @using MudBlazor
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject IUserAccountService UserAccountService
 @inject NavigationManager NavigationManager
+
 @inject IDialogService DialogService
+@inject IUserAccountService UserAccountService
+@inject IGenericService<GeneralDepartment> GeneralDepartmentService
+@inject IGenericService<Department> DepartmentService
+@inject IGenericService<Branch> BranchService
+@inject IGenericService<Country> CountryService
+@inject IGenericService<Town> TownService
+@inject IGenericService<City> CityService
+@inject IGenericService<Employee> EmployeeService
+
 @inject DepartmentState DepartmentState

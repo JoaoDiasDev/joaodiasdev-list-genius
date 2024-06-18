@@ -1,3 +1,5 @@
+using BaseLibrary.Entities;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -34,7 +36,16 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection.Key!))
     };
 });
+
+//Adding Repositories to services
 builder.Services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+builder.Services.AddScoped<IGenericRepository<GeneralDepartment>, GeneralDepartmentRepository>();
+builder.Services.AddScoped<IGenericRepository<Department>, DepartmentRepository>();
+builder.Services.AddScoped<IGenericRepository<Branch>, BranchRepository>();
+builder.Services.AddScoped<IGenericRepository<Country>, CountryRepository>();
+builder.Services.AddScoped<IGenericRepository<City>, CityRepository>();
+builder.Services.AddScoped<IGenericRepository<Town>, TownRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorWasm",
