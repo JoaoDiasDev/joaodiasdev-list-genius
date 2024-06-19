@@ -2,7 +2,7 @@
 
 <MudDialog>
     <DialogContent>
-        <MudTextField @bind-Value="Department.Name" Label="Name" Variant="Variant.Outlined"></MudTextField>
+        <MudTextField @bind-Value="GeneralDepartment.Name" Label="Name" Variant="Variant.Outlined"></MudTextField>
     </DialogContent>
     <DialogActions>
         @if (ShowCancelButton)
@@ -15,41 +15,40 @@
 
 @code
 {
-    [Parameter] public GeneralDepartment Department { get; set; } = new();
+    [Parameter] public GeneralDepartment GeneralDepartment { get; set; } = new();
+    [Parameter] public EventCallback<GeneralDepartment> HandleSaveOperation { get; set; }
 
     private void Cancel() => CustomMudDialog.Cancel();
 
     public async void OpenDialog()
     {
-        await DisplayGeneralDepartmentDialog(title: "Add Department",
-                contentText: "You need to provide Department name.",
+        await DisplayGeneralDepartmentDialog(title: "Add GeneralDepartment",
+                contentText: "You need to provide GeneralDepartment name.",
                 buttonText: "Save",
                 color: Color.Success,
                 showCancelButton: true);
         StateHasChanged();
     }
 
-    protected override void SubmitHandler()
+    protected override async Task SubmitHandler()
     {
-        Save();
+        await Save();
     }
 
-    async void Save()
+    private async Task Save()
     {
-        if (string.IsNullOrEmpty(Department.Name))
+        if (string.IsNullOrEmpty(GeneralDepartment.Name))
         {
             await DisplayBaseDialog(title: "Error",
-                contentText: "You need to provide Department name.",
+                contentText: "You need to provide GeneralDepartment name.",
                 buttonText: "Close",
                 color: Color.Secondary,
                 showCancelButton: false);
         }
-        // else
-        // {
-        //     await DepartmentService.AddDepartment(Department);
-        //     await CustomMudDialog.ShowAsync<BaseDialog>("Success", "Department added successfully", "Close", Color.Primary);
-        //     IsVisible = false;
-        // }
+        else
+        {
+            await HandleSaveOperation.InvokeAsync(GeneralDepartment);
+        }
     }
 
     private async Task DisplayBaseDialog(string title,
@@ -82,5 +81,10 @@
             { nameof(ShowCancelButton), showCancelButton }
         };
         await DialogService.ShowAsync<GeneralDepartmentDialog>(title: title, parameters: parameters);
+    }
+
+    public void ChangeTitle(string title)
+    {
+        CustomMudDialog.SetTitle(title);
     }
 }

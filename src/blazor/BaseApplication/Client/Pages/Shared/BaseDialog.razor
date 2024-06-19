@@ -21,8 +21,20 @@
 
     [Parameter] public bool ShowCancelButton { get; set; }
 
-    protected virtual void SubmitHandler() => Submit();
+    protected virtual Task SubmitHandler()
+    {
+        Submit();
+        return Task.CompletedTask;
+    }
 
-    private void Submit() => CustomMudDialog.Close(DialogResult.Ok(true));
-    private void Cancel() => CustomMudDialog.Cancel();
+    private void Submit()
+    {
+        CustomMudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel()
+    {
+       CustomMudDialog.Cancel();
+    }
+
 }

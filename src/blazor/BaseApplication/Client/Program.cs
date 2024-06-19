@@ -20,7 +20,7 @@ builder.Services.AddScoped<CustomHttpHandler>();
 builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
-builder.Services.AddScoped<DepartmentState>();
+builder.Services.AddScoped<AllState>();
 builder.Services.AddScoped<IGenericService<GeneralDepartment>, GenericService<GeneralDepartment>>();
 builder.Services.AddScoped<IGenericService<Department>, GenericService<Department>>();
 builder.Services.AddScoped<IGenericService<Branch>, GenericService<Branch>>();

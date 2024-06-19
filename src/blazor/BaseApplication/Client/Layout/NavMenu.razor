@@ -27,7 +27,7 @@
                             <span>Administration</span>
                         </div>
                     </NavLink>
-                    <a class="nav-link p-2 text-white" style="margin-left: 5rem; visibility: @CssStyle">
+                    <a class="nav-link p-2 text-white" style="margin-left: 3rem; visibility: @CssStyle">
                         <div class="hstack">
                             <span class="bi bi-people fs-5 text-center" aria-hidden="true" style="margin-top: -2rem"></span>
                             <span>Users</span>
@@ -42,10 +42,10 @@
                             <span class="bi bi-backpack4-fill fs-3 text-center"
                                   aria-hidden="true"
                                   style="margin-top: -2rem"></span>
-                            <span>Department</span>
+                            <span>GeneralDepartment</span>
                         </div>
                     </NavLink>
-                    <div class="nav-link p-2 text-white" style="margin-left: 5rem; visibility: @_departmentCssStyle">
+                    <div class="nav-link p-2 text-white" style="margin-left: 3rem; visibility: @_departmentCssStyle">
                         <ul class="list-group">
                             <li style="list-style: none" class="cursorStyle">
                                 <a class="nav-link p-2" @onclick="GeneralDepartmentClicked">
@@ -61,7 +61,7 @@
                                     <div class="hstack">
                                         <span class="bi bi-substack fs-5 text-center"
                                               aria-hidden="true" style="margin-top: -2rem"></span>
-                                        <span>Department</span>
+                                        <span>GeneralDepartment</span>
                                     </div>
                                 </a>
                             </li>
@@ -119,6 +119,6 @@
 
     void GeneralDepartmentClicked()
     {
-        DepartmentState.GeneralDepartmentClicked();
+        AllState.GeneralDepartmentClicked();
     }
 }

@@ -17,8 +17,7 @@
 @using ClientLibrary.Helpers
 @using ClientLibrary.Services.Contracts
 @using Client.Pages.Shared
-@using Client.Pages.Admin
-@using Client.Pages.Department
+@using Client.Pages.Content.DepartmentPages
 @using MudBlazor
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -34,4 +33,5 @@
 @inject IGenericService<City> CityService
 @inject IGenericService<Employee> EmployeeService
 
-@inject DepartmentState DepartmentState
+@* //Navbar tabs communication state handling *@
+@inject AllState AllState
