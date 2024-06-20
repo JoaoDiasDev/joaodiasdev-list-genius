@@ -14,12 +14,12 @@ public class GeneralDepartmentRepository(AppDbContext appDbContext) : IGenericRe
 
     public async Task<GeneralResponse> Create(GeneralDepartment item)
     {
-        if (!await CheckName(item.Name!)) return AlreadyExist();
-        {
-            appDbContext.GeneralDepartments.Add(item);
-            await Commit();
-            return Success();
-        }
+        var checkIfNull = await CheckName(item.Name);
+        if (!checkIfNull) return AlreadyExist();
+        appDbContext.GeneralDepartments.Add(item);
+        await Commit();
+        return Success();
+
     }
 
     public async Task<GeneralResponse> Update(GeneralDepartment item)

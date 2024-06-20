@@ -1,90 +1,83 @@
-﻿@inherits BaseDialog
+﻿<div class="modal fade @(_isModalVisible ? "show" : "")" id="GeneralDepartmentDialog"
+     tabindex="-1" aria-labelledby="GeneralDepartmentDialogLabel"
+     aria-hidden="true"
+     style="display: @(_isModalVisible ? "block" : "none")">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content dark-modal-content">
+            <div class="modal-header dark-modal-header">
+                <h5 class="modal-title" id="GeneralDepartmentDialogLabel">@_dialogTitle</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseDialog"></button>
+            </div>
+            <div class="modal-body dark-modal-body">
+                <div class="mb-3">
+                    <label for="nameInput" class="form-label">Name</label>
+                    <input type="text" class="form-control dark-input" id="nameInput" @bind-value="GeneralDepartment.Name">
+                </div>
+            </div>
+            <div class="modal-footer dark-modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="SubmitHandler">@_buttonText</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<MudDialog>
-    <DialogContent>
-        <MudTextField @bind-Value="GeneralDepartment.Name" Label="Name" Variant="Variant.Outlined"></MudTextField>
-    </DialogContent>
-    <DialogActions>
-        @if (ShowCancelButton)
-        {
-            <MudButton OnClick="@Cancel">Cancel</MudButton>
-        }
-        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="@SubmitHandler">@ButtonText</MudButton>
-    </DialogActions>
-</MudDialog>
-
-@code
-{
+@code {
     [Parameter] public GeneralDepartment GeneralDepartment { get; set; } = new();
-    [Parameter] public EventCallback<GeneralDepartment> HandleSaveOperation { get; set; }
+    [Parameter] public EventCallback<GeneralDepartment> OnSaveOperation { get; set; }
 
-    private void Cancel() => CustomMudDialog.Cancel();
+    private string _dialogTitle = "Edit General Department";
+    private string _buttonText = "Save";
+    private bool _isModalVisible = false;
 
-    public async void OpenDialog()
+
+    public void OpenDialog()
     {
-        await DisplayGeneralDepartmentDialog(title: "Add GeneralDepartment",
-                contentText: "You need to provide GeneralDepartment name.",
-                buttonText: "Save",
-                color: Color.Success,
-                showCancelButton: true);
+        _isModalVisible = true;
         StateHasChanged();
     }
 
-    protected override async Task SubmitHandler()
+    public void CloseDialog()
     {
-        await Save();
-    }
-
-    private async Task Save()
-    {
-        if (string.IsNullOrEmpty(GeneralDepartment.Name))
-        {
-            await DisplayBaseDialog(title: "Error",
-                contentText: "You need to provide GeneralDepartment name.",
-                buttonText: "Close",
-                color: Color.Secondary,
-                showCancelButton: false);
-        }
-        else
-        {
-            await HandleSaveOperation.InvokeAsync(GeneralDepartment);
-        }
-    }
-
-    private async Task DisplayBaseDialog(string title,
-      string contentText,
-      string buttonText,
-      Color color,
-      bool showCancelButton = false)
-    {
-        var parameters = new DialogParameters<BaseDialog>
-        {
-            { nameof(ContentText), contentText },
-            { nameof(ButtonText), buttonText },
-            { nameof(Color), color },
-            { nameof(ShowCancelButton), showCancelButton }
-        };
-        await DialogService.ShowAsync<BaseDialog>(title: title, parameters: parameters);
-    }
-
-    private async Task DisplayGeneralDepartmentDialog(string title,
-      string contentText,
-      string buttonText,
-      Color color,
-      bool showCancelButton = false)
-    {
-        var parameters = new DialogParameters<BaseDialog>
-        {
-            { nameof(ContentText), contentText },
-            { nameof(ButtonText), buttonText },
-            { nameof(Color), color },
-            { nameof(ShowCancelButton), showCancelButton }
-        };
-        await DialogService.ShowAsync<GeneralDepartmentDialog>(title: title, parameters: parameters);
+        _isModalVisible = false;
+        StateHasChanged();
     }
 
     public void ChangeTitle(string title)
     {
-        CustomMudDialog.SetTitle(title);
+        _dialogTitle = title;
+    }
+
+    public void ChangeButtonText(string text)
+    {
+        _buttonText = text;
+    }
+
+    private async Task SubmitHandler()
+    {
+        await SaveDepartment();
+    }
+
+    private async Task SaveDepartment()
+    {
+        if (string.IsNullOrEmpty(GeneralDepartment.Name))
+        {
+            await ShowErrorDialog("You need to provide a General Department name.");
+        }
+        else
+        {
+            await OnSaveOperation.InvokeAsync(GeneralDepartment);
+            CloseDialog();
+        }
+    }
+
+    private async Task ShowErrorDialog(string errorMessage)
+    {
+        await DialogService.ShowAsync<BaseDialog>("Error", new DialogParameters
+        {
+            { nameof(BaseDialog.ContentText), errorMessage },
+            { nameof(BaseDialog.ButtonText), "Close" },
+            { nameof(BaseDialog.Color), Color.Secondary },
+            { nameof(BaseDialog.ShowCancelButton), false }
+        });
     }
 }

@@ -13,35 +13,46 @@
                             <i class="bi bi-plus-circle-dotted"></i> Add GeneralDepartment
                         </button>
                     </div>
-                    <div class="card-header">
+                    <div class="card-header" style="max-height: 580px; overflow-x: hidden; overflow-y: scroll; ">
                         <div class="card-body">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th sappe="col">#</th>
-                                        <th scope="col">First</th>
-                                        <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">General Department</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Jacob</td>
-                                        <td>Thornton</td>
-                                        <td>fat</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td colspan="2">Larry the Bird</td>
-                                        <td>twitter</td>
-                                    </tr>
+                                    @if (GeneralDepartments is not null)
+                                    {
+                                        var count = 1;
+                                        foreach (var item in GeneralDepartments)
+                                        {
+                                            <tr>
+                                                <th scope="row">@count</th>
+                                                <td>@item.Id</td>
+                                                <td>@item.Name</td>
+                                                <td>
+                                                    <i class="bi bi-pencil text-info" id="cursorStyle"
+                                                       @onclick="() => EditClicked(item)"></i>
+                                                    <i class="bi bi-trash text-danger" id="cursorStyle"
+                                                       @onclick="() => DeleteClicked(item)"></i>
+
+                                                </td>
+                                            </tr>
+                                            count++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="4">
+                                                <div class="alert alert-info text-center">No General Department added yet!</div>
+                                            </td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -51,14 +62,26 @@
         </div>
     </div>
 }
-<GeneralDepartmentDialog @ref="@GeneralDepartmentDialog"
-                         GeneralDepartment="@GeneralDepartment"
-                         HandleSaveOperation="@HandleSaveOperation"/>
+<GeneralDepartmentDialog @ref="_generalDepartmentDialog"
+                         GeneralDepartment="GeneralDepartment"
+                         OnSaveOperation="HandleSaveOperation" />
+
+<ConfirmationDialog @ref="_confirmationDialog"
+                    DialogTitle="Confirm Delete"
+                    Message="Are you sure you want to delete this department?"
+                    OnConfirmationChanged="HandleConfirmationResult" />
+
+<style>
+    .cursorStyle {
+        cursor: pointer;
+    }
+</style>
 @code
 {
-    GeneralDepartmentDialog? GeneralDepartmentDialog;
+    GeneralDepartmentDialog? _generalDepartmentDialog;
+    private ConfirmationDialog? _confirmationDialog;
     private GeneralDepartment GeneralDepartment { get; set; } = new();
-    public List<GeneralDepartment> GeneralDepartments { get; set; } = [];
+    private List<GeneralDepartment> GeneralDepartments { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,12 +94,16 @@
         GeneralDepartments = await GeneralDepartmentService.GetAll(Constants.GeneralDepartmentBaseUrl);
     }
 
-    void OpenDialog()
+    private void OpenDialog()
     {
-        GeneralDepartmentDialog?.OpenDialog();
+        GeneralDepartment = new GeneralDepartment();
+        _generalDepartmentDialog?.ChangeTitle("Add General Department");
+        _generalDepartmentDialog?.ChangeButtonText("Add");
+        _generalDepartmentDialog?.OpenDialog();
     }
 
-    private async void HandleSaveOperation(GeneralDepartment generalDepartment)
+    //Add Or Update
+    private async Task HandleSaveOperation(GeneralDepartment generalDepartment)
     {
         bool successCheck;
         if (generalDepartment.Id > 0)
@@ -94,15 +121,33 @@
         {
             GeneralDepartment = new GeneralDepartment();
             await GetGeneralDepartments();
-            GeneralDepartmentDialog?.ChangeTitle("Add");
+            _generalDepartmentDialog?.CloseDialog();
         }
     }
 
+    //Edit
     private void EditClicked(GeneralDepartment generalDepartment)
     {
-        GeneralDepartmentDialog?.ChangeTitle("Update");
+        _generalDepartmentDialog?.ChangeTitle("Update General Department");
+        _generalDepartmentDialog?.ChangeButtonText("Update");
         GeneralDepartment = generalDepartment;
-        GeneralDepartmentDialog?.OpenDialog();
+        _generalDepartmentDialog?.OpenDialog();
+    }
+
+    //Delete
+    private async Task DeleteClicked(GeneralDepartment generalDepartment)
+    {
+        var aa =  await DisplayConfirmationDialog(title: "Delete General Department",
+                contentText: $"Do you really want to delete {generalDepartment.Name}?"
+                );
+
+        if (HandleConfirmationResult()) return;
+
+        var response = await GeneralDepartmentService.DeleteById(generalDepartment.Id, Constants.GeneralDepartmentBaseUrl);
+        if (await DisplayMessage(response.Flag, response.Message))
+        {
+            await GetGeneralDepartments();
+        }
     }
 
     private async Task<bool> DisplayMessage(bool flag, string message)
@@ -117,6 +162,28 @@
             await DialogService.ShowMessageBox("Error", message, yesText: "Ok");
             return false;
         }
+    }
+
+    private void HandleConfirmationResult(bool confirmed)
+    {
+        if (confirmed)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+
+    private async Task DisplayConfirmationDialog(string title,
+      string contentText)
+    {
+        var parameters = new DialogParameters<ConfirmationDialog>
+        {
+            { nameof(BaseDialog.ContentText), contentText },
+        };
+        await DialogService.ShowAsync<ConfirmationDialog>(title: title, parameters: parameters);
     }
 
     public void Dispose()
