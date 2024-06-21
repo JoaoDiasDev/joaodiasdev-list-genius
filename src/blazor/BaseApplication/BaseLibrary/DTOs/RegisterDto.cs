@@ -1,4 +1,5 @@
 ﻿namespace BaseLibrary.DTOs;
+
 public class RegisterDto : AccountBaseDto
 {
     [Required]

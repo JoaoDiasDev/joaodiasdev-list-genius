@@ -1,4 +1,5 @@
 ﻿namespace BaseLibrary.DTOs;
+
 public class AccountBaseDto
 {
     [DataType(DataType.EmailAddress)]

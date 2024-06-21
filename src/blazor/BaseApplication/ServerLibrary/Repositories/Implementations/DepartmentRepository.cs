@@ -4,7 +4,11 @@ public class DepartmentRepository(AppDbContext appDbContext) : IGenericRepositor
 {
     public async Task<List<Department>> GetAll()
     {
-        return await appDbContext.Departments.ToListAsync();
+        return await appDbContext
+            .Departments
+            .AsNoTracking()
+            .Include(gd => gd.GeneralDepartment)
+            .ToListAsync();
     }
 
     public async Task<Department> GetById(int id)
@@ -14,12 +18,12 @@ public class DepartmentRepository(AppDbContext appDbContext) : IGenericRepositor
 
     public async Task<GeneralResponse> Create(Department item)
     {
-        if (!await CheckName(item.Name!)) return AlreadyExist();
-        {
-            appDbContext.Departments.Add(item);
-            await Commit();
-            return Success();
-        }
+        var checkIfNull = await CheckName(item.Name);
+        if (!checkIfNull) return AlreadyExist();
+        appDbContext.Departments.Add(item);
+        await Commit();
+        return Success();
+
     }
 
     public async Task<GeneralResponse> Update(Department item)

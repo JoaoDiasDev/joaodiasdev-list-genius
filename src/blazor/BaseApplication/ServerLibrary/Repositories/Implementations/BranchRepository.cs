@@ -14,12 +14,11 @@ public class BranchRepository(AppDbContext appDbContext) : IGenericRepository<Br
 
     public async Task<GeneralResponse> Create(Branch item)
     {
-        if (!await CheckName(item.Name!)) return AlreadyExist();
-        {
-            appDbContext.Branches.Add(item);
-            await Commit();
-            return Success();
-        }
+        var checkIfNull = await CheckName(item.Name);
+        if (!checkIfNull) return AlreadyExist();
+        appDbContext.Branches.Add(item);
+        await Commit();
+        return Success();
     }
 
     public async Task<GeneralResponse> Update(Branch item)

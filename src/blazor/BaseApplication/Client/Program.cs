@@ -1,7 +1,8 @@
 using BaseLibrary.Entities;
 using ClientLibrary.Services.Implementations;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using MudBlazor.Services;
+using Syncfusion.Blazor;
+using Syncfusion.Blazor.Popups;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -14,7 +15,8 @@ builder.Services.AddHttpClient("SystemApiClient", client =>
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7162/") });
 builder.Services.AddAuthorizationCore();
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddMudServices();
+builder.Services.AddSyncfusionBlazor();
+builder.Services.AddScoped<SfDialogService>();
 builder.Services.AddScoped<GetHttpClient>();
 builder.Services.AddScoped<CustomHttpHandler>();
 builder.Services.AddScoped<LocalStorageService>();

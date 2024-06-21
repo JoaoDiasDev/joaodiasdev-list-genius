@@ -18,12 +18,15 @@
 @using ClientLibrary.Services.Contracts
 @using Client.Pages.Shared
 @using Client.Pages.Content.DepartmentPages
-@using MudBlazor
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
-@inject IDialogService DialogService
+@* // Services *@
+@inject SfDialogService SfDialogService
 @inject IUserAccountService UserAccountService
 @inject IGenericService<GeneralDepartment> GeneralDepartmentService
 @inject IGenericService<Department> DepartmentService

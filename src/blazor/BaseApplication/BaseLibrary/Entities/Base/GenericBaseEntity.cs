@@ -1,4 +1,5 @@
 ﻿namespace BaseLibrary.Entities.Base;
+
 public class GenericBaseEntity
 {
     public int Id { get; set; }

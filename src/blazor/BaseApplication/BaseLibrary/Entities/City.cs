@@ -8,5 +8,6 @@ public class City : GenericBaseEntity
     public int CountryId { get; set; }
     public Country? Country { get; set; }
     //Relationship: One To Many with Town
+    [JsonIgnore]
     public List<Town>? Towns { get; set; }
 }

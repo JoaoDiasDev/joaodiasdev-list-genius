@@ -14,12 +14,11 @@ public class CityRepository(AppDbContext appDbContext) : IGenericRepository<City
 
     public async Task<GeneralResponse> Create(City item)
     {
-        if (!await CheckName(item.Name!)) return AlreadyExist();
-        {
-            appDbContext.Cities.Add(item);
-            await Commit();
-            return Success();
-        }
+        var checkIfNull = await CheckName(item.Name);
+        if (!checkIfNull) return AlreadyExist();
+        appDbContext.Cities.Add(item);
+        await Commit();
+        return Success();
     }
 
     public async Task<GeneralResponse> Update(City item)

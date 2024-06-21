@@ -14,12 +14,11 @@ public class CountryRepository(AppDbContext appDbContext) : IGenericRepository<C
 
     public async Task<GeneralResponse> Create(Country item)
     {
-        if (!await CheckName(item.Name!)) return AlreadyExist();
-        {
-            appDbContext.Countries.Add(item);
-            await Commit();
-            return Success();
-        }
+        var checkIfNull = await CheckName(item.Name);
+        if (!checkIfNull) return AlreadyExist();
+        appDbContext.Countries.Add(item);
+        await Commit();
+        return Success();
     }
 
     public async Task<GeneralResponse> Update(Country item)

@@ -26,7 +26,7 @@
     [Parameter] public GeneralDepartment GeneralDepartment { get; set; } = new();
     [Parameter] public EventCallback<GeneralDepartment> OnSaveOperation { get; set; }
 
-    private string _dialogTitle = "Edit General Department";
+    private string _dialogTitle = $"Edit {nameof(GeneralDepartment)}";
     private string _buttonText = "Save";
     private bool _isModalVisible = false;
 
@@ -55,10 +55,10 @@
 
     private async Task SubmitHandler()
     {
-        await SaveDepartment();
+        await Save();
     }
 
-    private async Task SaveDepartment()
+    private async Task Save()
     {
         if (string.IsNullOrEmpty(GeneralDepartment.Name))
         {
@@ -71,14 +71,4 @@
         }
     }
 
-    private async Task ShowErrorDialog(string errorMessage)
-    {
-        await DialogService.ShowAsync<BaseDialog>("Error", new DialogParameters
-        {
-            { nameof(BaseDialog.ContentText), errorMessage },
-            { nameof(BaseDialog.ButtonText), "Close" },
-            { nameof(BaseDialog.Color), Color.Secondary },
-            { nameof(BaseDialog.ShowCancelButton), false }
-        });
-    }
 }
