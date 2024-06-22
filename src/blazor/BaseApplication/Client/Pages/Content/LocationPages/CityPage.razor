@@ -1,38 +1,41 @@
 ﻿@implements IDisposable
 
-@if (AllState.ShowGeneralDepartment)
+@if (AllState.ShowCity)
 {
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header text-bg-secondary">
-                        <h4 class="float-start">General Departments</h4>
+                        <h4 class="float-start">Cities</h4>
                         <button class="btn btn-success float-end"
-                                @onclick="OpenDialog">
-                            <i class="bi bi-plus-circle-dotted"></i> Add GeneralDepartment
+                                @onclick="AddButtonClicked">
+                            <i class="bi bi-plus-circle-dotted"></i> Add City
                         </button>
                     </div>
-                    <div class="card-header text-bg-light" style="max-height: 580px; overflow-x: hidden; overflow-y: scroll; ">
+                    <div class="card-header text-bg-light"
+                         style="max-height: 580px; overflow-x: hidden; overflow-y: scroll; ">
                         <div class="card-body text-bg-light">
                             <table class="table table-secondary table-striped">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Id</th>
-                                        <th scope="col">General Department</th>
+                                        <th scope="col">Country</th>
+                                        <th scope="col">City</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (GeneralDepartments is not null)
+                                    @if (Cities is not null)
                                     {
                                         var count = 1;
-                                        foreach (var item in GeneralDepartments)
+                                        foreach (var item in Cities)
                                         {
                                             <tr>
                                                 <th scope="row">@count</th>
                                                 <td>@item.Id</td>
+                                                <td>@item.Country?.Name</td>
                                                 <td>@item.Name</td>
                                                 <td>
                                                     <i class="bi bi-pencil text-info" id="cursorStyle"
@@ -49,7 +52,7 @@
                                     {
                                         <tr>
                                             <td colspan="4">
-                                                <div class="alert alert-info text-center">No General Department added yet!</div>
+                                                <div class="alert alert-info text-center">No City added yet!</div>
                                             </td>
                                         </tr>
                                     }
@@ -69,76 +72,90 @@
     }
 </style>
 
-<GeneralDepartmentDialog @ref="_generalDepartmentDialog"
-                         GeneralDepartment="GeneralDepartment"
-                         OnSaveOperation="@HandleSaveOperation" />
+<CityDialog @ref="_cityDialog"
+              City="City"
+              Countries="Countries"
+              OnSaveOperation="HandleSaveOperation" />
 
 
-@code
-{
-    GeneralDepartmentDialog? _generalDepartmentDialog;
-    private GeneralDepartment GeneralDepartment { get; set; } = new();
-    private List<GeneralDepartment> GeneralDepartments { get; set; } = [];
+@code {
+    CityDialog? _cityDialog;
+    private City City { get; set; } = new();
+    public List<Country> Countries { get; set; } = [];
+    private List<City> Cities { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
-        await GetGeneralDepartments();
+        await GetCities();
+        await GetCountries();
         AllState.Action += StateHasChanged;
     }
 
-    private async Task GetGeneralDepartments()
+    private async Task GetCities()
     {
-        GeneralDepartments = await GeneralDepartmentService.GetAll(Constants.GeneralDepartmentBaseUrl);
+        Cities = await CityService.GetAll(Constants.CityBaseUrl);
+    }
+
+    private async Task GetCountries()
+    {
+        Countries = await CountryService.GetAll(Constants.CountryBaseUrl);
+    }
+
+    private void AddButtonClicked()
+    {
+        _cityDialog?.ChangeTitle("Add");
+        City = new City();
+        OpenDialog();
     }
 
     private void OpenDialog()
     {
-        _generalDepartmentDialog?.OpenDialog();
+        _cityDialog?.OpenDialog();
     }
 
     //Add Or Update
-    private async Task HandleSaveOperation(GeneralDepartment generalDepartment)
+    private async Task HandleSaveOperation(City city)
     {
         bool successCheck;
-        if (generalDepartment.Id > 0)
+        if (city.Id > 0)
         {
-            var response = await GeneralDepartmentService.Update(generalDepartment, Constants.GeneralDepartmentBaseUrl);
+            var response = await CityService.Update(city, Constants.CityBaseUrl);
             successCheck = await DisplayMessage(response.Flag, response.Message);
         }
         else
         {
-            var response = await GeneralDepartmentService.Create(generalDepartment, Constants.GeneralDepartmentBaseUrl);
+            var response = await CityService.Create(city, Constants.CityBaseUrl);
             successCheck = await DisplayMessage(response.Flag, response.Message);
         }
 
         if (successCheck)
         {
-            GeneralDepartment = new GeneralDepartment();
-            await GetGeneralDepartments();
-            _generalDepartmentDialog?.ChangeTitle("Add");
+            City = new City();
+            await GetCities();
+            _cityDialog?.ChangeTitle("Add");
         }
     }
 
     //Edit
-    private void EditClicked(GeneralDepartment generalDepartment)
+    private void EditClicked(City city)
     {
-        _generalDepartmentDialog?.ChangeTitle("Update");
-        GeneralDepartment = generalDepartment;
+        _cityDialog?.ChangeTitle("Update");
+        City = city;
         OpenDialog();
     }
 
     //Delete
-    private async Task DeleteClicked(GeneralDepartment generalDepartment)
+    private async Task DeleteClicked(City city)
     {
-        var isConfirmed = await SfDialogService.ConfirmAsync(title: "Delete General Department",
-        content: $"Do you really want to delete {generalDepartment.Name}?");
+        var isConfirmed = await SfDialogService.ConfirmAsync($"Are you sure you wanna delete {city.Name}?",
+            "Confirm Delete");
         if (!isConfirmed) return;
-        var response = await GeneralDepartmentService.DeleteById(generalDepartment.Id,
-            Constants.GeneralDepartmentBaseUrl);
+
+        var response = await CityService.DeleteById(city.Id, Constants.CityBaseUrl);
         var successCheck = await DisplayMessage(response.Flag, response.Message);
         if (successCheck)
         {
-            await GetGeneralDepartments();
+            await GetCities();
         }
     }
 

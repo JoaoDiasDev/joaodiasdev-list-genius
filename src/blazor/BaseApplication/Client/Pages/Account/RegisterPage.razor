@@ -81,29 +81,19 @@
         if (result.Flag)
         {
             _user = new RegisterDto();
-            await DisplayDialog(title: "Register successful", contentText: result.Message, buttonText: "Ok", Color.Success);
+            await DisplayDialog(title: "Register successful", content: result.Message);
         }
         else
         {
-            await DisplayDialog(title: "Error occurred", contentText: result.Message, buttonText: "Close", Color.Secondary);
+            await DisplayDialog(title: "Error occurred", content: result.Message);
         }
         ShowLoadingButton = false;
     }
 
     private async Task DisplayDialog(string title,
-      string contentText,
-      string buttonText,
-      Color color,
-      bool showCancelButton = false)
+      string content)
     {
-        var parameters = new DialogParameters<BaseDialog>
-        {
-            { nameof(BaseDialog.ContentText), contentText },
-            { nameof(BaseDialog.ButtonText), buttonText },
-            { nameof(BaseDialog.Color), color },
-            { nameof(BaseDialog.ShowCancelButton), showCancelButton }
-        };
-        await DialogService.ShowAsync<BaseDialog>(title: title, parameters: parameters);
+        await SfDialogService.AlertAsync(content, title);
     }
 
     private async Task CheckUserAuthentication()

@@ -24,19 +24,19 @@ public class GeneralDepartmentRepository(AppDbContext appDbContext) : IGenericRe
 
     public async Task<GeneralResponse> Update(GeneralDepartment item)
     {
-        var dep = await appDbContext.GeneralDepartments.FindAsync(item.Id);
-        if (dep is null) return NotFound();
-        dep.Name = item.Name;
+        var generalDep = await appDbContext.GeneralDepartments.FindAsync(item.Id);
+        if (generalDep is null) return NotFound();
+        generalDep.Name = item.Name;
         await Commit();
         return Success();
     }
 
     public async Task<GeneralResponse> DeleteById(int id)
     {
-        var dep = await appDbContext.GeneralDepartments.FindAsync(id);
-        if (dep is null) return NotFound();
+        var generalDep = await appDbContext.GeneralDepartments.FindAsync(id);
+        if (generalDep is null) return NotFound();
 
-        appDbContext.GeneralDepartments.Remove(dep);
+        appDbContext.GeneralDepartments.Remove(generalDep);
         await Commit();
         return Success();
     }

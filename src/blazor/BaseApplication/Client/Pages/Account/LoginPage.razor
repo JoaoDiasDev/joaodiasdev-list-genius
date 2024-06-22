@@ -81,28 +81,15 @@
         else
         {
             await DisplayDialog(title: "Error occurred",
-                contentText: result.Message,
-                buttonText: "Close",
-                color: Color.Secondary
-                );
+                content: result.Message);
         }
         ShowLoadingButton = false;
     }
 
-    private async Task DisplayDialog(string title,
-       string contentText,
-       string buttonText,
-       Color color,
-       bool showCancelButton = false)
+    private async Task DisplayDialog(string content,
+       string title)
     {
-        var parameters = new DialogParameters<BaseDialog>
-        {
-            { nameof(BaseDialog.ContentText), contentText },
-            { nameof(BaseDialog.ButtonText), buttonText },
-            { nameof(BaseDialog.Color), color },
-            { nameof(BaseDialog.ShowCancelButton), showCancelButton }
-        };
-        await DialogService.ShowAsync<BaseDialog>(title: title, parameters: parameters);
+        await SfDialogService.AlertAsync(content, title);
     }
 
     private async Task CheckUserAuthentication()

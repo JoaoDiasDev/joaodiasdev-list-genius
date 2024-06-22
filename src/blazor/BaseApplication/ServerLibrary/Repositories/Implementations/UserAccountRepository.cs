@@ -1,7 +1,9 @@
 ﻿namespace ServerLibrary.Repositories.Implementations;
 
-public class UserAccountRepository(IOptions<JwtSection> configJwt, AppDbContext appDbContext) : IUserAccountRepository
+public class UserAccountRepository(IOptions<JwtSection> configJwt,
+    AppDbContext appDbContext) : IUserAccountRepository
 {
+    private const string AuthUrl = "api/authentication";
     public async Task<GeneralResponse> CreateAsync(RegisterDto user)
     {
         if (user is null)
@@ -174,4 +176,56 @@ public class UserAccountRepository(IOptions<JwtSection> configJwt, AppDbContext 
         );
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public async Task<List<ManageUserDto>> GetUsers()
+    {
+        var allUsers = await GetApplicationUsers();
+        var allUsersRoles = await UserRoles();
+        var allRoles = await SystemRoles();
+
+        if (allUsers.Count == 0 || allRoles.Count == 0)
+        {
+            throw new ArgumentNullException(nameof(ManageUserDto), "No users or roles found");
+        }
+
+        var users = new List<ManageUserDto>();
+        foreach (var user in allUsers)
+        {
+            var userRole = allUsersRoles.FirstOrDefault(u => u.UserId == user.Id);
+            var roleName = allRoles.FirstOrDefault(r => r.Id == userRole!.RoleId);
+            users.Add(new ManageUserDto
+            {
+                UserId = user.Id,
+                Name = user.FullName!,
+                Email = user.Email!,
+                Role = roleName!.Name!
+            }
+            );
+        }
+
+        return users;
+    }
+
+    public async Task<GeneralResponse> UpdateUser(ManageUserDto user)
+    {
+        var getRole = (await GetRoles()).FirstOrDefault(r => r.Name!.Equals(user.Role));
+        var userRole = await appDbContext.UserRoles.FirstOrDefaultAsync(u => u.UserId == user.UserId);
+        userRole!.RoleId = getRole!.Id;
+        await appDbContext.SaveChangesAsync();
+        return new GeneralResponse(true, "User role updated successfully");
+    }
+
+    public async Task<List<SystemRole>> GetRoles() => await SystemRoles();
+
+    public async Task<GeneralResponse> DeleteUser(int id)
+    {
+        var user = await appDbContext.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == id);
+        appDbContext.ApplicationUsers.Remove(user!);
+        await appDbContext.SaveChangesAsync();
+        return new GeneralResponse(true, "User successfully deleted!");
+    }
+    private async Task<List<SystemRole>> SystemRoles() => await appDbContext.SystemRoles.AsNoTracking().ToListAsync();
+    private async Task<List<UserRole>> UserRoles() => await appDbContext.UserRoles.AsNoTracking().ToListAsync();
+    private async Task<List<ApplicationUser>> GetApplicationUsers() => await appDbContext.ApplicationUsers.AsNoTracking().ToListAsync();
+
 }

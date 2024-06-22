@@ -1,14 +1,14 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider IsDarkMode="true" />
-<MudDialogProvider FullWidth="true"
-                   MaxWidth="MaxWidth.Small"
-                   CloseButton="true"
-                   DisableBackdropClick="true"
-                   NoHeader="false"
-                   Position="DialogPosition.Center"
-                   CloseOnEscapeKey="true" />
-<MudSnackbarProvider />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            @Body
+        </div>
+    </div>
+</div>
+<Syncfusion.Blazor.Popups.SfDialogProvider />
+
 
 <style>
     body {
@@ -19,11 +19,3 @@
         background-size: cover;
     }
 </style>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12">
-            @Body
-        </div>
-    </div>
-</div>
