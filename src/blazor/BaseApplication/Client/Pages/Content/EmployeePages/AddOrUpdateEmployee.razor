@@ -1,5 +1,4 @@
-﻿@using Microsoft.IdentityModel.Tokens
-@implements IDisposable
+﻿@implements IDisposable
 
 @if (AllState.ShowEmployee)
 {
@@ -36,7 +35,7 @@
                     <div class="container-fluid">
                         @if (FirstLayer)
                         {
-                            <EditForm Enhance Model="EmployeeGroup1Dto" OnSubmit="@Form1">
+                            <EditForm Enhance Model="EmployeeGroup1Dto" OnValidSubmit="Form1">
                                 <DataAnnotationsValidator />
                                 <div class="row">
                                     <div class="col-lg-2"></div>
@@ -59,19 +58,18 @@
                                                 <ValidationMessage For="() => EmployeeGroup1Dto.Address" class="text-danger" />
                                             </div>
                                             <div class="form-control mt-2">
-                                                @if(string.IsNullOrEmpty(EmployeeGroup1Dto.Photo))
+                                                @if (string.IsNullOrEmpty(EmployeeGroup1Dto.Photo))
                                                 {
-                                                    <img src="image/profile/default-image-profile.png"
+                                                    <img src="images/profile/default-profile-image.png"
                                                          width="100"
-                                                         height="100" alt="Employee Photo" />
+                                                         height="100" alt="Default Photo" />
                                                 }
                                                 else
                                                 {
                                                     <img src="@EmployeeGroup1Dto.Photo"
                                                          width="100"
                                                          height="100" alt="Employee Photo" />
-                                                })
-
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -109,7 +107,7 @@
                         }
                         @if (SecondLayer)
                         {
-                            <EditForm Enhance Model="EmployeeGroup2Dto" OnSubmit="@Form2">
+                            <EditForm Enhance Model="EmployeeGroup2Dto" OnValidSubmit="Form2">
                                 <DataAnnotationsValidator />
                                 <div class="row">
                                     <div class="col-lg-2"></div>
@@ -305,6 +303,12 @@
     [Parameter] public List<GeneralDepartment> GeneralDepartments { get; set; } = [];
     [Parameter] public List<Department> Departments { get; set; } = [];
     [Parameter] public List<Branch> Branches { get; set; } = [];
+    [Parameter] public EventCallback NotifyParentFormCloseClicked { get; set; }
+    [Parameter] public EventCallback<int> HandleCitySelectedEvent { get; set; }
+    [Parameter] public EventCallback<int> HandleCountrySelectedEvent { get; set; }
+    [Parameter] public EventCallback<int> HandleGeneralDepartmentSelectedEvent { get; set; }
+    [Parameter] public EventCallback<int> HandleDepartmentSelectedEvent { get; set; }
+    [Parameter] public EventCallback<Employee> HandleSaveEmployeeClickedEvent { get; set; }
 
     private string _floatingNumber1 = "floatingNumber";
     private string _floatingDiv1 = "floatingDiv";
@@ -356,22 +360,17 @@
         }
     }
 
-
-    [Parameter] public EventCallback NotifyParentFormCloseClicked { get; set; }
-
     private async Task CloseForm()
     {
         ShowAddOrUpdateEmployee = false;
         await NotifyParentFormCloseClicked.InvokeAsync();
     }
 
-    [Parameter] public EventCallback<int> HandleCitySelectedEvent { get; set; }
     public void OnCityValueChange(ChangeEventArgs<string, City> args)
     {
         HandleCitySelectedEvent.InvokeAsync(int.Parse(args.Value));
     }
 
-    [Parameter] public EventCallback<int> HandleCountrySelectedEvent { get; set; }
     public void OnCountryValueChange(ChangeEventArgs<string, Country> args)
     {
         HandleCountrySelectedEvent.InvokeAsync(int.Parse(args.Value));
@@ -382,13 +381,11 @@
         EmployeeGroup2Dto.TownId = int.Parse(args.Value);
     }
 
-    [Parameter] public EventCallback<int> HandleGeneralDepartmentSelectedEvent { get; set; }
     public void OnGeneralDepartmentValueChange(ChangeEventArgs<string, GeneralDepartment> args)
     {
         HandleGeneralDepartmentSelectedEvent.InvokeAsync(int.Parse(args.Value));
     }
 
-    [Parameter] public EventCallback<int> HandleDepartmentSelectedEvent { get; set; }
     public void OnDepartmentValueChange(ChangeEventArgs<string, Department> args)
     {
         HandleDepartmentSelectedEvent.InvokeAsync(int.Parse(args.Value));
@@ -416,7 +413,6 @@
                && EmployeeGroup2Dto.BranchId != 0;
     }
 
-    [Parameter] public EventCallback<Employee> HandleSaveEmployeeClickedEvent { get; set; }
     private void Form1()
     {
         var isValid = ValidateEmployeeGroup1();

@@ -8,6 +8,4 @@ public class EmployeeGrouping1Dto
     [Required] public string Photo { get; set; } = string.Empty;
     [Required] public string CivilId { get; set; } = string.Empty;
     [Required] public string FileNumber { get; set; } = string.Empty;
-    [Required] public string Description { get; set; } = string.Empty;
-
 }
