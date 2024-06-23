@@ -14,7 +14,7 @@
                         </div>
                         <div class="card-body">
                             <SfGrid DataSource="@Employees">
-                                <GridColums>
+                                <GridColumns>
                                     <GridColumn HeaderText="Employee Image">
                                         <Template>
                                             @{
@@ -32,7 +32,7 @@
                                     <GridColumn Field=@nameof(Employee.JobName) HeaderText="Job Name"></GridColumn>
                                     <GridColumn Field=@nameof(Employee.Branch.Name) HeaderText="Branch"></GridColumn>
                                     <GridColumn Field=@nameof(Employee.Town.Name) HeaderText="Town"></GridColumn>
-                                </GridColums>
+                                </GridColumns>
                             </SfGrid>
                         </div>
                         <div class="card-footer">
