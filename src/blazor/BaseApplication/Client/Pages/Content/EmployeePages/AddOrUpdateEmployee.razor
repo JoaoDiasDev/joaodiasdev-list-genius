@@ -286,23 +286,30 @@
     public bool FirstLayer { get; set; } = true;
     public bool SecondLayer { get; set; } = false;
 
-    private void AddEmployee()
+    protected override void OnInitialized()
     {
-        ShowAddOrUpdateEmployee = true;
+        AllState.Action += StateHasChanged;
     }
 
-    private void UpdateEmployee()
+    private void ShowLayer2()
     {
-        ShowAddOrUpdateEmployee = true;
+        FirstLayer = false;
+        SecondLayer = true;
     }
 
-    private void Cancel()
+    private void PrevClicked()
+    {
+        FirstLayer = true;
+        SecondLayer = false;
+    }
+
+    [Parameter] public EventCallback NotifyParentFormCloseClicked { get; set; }
+
+    private async Task CloseForm()
     {
         ShowAddOrUpdateEmployee = false;
+        await NotifyParentFormCloseClicked.InvokeAsync();
     }
 
-    public void Dispose()
-    {
-        ShowAddOrUpdateEmployee = false;
-    }
+    public void Dispose() => AllState.Action -= StateHasChanged;
 }
