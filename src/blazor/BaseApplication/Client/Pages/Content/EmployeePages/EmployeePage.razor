@@ -75,13 +75,13 @@
                     HandleDetailsPageCloseBtnClicked="OnDetailsPageCloseBtnClicked">
 
 </EmployeeDetailPage>
-<CustomContextMenu @ref="_contextMenu"
+@* <CustomContextMenu @ref="_contextMenu"
                    HandleDeleteClicked="DeleteClicked"
                    HandleEditClicked="EditClicked"
                    HandleViewClicked="ViewClicked">
-</CustomContextMenu>
+</CustomContextMenu> *@
 
-@* <CustomContextMenu @ref="_contextMenu"
+<CustomContextMenu @ref="_contextMenu"
                    HandleDeleteClicked="DeleteClicked"
                    HandleEditClicked="EditClicked"
                    HandleViewClicked="ViewClicked"
@@ -91,7 +91,7 @@
                    HandleAddVacationClicked="AddVacationClicked">
 
 </CustomContextMenu>
- *@
+
 @code {
     AddOrUpdateEmployee? _addOrUpdateEmployee;
     private CustomContextMenu? _contextMenu;
@@ -166,6 +166,7 @@
         if (successCheck)
         {
             _addOrUpdateEmployee!.ClearContent();
+            await OnNotifyParentFormCloseClicked();
         }
     }
 
@@ -175,6 +176,7 @@
         ShowMainPage = true;
         ShowAddOrUpdatePage = false;
         await LoadEmployees();
+        SelectedEmployee = new Employee();
     }
 
     private async Task LoadEmployees()
@@ -203,6 +205,7 @@
         _addOrUpdateEmployee!.EmployeeGroup1Dto.Name = SelectedEmployee.Name;
         _addOrUpdateEmployee!.EmployeeGroup1Dto.TelephoneNumber = SelectedEmployee.TelephoneNumber;
         _addOrUpdateEmployee!.EmployeeGroup1Dto.Photo = SelectedEmployee.Photo;
+        _addOrUpdateEmployee!.EmployeeGroup1Dto.Address = SelectedEmployee.Address;
         _addOrUpdateEmployee!.EmployeeGroup2Dto.JobName = SelectedEmployee.JobName;
         _addOrUpdateEmployee!.EmployeeGroup2Dto.Other = SelectedEmployee.Other;
 
@@ -250,6 +253,30 @@
     {
         ShowMainPage = true;
         ShowDetailsPage = false;
+    }
+
+    private async Task AddVacationClicked()
+    {
+        _contextMenu!.CloseContextMenu();
+        await SfDialogService.AlertAsync("Add Vacation Clicked", "Add Vacation");
+    }
+
+    private async Task AddOvertimeClicked()
+    {
+        _contextMenu!.CloseContextMenu();
+        await SfDialogService.AlertAsync("Add Overtime Clicked", "Add Overtime");
+    }
+
+    private async Task AddHealthClicked()
+    {
+        _contextMenu!.CloseContextMenu();
+        await SfDialogService.AlertAsync("Add Health Clicked", "Add Health");
+    }
+
+    private async Task AddSanctionClicked()
+    {
+        _contextMenu!.CloseContextMenu();
+        await SfDialogService.AlertAsync("Add Sanction Clicked", "Add Sanction");
     }
 
     private async Task<bool> DisplayMessage(bool flag, string message)
