@@ -70,13 +70,36 @@
                      HandleDepartmentSelectedEvent="HandleDepartmentSelectedEvent"
                      HandleSaveEmployeeClickedEvent="HandleSaveEmployeeClickedEvent">
 </AddOrUpdateEmployee>
+<EmployeeDetailPage EmployeeDetails="Employee"
+                    ShowDetailsPage="ShowDetailsPage"
+                    HandleDetailsPageCloseBtnClicked="OnDetailsPageCloseBtnClicked">
 
+</EmployeeDetailPage>
+<CustomContextMenu @ref="_contextMenu"
+                   HandleDeleteClicked="DeleteClicked"
+                   HandleEditClicked="EditClicked"
+                   HandleViewClicked="ViewClicked">
+</CustomContextMenu>
+
+@* <CustomContextMenu @ref="_contextMenu"
+                   HandleDeleteClicked="DeleteClicked"
+                   HandleEditClicked="EditClicked"
+                   HandleViewClicked="ViewClicked"
+                   HandleAddHealthClicked="AddHealthClicked"
+                   HandleAddOvertimeClicked="AddOvertimeClicked"
+                   HandleAddSanctionClicked="AddSanctionClicked"
+                   HandleAddVacationClicked="AddVacationClicked">
+
+</CustomContextMenu>
+ *@
 @code {
     AddOrUpdateEmployee? _addOrUpdateEmployee;
+    private CustomContextMenu? _contextMenu;
     private List<Employee> Employees { get; set; } = [];
     private Employee Employee { get; set; } = new();
     private bool ShowMainPage { get; set; } = true;
     public bool ShowAddOrUpdatePage { get; set; }
+    private bool ShowDetailsPage { get; set; }
     public List<Country> DefaultCountries { get; set; } = [];
     private List<City> DefaultCities { get; set; } = [];
     private List<Town> DefaultTowns { get; set; } = [];
@@ -87,7 +110,7 @@
     public List<Department> SelectedDepartments { get; set; } = [];
     public List<City> SelectedCities { get; set; } = [];
     public List<Branch> SelectedBranches { get; set; } = [];
-    public Employee SelectedEmployee { get; set; } = new();
+    private Employee SelectedEmployee { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -169,7 +192,64 @@
     private void ShowMenuPopUp(Employee employee)
     {
         SelectedEmployee = employee;
-        contextMenu!.OpenContextMenu();
+        _contextMenu!.OpenContextMenu();
+    }
+
+    private void EditClicked()
+    {
+        _addOrUpdateEmployee!.Employee.Id = SelectedEmployee.Id;
+        _addOrUpdateEmployee!.EmployeeGroup1Dto.CivilId = SelectedEmployee.CivilId;
+        _addOrUpdateEmployee!.EmployeeGroup1Dto.FileNumber = SelectedEmployee.FileNumber;
+        _addOrUpdateEmployee!.EmployeeGroup1Dto.Name = SelectedEmployee.Name;
+        _addOrUpdateEmployee!.EmployeeGroup1Dto.TelephoneNumber = SelectedEmployee.TelephoneNumber;
+        _addOrUpdateEmployee!.EmployeeGroup1Dto.Photo = SelectedEmployee.Photo;
+        _addOrUpdateEmployee!.EmployeeGroup2Dto.JobName = SelectedEmployee.JobName;
+        _addOrUpdateEmployee!.EmployeeGroup2Dto.Other = SelectedEmployee.Other;
+
+        _addOrUpdateEmployee!.GeneralDepartment = SelectedEmployee.Branch!.Department!.GeneralDepartment!.Name;
+        _addOrUpdateEmployee!.Department = SelectedEmployee.Branch!.Department!.Name;
+        _addOrUpdateEmployee!.Branch = SelectedEmployee.Branch!.Name;
+        _addOrUpdateEmployee!.Country = SelectedEmployee.Town!.City!.Country!.Name;
+        _addOrUpdateEmployee!.City = SelectedEmployee.Town!.City!.Name;
+        _addOrUpdateEmployee!.Town = SelectedEmployee.Town!.Name;
+
+        _addOrUpdateEmployee.Title = "Update";
+        SelectedEmployee = new Employee();
+        _contextMenu!.CloseContextMenu();
+        ShowAddOrUpdatePage = true;
+        ShowMainPage = false;
+    }
+
+    private async Task DeleteClicked()
+    {
+        _contextMenu!.CloseContextMenu();
+        var confirm = await SfDialogService
+            .ConfirmAsync($"Are you sure you wanna delete {SelectedEmployee.Name}?",
+            "Confirm Delete");
+        if (!confirm) return;
+
+        var response = await EmployeeService.DeleteById(SelectedEmployee.Id, Constants.EmployeeBaseUrl);
+        var result = await DisplayMessage(response.Flag, response.Message);
+        if (result)
+        {
+            SelectedEmployee = new Employee();
+            await LoadEmployees();
+        }
+    }
+
+    private void ViewClicked()
+    {
+        Employee = SelectedEmployee;
+        _contextMenu!.CloseContextMenu();
+        ShowDetailsPage = true;
+        ShowMainPage = false;
+        SelectedEmployee = new Employee();
+    }
+
+    private void OnDetailsPageCloseBtnClicked()
+    {
+        ShowMainPage = true;
+        ShowDetailsPage = false;
     }
 
     private async Task<bool> DisplayMessage(bool flag, string message)
