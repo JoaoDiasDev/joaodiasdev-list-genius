@@ -92,7 +92,13 @@
 
 </CustomContextMenu>
 
+<DoctorDialog @ref="_doctorDialog"
+              Doctor="Doctor"
+              HandleSaveOperationEvent="OnSaveHealthEvent">
+</DoctorDialog>
+
 @code {
+    DoctorDialog? _doctorDialog;
     AddOrUpdateEmployee? _addOrUpdateEmployee;
     private CustomContextMenu? _contextMenu;
     private List<Employee> Employees { get; set; } = [];
@@ -111,6 +117,7 @@
     public List<City> SelectedCities { get; set; } = [];
     public List<Branch> SelectedBranches { get; set; } = [];
     private Employee SelectedEmployee { get; set; } = new();
+    private Doctor Doctor { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -267,10 +274,21 @@
         await SfDialogService.AlertAsync("Add Overtime Clicked", "Add Overtime");
     }
 
-    private async Task AddHealthClicked()
+    private void AddHealthClicked()
     {
+        Doctor.EmployeeId = SelectedEmployee.Id;
         _contextMenu!.CloseContextMenu();
-        await SfDialogService.AlertAsync("Add Health Clicked", "Add Health");
+        _doctorDialog!.OpenDialog();
+    }
+
+    private async Task OnSaveHealthEvent(Doctor doctor)
+    {
+        // var result = await EmployeeService.CreateDoctor(doctor);
+        // var successCheck = await DisplayMessage(result.Flag, result.Message);
+        // if (successCheck)
+        // {
+        //     _doctorDialog!.CloseDialog();
+        // }
     }
 
     private async Task AddSanctionClicked()
