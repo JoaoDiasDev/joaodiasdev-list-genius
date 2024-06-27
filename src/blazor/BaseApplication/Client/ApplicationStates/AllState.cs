@@ -95,7 +95,72 @@ public class AllState
         ShowTown = false;
         ShowUser = false;
         ShowEmployee = false;
+        ShowHealth = false;
+        ShowSanction = false;
+        ShowSanctionType = false;
+        ShowOvertime = false;
+        ShowOvertimeType = false;
+        ShowVacation = false;
+        ShowVacationType = false;
     }
 
     public bool ShowHealth { get; set; }
+    public void HealthClicked()
+    {
+        ResetAllDepartments();
+        ShowHealth = true;
+        Action?.Invoke();
+    }
+
+    public bool ShowSanction { get; set; }
+
+    public void SanctionClicked()
+    {
+        ResetAllDepartments();
+        ShowSanction = true;
+        Action?.Invoke();
+    }
+    public bool ShowSanctionType { get; set; }
+
+    public void SanctionTypeClicked()
+    {
+        ResetAllDepartments();
+        ShowSanctionType = true;
+        Action?.Invoke();
+    }
+    public bool ShowOvertime { get; set; }
+
+    public void OvertimeClicked()
+    {
+        ResetAllDepartments();
+        ShowOvertime = true;
+        Action?.Invoke();
+    }
+
+    public bool ShowOvertimeType { get; set; }
+
+    public void OvertimeTypeClicked()
+    {
+        ResetAllDepartments();
+        ShowOvertimeType = true;
+        Action?.Invoke();
+    }
+    public bool ShowVacation { get; set; }
+
+    public void VacationClicked()
+    {
+        ResetAllDepartments();
+        ShowVacation = true;
+        Action?.Invoke();
+    }
+
+    public bool ShowVacationType { get; set; }
+
+    public void VacationTypeClicked()
+    {
+        ResetAllDepartments();
+        ShowVacationType = true;
+        Action?.Invoke();
+    }
+
 }

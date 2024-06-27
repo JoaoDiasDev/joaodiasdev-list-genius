@@ -34,9 +34,9 @@
                                                 <td>@item.Email</td>
                                                 <td>@item.Role</td>
                                                 <td>
-                                                    <i class="bi bi-pencil text-info" id="cursorStyle"
+                                                    <i class="bi bi-pencil text-info cursorStyle" 
                                                        @onclick="() => EditClicked(item)"></i>
-                                                    <i class="bi bi-trash text-danger" id="cursorStyle"
+                                                    <i class="bi bi-trash text-danger cursorStyle"
                                                        @onclick="() => DeleteClicked(item)"></i>
 
                                                 </td>
@@ -63,7 +63,7 @@
 }
 
 <style>
-    #cursorStyle {
+    .cursorStyle {
         cursor: pointer;
     }
 </style>

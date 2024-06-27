@@ -1,5 +1,162 @@
-﻿<h3>VacationPage</h3>
+﻿@implements IDisposable
+@if (AllState.ShowVacation)
+{
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card border-warning shadow-lg">
+                    <div class="card-header"><h4 class="float-start">Vacation Information</h4></div>
+                    <div class="card-header" style="max-height: 580px; overflow-x: hidden; overflow-y: scroll;">
+                        <div class="card-body">
+                            @{
+                                var tool = (new List<string>() { "Search", "ExcelExport", "PdfExport", "Print" });
+                            }
+                            <SfGrid DataSource="@Vacations" AllowPaging="true" AllowSorting="true"
+                                    Toolbar="@tool" AllowExcelExport="true" AllowPdfExport="true" @ref="_defaultGrid">
+                                <GridPageSettings PageSize="5"></GridPageSettings>
+                                <GridEvents OnToolbarClick="ToolBarClickHandler" TValue="Vacation"></GridEvents>
+                                <GridColumns>
+                                    <GridColumn Field="@nameof(Vacation.EmployeeId)" HeaderText="ID"></GridColumn>
+                                    <GridColumn HeaderText="Type">
+                                        <Template>
+                                            @{
+                                                var vacation = (context as Vacation);
+                                                <div>
+                                                    @vacation!.VacationType!.Name
+                                                </div>
+                                            }
+                                        </Template>
+                                    </GridColumn>
+                                    <GridColumn Field="@nameof(Vacation.StartDate)" HeaderText="Start Date"></GridColumn>
+                                    <GridColumn Field="@nameof(Vacation.EndDate)" HeaderText="End Date"></GridColumn>
+                                    <GridColumn Field="@nameof(Vacation.NumberOfDays)" HeaderText="Number of days"></GridColumn>
+                                    <GridColumn HeaderText="Action">
+                                        <Template>
+                                            @{
+                                                var vacation = context as Vacation;
+                                                <div>
+                                                    <i class="bi bi-pencil text-info cursorStyle"
+                                                       @onclick="() => EditClicked(vacation!)"></i>
+                                                    <i class="bi bi-trash text-danger cursorStyle"
+                                                       @onclick="() => DeleteClicked(vacation!)"></i>
+                                                </div>
+                                            }
+                                        </Template>
+                                    </GridColumn>
+                                </GridColumns>
+                            </SfGrid>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<style>
+    .cursorStyle {
+        cursor: pointer;
+    }
+</style>
+
+<VacationDialog @ref="_vacationDialog"
+                Vacation="_vacation"
+                VacationTypes="VacationTypes"
+                HandleSaveOperationEvent="OnSaveOperationEvent">
+
+</VacationDialog>
 
 @code {
+    private SfGrid<Vacation>? _defaultGrid;
+    private VacationDialog? _vacationDialog;
+    private Vacation _vacation = new();
+    private List<Vacation> Vacations { get; set; } = [];
+    private List<VacationType> VacationTypes { get; set; } = [];
 
+    protected override async Task OnInitializedAsync()
+    {
+        await GetTypes();
+        await GetVacations();
+        AllState.Action += StateHasChanged;
+    }
+
+    private async Task GetVacations()
+    {
+        Vacations = await VacationService.GetAll(Constants.VacationBaseUrl);
+    }
+
+    private async Task GetTypes()
+    {
+        VacationTypes = await VacationTypeService.GetAll(Constants.VacationTypeBaseUrl);
+    }
+
+    private void AddButtonClicked()
+    {
+        _vacation = new Vacation();
+        OpenDialog();
+    }
+
+    private void OpenDialog()
+    {
+        _vacationDialog?.OpenDialog();
+    }
+
+    private async Task OnSaveOperationEvent(Vacation vacation)
+    {
+        var result = await VacationService.Update(vacation, Constants.VacationBaseUrl);
+        var successCheck = await DisplayMessage(result.Flag, result.Message);
+        if (successCheck)
+        {
+            _vacation = new Vacation();
+            await GetVacations();
+        }
+    }
+
+    private void EditClicked(Vacation vacation)
+    {
+        _vacation = vacation;
+        OpenDialog();
+    }
+
+    private async Task DeleteClicked(Vacation vacation)
+    {
+        var confirm = await SfDialogService.ConfirmAsync($"Are you sure you wanna delete this vacation?", "Confirm Delete");
+        if (!confirm) return;
+
+        var response = await VacationService.DeleteById(vacation.Id, Constants.VacationBaseUrl);
+        var result = await DisplayMessage(response.Flag, response.Message);
+        if (result)
+            await GetVacations();
+    }
+
+    private async Task<bool> DisplayMessage(bool flag, string message)
+    {
+        if (flag)
+        {
+            await SfDialogService.AlertAsync(message, "Success");
+            return true;
+        }
+        else
+        {
+            await SfDialogService.AlertAsync(message, "Error");
+            return false;
+        }
+    }
+
+    public async Task ToolBarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        switch (args.Item.Text)
+        {
+            case "Excel Export":
+                await _defaultGrid!.ExportToExcelAsync();
+                break;
+            case "PDF Export":
+                await _defaultGrid!.ExportToPdfAsync();
+                break;
+        }
+    }
+
+    public void Dispose()
+    {
+        AllState.Action -= StateHasChanged;
+    }
 }

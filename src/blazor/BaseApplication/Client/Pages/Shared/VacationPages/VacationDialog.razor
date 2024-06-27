@@ -1,5 +1,94 @@
-﻿<h3>VacationDialog</h3>
+﻿<SfDialog Width="280px" IsModal="true" ShowCloseIcon="true" @bind-Visible="IsVisible">
+    <DialogEvents OnOpen="OpenDialog" />
+    <DialogTemplates>
+        <Header> @Title Employee's Vacation</Header>
+        <Content>
+            <EditForm Model="Vacation" Enhance OnSubmit="@Save">
+                <div class="card border-success">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Employee ID</label>
+                            <input @bind="Vacation.EmployeeId" class="form-control" disabled />
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="form-label">Start Date</label>
+                            <InputDate @bind-Value="Vacation.StartDate" class="form-control" />
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="form-label">Number of days</label>
+                            <InputNumber @bind-Value="Vacation.NumberOfDays" class="form-control" />
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="form-label">End Date</label>
+                            <input value="@Vacation.EndDate.Date" type="text" class="form-control" disabled />
+                        </div>
+                        <div class="form-group mt-3 mb-3">
+                            <label class="form-label">Select Type</label>
+                            @if (Vacation.VacationType != null)
+                            {
+                                var selected = Vacation.VacationType!.Name;
+                                <SfDropDownList DataSource="@VacationTypes"
+                                                TValue="string" TItem="VacationType" Placeholder="@selected">
+                                    <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                                    <DropDownListEvents TValue="string" TItem="VacationType" ValueChange="OnValueChange"></DropDownListEvents>
+                                </SfDropDownList>
+                            }
+                            else
+                            {
+                                <SfDropDownList DataSource="@VacationTypes"
+                                                TValue="string" TItem="VacationType" Placeholder="Select Type">
+                                    <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                                    <DropDownListEvents TValue="string" TItem="VacationType" ValueChange="OnValueChange"></DropDownListEvents>
+                                </SfDropDownList>
+                            }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </Content>
+    </DialogTemplates>
+
+    <DialogButtons>
+        <DialogButton Content="Save" Type="ButtonType.Submit" IsPrimary="true" OnClick="@Save" />
+    </DialogButtons>
+</SfDialog>
 
 @code {
+    [Parameter] public Vacation Vacation { get; set; } = new();
+    [Parameter] public List<VacationType> VacationTypes { get; set; } = [];
+    [Parameter] public EventCallback<Vacation> HandleSaveOperationEvent { get; set; }
+    private string Title { get; set; } = "Add";
+    private bool IsVisible { get; set; }
 
+    private async void Save()
+    {
+        if (Vacation.VacationTypeId <= 0)
+        {
+            await SfDialogService.AlertAsync("You need to provide type.", "Alert!");
+        }
+        else
+        {
+            await HandleSaveOperationEvent.InvokeAsync(Vacation);
+        }
+    }
+
+    public void OpenDialog()
+    {
+        IsVisible = true;
+        StateHasChanged();
+    }
+
+    public void CloseDialog()
+    {
+        IsVisible = false;
+        StateHasChanged();
+    }
+
+    public void OnValueChange(ChangeEventArgs<string, VacationType> args)
+    {
+        Vacation.VacationTypeId = int.Parse(args.Value);
+    }
+
+    public void ChangeTile(string title) => Title = title;
 }

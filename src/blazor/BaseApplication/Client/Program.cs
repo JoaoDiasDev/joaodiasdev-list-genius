@@ -38,5 +38,6 @@ builder.Services.AddScoped<IGenericService<Overtime>, GenericService<Overtime>>(
 builder.Services.AddScoped<IGenericService<OvertimeType>, GenericService<OvertimeType>>();
 builder.Services.AddScoped<IGenericService<Sanction>, GenericService<Sanction>>();
 builder.Services.AddScoped<IGenericService<SanctionType>, GenericService<SanctionType>>();
+builder.Services.AddScoped<IGenericService<Doctor>, GenericService<Doctor>>();
 
 await builder.Build().RunAsync();

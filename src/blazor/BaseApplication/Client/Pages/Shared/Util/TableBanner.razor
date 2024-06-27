@@ -1,37 +1,44 @@
-﻿<div class="container-fluid">
+﻿@implements IDisposable
+
+<div class="container-fluid">
     <div class="row">
         <div class="col-lg-2 cursorStyle">
             <div class="card text-bg border-primary">
                 <div class="card-header">
                     <i class="bi bi-people text-primary"></i> Employees
+                    <span class="badge bg-dark fs-6">@Employees.Count</span>
                 </div>
             </div>
         </div>
         <div class="col-lg-2 cursorStyle">
-            <div class="card text-bg border-success">
+            <div class="card text-bg border-success" @onclick="VacationClicked">
                 <div class="card-header">
                     <i class="bi bi-backpack text-success"></i> Vacation
+                    <span class="badge bg-dark fs-6">@Vacations.Count</span>
                 </div>
             </div>
         </div>
         <div class="col-lg-2 cursorStyle">
-            <div class="card text-bg border-danger">
+            <div class="card text-bg border-danger" @onclick="OvertimeClicked">
                 <div class="card-header">
                     <i class="bi bi-watch text-danger"></i> Overtime
+                    <span class="badge bg-dark fs-6">@Overtimes.Count</span>
                 </div>
             </div>
         </div>
         <div class="col-lg-2 cursorStyle">
-            <div class="card text-bg border-warning">
+            <div class="card text-bg border-warning" @onclick="DoctorClicked">
                 <div class="card-header">
                     <i class="bi bi-hospital text-warning"></i> Doctor
+                    <span class="badge bg-dark fs-6">@Doctors.Count</span>
                 </div>
             </div>
         </div>
         <div class="col-lg-2 cursorStyle">
-            <div class="card text-bg border-info">
+            <div class="card text-bg border-info" @onclick="SanctionClicked">
                 <div class="card-header">
                     <i class="bi bi-exclamation-triangle text-info"></i> Sanctions
+                    <span class="badge bg-dark fs-6">@Sanctions.Count</span>
                 </div>
             </div>
         </div>
@@ -39,8 +46,48 @@
             <div class="card text-bg border-dark">
                 <div class="card-header">
                     <i class="bi bi-building text-dark"></i> Departments
+                    <span class="badge bg-dark fs-6">@Departments.Count</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .cursorStyle {
+        cursor: pointer;
+    }
+</style>
+
+@code {
+    public List<Employee> Employees { get; set; } = [];
+    public List<Vacation> Vacations { get; set; } = [];
+    public List<Overtime> Overtimes { get; set; } = [];
+    public List<Department> Departments { get; set; } = [];
+    public List<Doctor> Doctors { get; set; } = [];
+    public List<Sanction> Sanctions { get; set; } = [];
+
+    protected async override Task OnInitializedAsync()
+    {
+        AllState.Action += StateHasChanged;
+        await LoadDefaults();
+    }
+
+    async Task LoadDefaults()
+    {
+        Employees = await EmployeeService.GetAll(Constants.EmployeeBaseUrl);
+        Vacations = await VacationService.GetAll(Constants.DepartmentBaseUrl);
+        Overtimes = await OvertimeService.GetAll(Constants.OvertimeBaseUrl);
+        Departments = await DepartmentService.GetAll(Constants.SanctionBaseUrl);
+        Doctors = await DoctorService.GetAll(Constants.VacationBaseUrl);
+        Sanctions = await SanctionService.GetAll(Constants.DoctorBaseUrl);
+    }
+
+    void DoctorClicked() => AllState.HealthClicked();
+    void VacationClicked() => AllState.VacationClicked();
+    void OvertimeClicked() => AllState.OvertimeClicked();
+    void SanctionClicked() => AllState.SanctionClicked();
+
+    public void Dispose() => AllState.Action -= StateHasChanged;
+
+}

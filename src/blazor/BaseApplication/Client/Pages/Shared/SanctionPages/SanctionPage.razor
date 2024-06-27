@@ -1,5 +1,162 @@
-﻿<h3>SanctionPage</h3>
+﻿@implements IDisposable
+@if (AllState.ShowSanction)
+{
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card border-warning shadow-lg">
+                    <div class="card-header"><h4 class="float-start">Sanction Information</h4></div>
+                    <div class="card-header" style="max-height: 580px; overflow-x: hidden; overflow-y: scroll;">
+                        <div class="card-body">
+                            @{
+                                var tool = (new List<string>() { "Search", "ExcelExport", "PdfExport", "Print" });
+                            }
+                            <SfGrid DataSource="@Sanctions" AllowPaging="true" AllowSorting="true"
+                                    Toolbar="@tool" AllowExcelExport="true" AllowPdfExport="true" @ref="_defaultGrid">
+                                <GridPageSettings PageSize="5"></GridPageSettings>
+                                <GridEvents OnToolbarClick="ToolBarClickHandler" TValue="Sanction"></GridEvents>
+                                <GridColumns>
+                                    <GridColumn Field="@nameof(Sanction.EmployeeId)" HeaderText="ID"></GridColumn>
+                                    <GridColumn HeaderText="Type">
+                                        <Template>
+                                            @{
+                                                var sanction = (context as Sanction);
+                                                <div>
+                                                    @sanction!.SanctionType!.Name
+                                                </div>
+                                            }
+                                        </Template>
+                                    </GridColumn>
+                                    <GridColumn Field="@nameof(Sanction.Date)" HeaderText="Ocurring Date"></GridColumn>
+                                    <GridColumn Field="@nameof(Sanction.Punishment)" HeaderText="Punishment"></GridColumn>
+                                    <GridColumn Field="@nameof(Sanction.PunishmentDate)" HeaderText="Punishment Date"></GridColumn>
+                                    <GridColumn HeaderText="Action">
+                                        <Template>
+                                            @{
+                                                var sanction = context as Sanction;
+                                                <div>
+                                                    <i class="bi bi-pencil text-info cursorStyle"
+                                                    @onclick="() => EditClicked(sanction!)"></i>
+                                                    <i class="bi bi-trash text-danger cursorStyle"
+                                                    @onclick="() => DeleteClicked(sanction!)"></i>
+                                                </div>
+                                            }
+                                        </Template>
+                                    </GridColumn>
+                                </GridColumns>
+                            </SfGrid>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<style>
+    .cursorStyle {
+        cursor: pointer;
+    }
+</style>
+
+<SanctionDialog @ref="_sanctionDialog"
+                Sanction="_sanction"
+                SanctionTypes="SanctionTypes"
+                HandleSaveOperationEvent="OnSaveOperationEvent">
+
+</SanctionDialog>
 
 @code {
+    private SfGrid<Sanction>? _defaultGrid;
+    private SanctionDialog? _sanctionDialog;
+    private Sanction _sanction = new();
+    private List<Sanction> Sanctions { get; set; } = [];
+    private List<SanctionType> SanctionTypes { get; set; } = [];
 
+    protected override async Task OnInitializedAsync()
+    {
+        await GetTypes();
+        await GetSanctions();
+        AllState.Action += StateHasChanged;
+    }
+
+    private async Task GetSanctions()
+    {
+        Sanctions = await SanctionService.GetAll(Constants.SanctionBaseUrl);
+    }
+
+    private async Task GetTypes()
+    {
+        SanctionTypes = await SanctionTypeService.GetAll(Constants.SanctionTypeBaseUrl);
+    }
+
+    private void AddButtonClicked()
+    {
+        _sanction = new Sanction();
+        OpenDialog();
+    }
+
+    private void OpenDialog()
+    {
+        _sanctionDialog?.OpenDialog();
+    }
+
+    private async Task OnSaveOperationEvent(Sanction sanction)
+    {
+        var result = await SanctionService.Update(sanction, Constants.SanctionBaseUrl);
+        var successCheck = await DisplayMessage(result.Flag, result.Message);
+        if (successCheck)
+        {
+            _sanction = new Sanction();
+            await GetSanctions();
+        }
+    }
+
+    private void EditClicked(Sanction sanction)
+    {
+        _sanction = sanction;
+        OpenDialog();
+    }
+
+    private async Task DeleteClicked(Sanction sanction)
+    {
+        var confirm = await SfDialogService.ConfirmAsync($"Are you sure you wanna delete this sanction?", "Confirm Delete");
+        if (!confirm) return;
+
+        var response = await SanctionService.DeleteById(sanction.Id, Constants.SanctionBaseUrl);
+        var result = await DisplayMessage(response.Flag, response.Message);
+        if (result)
+            await GetSanctions();
+    }
+
+    private async Task<bool> DisplayMessage(bool flag, string message)
+    {
+        if (flag)
+        {
+            await SfDialogService.AlertAsync(message, "Success");
+            return true;
+        }
+        else
+        {
+            await SfDialogService.AlertAsync(message, "Error");
+            return false;
+        }
+    }
+
+    public async Task ToolBarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        switch (args.Item.Text)
+        {
+            case "Excel Export":
+                await _defaultGrid!.ExportToExcelAsync();
+                break;
+            case "PDF Export":
+                await _defaultGrid!.ExportToPdfAsync();
+                break;
+        }
+    }
+
+    public void Dispose()
+    {
+        AllState.Action -= StateHasChanged;
+    }
 }
