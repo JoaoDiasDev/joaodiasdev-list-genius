@@ -29,15 +29,15 @@
     </DialogTemplates>
 
     <DialogButtons>
-        <DialogButton Content="Save" Type="ButtonType.Submit" IsPrimary="true" OnClick="Save" />
+        <DialogButton Content="Save" Type="ButtonType.Submit" IsPrimary="true" OnClick="@Save" />
     </DialogButtons>
 </SfDialog>
 
 @code {
-    public string Title { get; set; } = "Add";
     [Parameter] public Doctor Doctor { get; set; } = new();
     [Parameter] public EventCallback<Doctor> HandleSaveOperationEvent { get; set; }
 
+    private string Title { get; set; } = "Add";
     private bool IsVisible { get; set; }
     private async void Save() => await HandleSaveOperationEvent.InvokeAsync(Doctor);
 

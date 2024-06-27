@@ -1,0 +1,160 @@
+﻿@implements IDisposable
+@if (AllState.ShowOvertime)
+{
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card border-warning shadow-lg">
+                    <div class="card-header"><h4 class="float-start">Health Information</h4></div>
+                    <div class="card-header" style="max-height: 580px; overflow-x: hidden; overflow-y: scroll;">
+                        <div class="card-body">
+                            @{
+                                var tool = (new List<string>() { "Search", "ExcelExport", "PdfExport", "Print" });
+                            }
+                            <SfGrid DataSource="@Overtimes" AllowPaging="true" AllowSorting="true"
+                                    Toolbar="@tool" AllowExcelExport="true" AllowPdfExport="true" @ref="_defaultGrid">
+                                <GridPageSettings PageSize="5"></GridPageSettings>
+                                <GridEvents OnToolbarClick="ToolBarClickHandler" TValue="Overtime"></GridEvents>
+                                <GridColumns>
+                                    <GridColumn Field="@nameof(Overtime.EmployeeId)" HeaderText="ID"></GridColumn>
+                                    <GridColumn HeaderText="Type">
+                                        <Template>
+                                            @{
+                                                var overtime = (context as Overtime);
+                                                <div>
+                                                    @overtime!.OvertimeType!.Name
+                                                </div>
+                                            }
+                                        </Template>
+                                    </GridColumn>
+                                    <GridColumn Field="@nameof(Overtime.StartDate)" HeaderText="Start Date"></GridColumn>
+                                    <GridColumn Field="@nameof(Overtime.EndDate)" HeaderText="End Date"></GridColumn>
+                                    <GridColumn Field="@nameof(Overtime.NumberOfDays)" HeaderText="Number Of days"></GridColumn>
+                                    <GridColumn HeaderText="Action">
+                                        <Template>
+                                            @{
+                                                var overtime = context as Overtime;
+                                                <div>
+                                                    <i class="bi bi-pencil text-info" id="cursorStyle" @onclick="() => EditClicked(overtime!)"></i>
+                                                    <i class="bi bi-trash text-danger" id="cursorStyle" @onclick="() => DeleteClicked(overtime!)"></i>
+                                                </div>
+                                            }
+                                        </Template>
+                                    </GridColumn>
+                                </GridColumns>
+                            </SfGrid>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<style>
+    .cursorStyle {
+        cursor: pointer;
+    }
+</style>
+
+<OvertimeDialog @ref="_overtimeDialog"
+                Overtime="_overtime"
+                OvertimeTypes="OvertimeTypes"
+                HandleSaveOperationEvent="OnSaveOperationEvent">
+
+</OvertimeDialog>
+
+@code {
+    private SfGrid<Overtime>? _defaultGrid;
+    private OvertimeDialog? _overtimeDialog;
+    private Overtime _overtime = new();
+    private List<Overtime> Overtimes { get; set; } = [];
+    private List<OvertimeType> OvertimeTypes { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetTypes();
+        await GetOvertime();
+        AllState.Action += StateHasChanged;
+    }
+
+    private async Task GetOvertime()
+    {
+        Overtimes = await OvertimeService.GetAll(Constants.OvertimeBaseUrl);
+    }
+
+    private async Task GetTypes()
+    {
+        OvertimeTypes = await OvertimeTypeService.GetAll(Constants.OvertimeTypeBaseUrl);
+    }
+
+    private void AddButtonClicked()
+    {
+        _overtime = new Overtime();
+        OpenDialog();
+    }
+
+    private void OpenDialog()
+    {
+        _overtimeDialog?.OpenDialog();
+    }
+
+    private async Task OnSaveOperationEvent(Overtime overtime)
+    {
+        var result = await OvertimeService.Update(overtime, Constants.OvertimeBaseUrl);
+        var successCheck = await DisplayMessage(result.Flag, result.Message);
+        if (successCheck)
+        {
+            _overtime = new Overtime();
+            await GetOvertime();
+        }
+    }
+
+    private void EditClicked(Overtime overtime)
+    {
+        _overtime = overtime;
+        OpenDialog();
+    }
+
+    private async Task DeleteClicked(Overtime overtime)
+    {
+        var confirm = await SfDialogService.ConfirmAsync($"Are you sure you wanna delete this overtime?", "Confirm Delete");
+        if (!confirm) return;
+
+        var response = await OvertimeService.DeleteById(overtime.Id, Constants.OvertimeBaseUrl);
+        var result = await DisplayMessage(response.Flag, response.Message);
+        if (result)
+            await GetOvertime();
+    }
+
+    private async Task<bool> DisplayMessage(bool flag, string message)
+    {
+        if (flag)
+        {
+            await SfDialogService.AlertAsync(message, "Success");
+            return true;
+        }
+        else
+        {
+            await SfDialogService.AlertAsync(message, "Error");
+            return false;
+        }
+    }
+
+    public async Task ToolBarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        switch (args.Item.Text)
+        {
+            case "Excel Export":
+                await _defaultGrid!.ExportToExcelAsync();
+                break;
+            case "PDF Export":
+                await _defaultGrid!.ExportToPdfAsync();
+                break;
+        }
+    }
+
+    public void Dispose()
+    {
+        AllState.Action -= StateHasChanged;
+    }
+}

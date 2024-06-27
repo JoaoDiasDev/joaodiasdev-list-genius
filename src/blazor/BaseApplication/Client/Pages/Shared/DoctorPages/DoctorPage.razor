@@ -1,0 +1,142 @@
+﻿@implements IDisposable
+@if (AllState.ShowHealth)
+{
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card border-warning shadow-lg">
+                    <div class="card-header"><h4 class="float-start">Health Information</h4></div>
+                    <div class="card-header" style="max-height: 580px; overflow-x: hidden; overflow-y: scroll;">
+                        <div class="card-body">
+                            @{
+                                var Tool = (new List<string>() { "Search", "ExcelExport", "PdfExport", "Print" });
+                            }
+                            <SfGrid DataSource="@Doctors" AllowPaging="true" AllowSorting="true"
+                                    Toolbar="@Tool" AllowExcelExport="true" AllowPdfExport="true" @ref="DefaultGrid">
+                                <GridPageSettings PageSize="5"></GridPageSettings>
+                                <GridEvents OnToolbarClick="ToolBarClickHandler" TValue="Doctor"></GridEvents>
+                                <GridColumns>
+                                    <GridColumn Field="@nameof(Doctor.EmployeeId)" HeaderText="ID"></GridColumn>
+                                    <GridColumn Field="@nameof(Doctor.MedicalDiagnose)" HeaderText="Diagnose"></GridColumn>
+                                    <GridColumn Field="@nameof(Doctor.MedicalRecommendation)" HeaderText="Recommendation"></GridColumn>
+                                    <GridColumn Field="@nameof(Doctor.Date)" HeaderText="Date"></GridColumn>
+                                    <GridColumn HeaderText="Action">
+                                        <Template>
+                                            @{
+                                                var employee = context as Doctor;
+                                                <div>
+                                                    <i class="bi bi-pencil text-info" id="cursorStyle" @onclick="() => EditClicked(employee!)"></i>
+                                                    <i class="bi bi-trash text-danger" id="cursorStyle" @onclick="() => DeleteClicked(employee!)"></i>
+                                                </div>
+                                            }
+                                        </Template>
+                                    </GridColumn>
+                                </GridColumns>
+                            </SfGrid>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<style>
+    .cursorStyle {
+        cursor: pointer;
+    }
+</style>
+
+<DoctorDialog @ref="_doctorDialog"
+              Doctor="_doctor"
+              HandleSaveOperationEvent="OnSaveOperationEvent">
+
+</DoctorDialog>
+
+@code {
+    private SfGrid<Doctor>? DefaultGrid;
+    private DoctorDialog? _doctorDialog;
+    private Doctor _doctor = new();
+    private List<Doctor> Doctors { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetHealth();
+        AllState.Action += StateHasChanged;
+    }
+
+    private async Task GetHealth()
+    {
+        Doctors = await DoctorService.GetAll(Constants.DoctorBaseUrl);
+    }
+
+    private void AddButtonClicked()
+    {
+        _doctor = new Doctor();
+        OpenDialog();
+    }
+
+    private void OpenDialog()
+    {
+        _doctorDialog?.OpenDialog();
+    }
+
+    private async Task OnSaveOperationEvent(Doctor doctor)
+    {
+        var result = await DoctorService.Update(doctor, Constants.DoctorBaseUrl);
+        var successCheck = await DisplayMessage(result.Flag, result.Message);
+        if (successCheck)
+        {
+            _doctor = new Doctor();
+            await GetHealth();
+        }
+    }
+
+    private void EditClicked(Doctor doctor)
+    {
+        _doctor = doctor;
+        OpenDialog();
+    }
+
+    private async Task DeleteClicked(Doctor doctor)
+    {
+        var confirm = await SfDialogService.ConfirmAsync($"Are you sure you wanna delete this?", "Confirm Delete");
+        if (!confirm) return;
+
+        var response = await DoctorService.DeleteById(doctor.Id, Constants.DoctorBaseUrl);
+        var result = await DisplayMessage(response.Flag, response.Message);
+        if (result)
+            await GetHealth();
+    }
+
+    private async Task<bool> DisplayMessage(bool flag, string message)
+    {
+        if (flag)
+        {
+            await SfDialogService.AlertAsync(message, "Success");
+            return true;
+        }
+        else
+        {
+            await SfDialogService.AlertAsync(message, "Error");
+            return false;
+        }
+    }
+
+    public void Dispose()
+    {
+        AllState.Action -= StateHasChanged;
+    }
+
+    public async Task ToolBarClickHandler(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        switch (args.Item.Text)
+        {
+            case "Excel Export":
+                await DefaultGrid!.ExportToExcelAsync();
+                break;
+            case "PDF Export":
+                await DefaultGrid!.ExportToPdfAsync();
+                break;
+        }
+    }
+}

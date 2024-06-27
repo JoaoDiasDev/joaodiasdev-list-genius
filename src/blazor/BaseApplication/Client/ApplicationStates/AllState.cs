@@ -96,4 +96,6 @@ public class AllState
         ShowUser = false;
         ShowEmployee = false;
     }
+
+    public bool ShowHealth { get; set; }
 }

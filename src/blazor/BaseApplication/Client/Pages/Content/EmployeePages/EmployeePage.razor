@@ -75,11 +75,6 @@
                     HandleDetailsPageCloseBtnClicked="OnDetailsPageCloseBtnClicked">
 
 </EmployeeDetailPage>
-@* <CustomContextMenu @ref="_contextMenu"
-                   HandleDeleteClicked="DeleteClicked"
-                   HandleEditClicked="EditClicked"
-                   HandleViewClicked="ViewClicked">
-</CustomContextMenu> *@
 
 <CustomContextMenu @ref="_contextMenu"
                    HandleDeleteClicked="DeleteClicked"
@@ -89,7 +84,6 @@
                    HandleAddOvertimeClicked="AddOvertimeClicked"
                    HandleAddSanctionClicked="AddSanctionClicked"
                    HandleAddVacationClicked="AddVacationClicked">
-
 </CustomContextMenu>
 
 <DoctorDialog @ref="_doctorDialog"
@@ -97,7 +91,17 @@
               HandleSaveOperationEvent="OnSaveHealthEvent">
 </DoctorDialog>
 
+<OvertimeDialog @ref="_overtimeDialog"
+                Overtime="Overtime"
+                OvertimeTypes="OvertimeTypes"
+                HandleSaveOperationEvent="OnSaveOvertimeEvent">
+
+</OvertimeDialog>
+
 @code {
+    OvertimeDialog? _overtimeDialog;
+    VacationDialog? _vacationDialog;
+    SanctionDialog? _sanctionDialog;
     DoctorDialog? _doctorDialog;
     AddOrUpdateEmployee? _addOrUpdateEmployee;
     private CustomContextMenu? _contextMenu;
@@ -118,6 +122,12 @@
     public List<Branch> SelectedBranches { get; set; } = [];
     private Employee SelectedEmployee { get; set; } = new();
     private Doctor Doctor { get; set; } = new();
+    private Overtime Overtime { get; set; } = new();
+    private List<OvertimeType> OvertimeTypes { get; set; } = [];
+    private Vacation Vacation { get; set; } = new();
+    private List<VacationType> VacationTypes { get; set; } = [];
+    private Sanction Sanction { get; set; } = new();
+    private List<SanctionType> SanctionTypes { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -262,16 +272,18 @@
         ShowDetailsPage = false;
     }
 
-    private async Task AddVacationClicked()
+    private void AddVacationClicked()
     {
+        Vacation.EmployeeId = SelectedEmployee.Id;
         _contextMenu!.CloseContextMenu();
-        await SfDialogService.AlertAsync("Add Vacation Clicked", "Add Vacation");
+        _vacationDialog!.OpenDialog();
     }
 
-    private async Task AddOvertimeClicked()
+    private void AddOvertimeClicked()
     {
+        Overtime.EmployeeId = SelectedEmployee.Id;
         _contextMenu!.CloseContextMenu();
-        await SfDialogService.AlertAsync("Add Overtime Clicked", "Add Overtime");
+        _overtimeDialog!.OpenDialog();
     }
 
     private void AddHealthClicked()
@@ -281,21 +293,39 @@
         _doctorDialog!.OpenDialog();
     }
 
-    private async Task OnSaveHealthEvent(Doctor doctor)
+    private void AddSanctionClicked()
     {
-        // var result = await EmployeeService.CreateDoctor(doctor);
-        // var successCheck = await DisplayMessage(result.Flag, result.Message);
-        // if (successCheck)
-        // {
-        //     _doctorDialog!.CloseDialog();
-        // }
+        Sanction.EmployeeId = SelectedEmployee.Id;
+        _contextMenu!.CloseContextMenu();
+        _sanctionDialog!.OpenDialog();
     }
 
-    private async Task AddSanctionClicked()
+    private async Task OnSaveHealthEvent(Doctor doctor)
     {
-        _contextMenu!.CloseContextMenu();
-        await SfDialogService.AlertAsync("Add Sanction Clicked", "Add Sanction");
+        doctor.EmployeeId = SelectedEmployee.Id;
+        var (flag, message) = await DoctorService.Create(doctor, Constants.DoctorBaseUrl);
+        var result = await DisplayMessage(flag, message);
+        if (result)
+        {
+            SelectedEmployee = new Employee();
+            Doctor = new Doctor();
+            _doctorDialog!.CloseDialog();
+        }
     }
+
+    private async Task OnSaveOvertimeEvent(Overtime overtime)
+    {
+        overtime.EmployeeId = SelectedEmployee.Id;
+        var (flag, message) = await OvertimeService.Create(overtime, Constants.OvertimeBaseUrl);
+        var result = await DisplayMessage(flag, message);
+        if (result)
+        {
+            SelectedEmployee = new Employee();
+            Overtime = new Overtime();
+            _overtimeDialog!.CloseDialog();
+        }
+    }
+
 
     private async Task<bool> DisplayMessage(bool flag, string message)
     {
