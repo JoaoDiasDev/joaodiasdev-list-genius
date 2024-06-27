@@ -36,6 +36,9 @@ namespace ServerLibrary.Data.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Password")
                         .HasColumnType("longtext");
 

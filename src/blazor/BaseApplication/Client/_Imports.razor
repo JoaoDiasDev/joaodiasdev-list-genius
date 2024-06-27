@@ -1,5 +1,6 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using System.Security.Claims
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -26,6 +27,7 @@
 @using Client.Pages.Shared.VacationPages
 @using Client.Pages.Shared.OvertimePages
 @using Client.Pages.Shared.SanctionPages
+@using Client.Pages.Content.ProfilePages;
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Buttons
@@ -52,5 +54,8 @@
 @inject IGenericService<Sanction> SanctionService
 @inject IGenericService<SanctionType> SanctionTypeService
 
-@* //Navbar tabs communication state handling *@
+@* //State handling *@
 @inject AllState AllState
+@inject UserProfileState UserProfileState;
+@inject GetHttpClient GetHttpClient;
+

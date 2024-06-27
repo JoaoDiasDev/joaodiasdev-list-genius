@@ -12,7 +12,7 @@ using ServerLibrary.Data;
 namespace ServerLibrary.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240626234629_First")]
+    [Migration("20240627183745_First")]
     partial class First
     {
         /// <inheritdoc />
@@ -37,6 +37,9 @@ namespace ServerLibrary.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("FullName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Image")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Password")

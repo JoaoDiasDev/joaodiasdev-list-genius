@@ -2,10 +2,10 @@
 
 [Route("api/[controller]")]
 [ApiController]
-[AllowAnonymous]
 public class AuthenticationController(IUserAccountRepository accountInterface) : ControllerBase
 {
     [HttpPost("register")]
+    [AllowAnonymous]
     public async Task<IActionResult> CreateAsync(RegisterDto user)
     {
         if (user is null)
@@ -17,6 +17,7 @@ public class AuthenticationController(IUserAccountRepository accountInterface) :
     }
 
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<IActionResult> SignInAsync(LoginDto user)
     {
         if (user is null)
@@ -28,6 +29,7 @@ public class AuthenticationController(IUserAccountRepository accountInterface) :
     }
 
     [HttpPost("refresh-token")]
+    [AllowAnonymous]
     public async Task<IActionResult> RefreshTokenAsync(RefreshTokenDto token)
     {
         if (token is null)
@@ -39,6 +41,7 @@ public class AuthenticationController(IUserAccountRepository accountInterface) :
     }
 
     [HttpGet("users")]
+    [Authorize]
     public async Task<IActionResult> GetUsersAsync()
     {
         var users = await accountInterface.GetUsers();
@@ -47,6 +50,7 @@ public class AuthenticationController(IUserAccountRepository accountInterface) :
     }
 
     [HttpPut("update-user")]
+    [Authorize]
     public async Task<IActionResult> UpdateUser(ManageUserDto user)
     {
         var result = await accountInterface.UpdateUser(user);
@@ -54,6 +58,7 @@ public class AuthenticationController(IUserAccountRepository accountInterface) :
     }
 
     [HttpGet("roles")]
+    [Authorize]
     public async Task<IActionResult> GetRoles()
     {
         var users = await accountInterface.GetRoles();
@@ -62,9 +67,26 @@ public class AuthenticationController(IUserAccountRepository accountInterface) :
     }
 
     [HttpDelete("delete-user/{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteUser(int id)
     {
         var result = await accountInterface.DeleteUser(id);
+        return Ok(result);
+    }
+
+    [HttpGet("user-image/{id}")]
+    [Authorize]
+    public async Task<IActionResult> GetUserImage(int id)
+    {
+        var result = await accountInterface.GetUserImage(id);
+        return Ok(result);
+    }
+
+    [HttpPut("update-profile")]
+    [Authorize]
+    public async Task<IActionResult> UpdateProfile(UserProfileDto profile)
+    {
+        var result = await accountInterface.UpdateProfile(profile);
         return Ok(result);
     }
 }

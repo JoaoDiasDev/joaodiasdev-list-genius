@@ -9,4 +9,6 @@ public interface IUserAccountRepository
     Task<GeneralResponse> UpdateUser(ManageUserDto user);
     Task<List<SystemRole>> GetRoles();
     Task<GeneralResponse> DeleteUser(int id);
+    Task<string> GetUserImage(int id);
+    Task<bool> UpdateProfile(UserProfileDto profile);
 }

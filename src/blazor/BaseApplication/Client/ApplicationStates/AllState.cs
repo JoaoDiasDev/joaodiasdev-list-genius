@@ -10,7 +10,7 @@ public class AllState
 
     public void GeneralDepartmentClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowGeneralDepartment = true;
         Action?.Invoke();
     }
@@ -20,7 +20,7 @@ public class AllState
 
     public void DepartmentClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowDepartment = true;
         Action?.Invoke();
     }
@@ -30,7 +30,7 @@ public class AllState
 
     public void BranchClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowBranch = true;
         Action?.Invoke();
     }
@@ -40,7 +40,7 @@ public class AllState
 
     public void CountryClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowCountry = true;
         Action?.Invoke();
     }
@@ -50,7 +50,7 @@ public class AllState
 
     public void CityClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowCity = true;
         Action?.Invoke();
     }
@@ -60,7 +60,7 @@ public class AllState
 
     public void TownClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowTown = true;
         Action?.Invoke();
     }
@@ -70,7 +70,7 @@ public class AllState
 
     public void UserClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowUser = true;
         Action?.Invoke();
     }
@@ -80,12 +80,12 @@ public class AllState
 
     public void EmployeeClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowEmployee = true;
         Action?.Invoke();
     }
 
-    private void ResetAllDepartments()
+    private void ResetAllStates()
     {
         ShowGeneralDepartment = false;
         ShowDepartment = false;
@@ -102,12 +102,13 @@ public class AllState
         ShowOvertimeType = false;
         ShowVacation = false;
         ShowVacationType = false;
+        ShowUserProfile = false;
     }
 
     public bool ShowHealth { get; set; }
     public void HealthClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowHealth = true;
         Action?.Invoke();
     }
@@ -116,7 +117,7 @@ public class AllState
 
     public void SanctionClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowSanction = true;
         Action?.Invoke();
     }
@@ -124,7 +125,7 @@ public class AllState
 
     public void SanctionTypeClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowSanctionType = true;
         Action?.Invoke();
     }
@@ -132,7 +133,7 @@ public class AllState
 
     public void OvertimeClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowOvertime = true;
         Action?.Invoke();
     }
@@ -141,7 +142,7 @@ public class AllState
 
     public void OvertimeTypeClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowOvertimeType = true;
         Action?.Invoke();
     }
@@ -149,7 +150,7 @@ public class AllState
 
     public void VacationClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowVacation = true;
         Action?.Invoke();
     }
@@ -158,8 +159,17 @@ public class AllState
 
     public void VacationTypeClicked()
     {
-        ResetAllDepartments();
+        ResetAllStates();
         ShowVacationType = true;
+        Action?.Invoke();
+    }
+
+    public bool ShowUserProfile { get; set; }
+
+    public void UserProfileClicked()
+    {
+        ResetAllStates();
+        ShowUserProfile = true;
         Action?.Invoke();
     }
 

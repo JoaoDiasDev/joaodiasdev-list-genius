@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Syncfusion.Blazor;
 using Syncfusion.Blazor.Popups;
 
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NCaF5cXmZCeEx0TXxbf1x0ZFZMZVxbRHBPIiBoS35RckVlW35fdXFVRmZVWUBz");
+Syncfusion.Licensing
+    .SyncfusionLicenseProvider
+    .RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NCaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXlcd3VVRGJeV0NxV0Q=");
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -25,6 +27,7 @@ builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 builder.Services.AddScoped<AllState>();
+builder.Services.AddScoped<UserProfileState>();
 builder.Services.AddScoped<IGenericService<GeneralDepartment>, GenericService<GeneralDepartment>>();
 builder.Services.AddScoped<IGenericService<Department>, GenericService<Department>>();
 builder.Services.AddScoped<IGenericService<Branch>, GenericService<Branch>>();
