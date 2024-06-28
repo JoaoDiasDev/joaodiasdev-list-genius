@@ -53,12 +53,6 @@
     </div>
 </div>
 
-<style>
-    .cursorStyle {
-        cursor: pointer;
-    }
-</style>
-
 @code {
     public List<Employee> Employees { get; set; } = [];
     public List<Vacation> Vacations { get; set; } = [];
@@ -67,7 +61,7 @@
     public List<Doctor> Doctors { get; set; } = [];
     public List<Sanction> Sanctions { get; set; } = [];
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         AllState.Action += StateHasChanged;
         await LoadDefaults();

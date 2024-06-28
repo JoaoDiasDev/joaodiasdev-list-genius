@@ -1,5 +1,4 @@
 ﻿namespace ServerLibrary.Repositories.Implementations;
-
 public class VacationRepository(AppDbContext appDbContext) : IGenericRepository<Vacation>
 {
     public async Task<GeneralResponse> DeleteById(int id)

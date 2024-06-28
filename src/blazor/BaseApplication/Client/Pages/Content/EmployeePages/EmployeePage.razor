@@ -7,14 +7,15 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header">
-                            <button class="btn btn-outline-success" @onclick="ShowAddOrUpdateEmployeeButtonClicked">
+                        <div class="card-header text-bg-secondary">
+                            <h4 class="float-start">Employees</h4>
+                            <button class="btn btn-success float-end" @onclick="ShowAddOrUpdateEmployeeButtonClicked">
                                 <i class="bi bi-plus-circle-dotted"></i> Add Employee
                             </button>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body text-bg-light">
                             @{
-                                var tool = (new List<string>() { "Search", "ExcelExport", "PdfExport", "Print", });
+                                var tool = (new List<string>() {"Search", "ExcelExport", "PdfExport", "Print",});
                             }
                             <SfGrid DataSource="@Employees" AllowPaging="true" AllowSorting="true"
                                     Toolbar="@tool" AllowExcelExport="true" AllowPdfExport="true" @ref="_defaultGrid">
@@ -25,7 +26,7 @@
                                             @{
                                                 var employee = context as Employee;
                                                 <div class="image">
-                                                    <img src="@employee!.Photo" alt="@employee.Name" width="150" height="150" />
+                                                    <img src="@employee!.Photo" alt="@employee.Name" width="150" height="150"/>
                                                 </div>
                                             }
                                         </Template>
@@ -75,6 +76,7 @@
                      HandleDepartmentSelectedEvent="HandleDepartmentSelectedEvent"
                      HandleSaveEmployeeClickedEvent="HandleSaveEmployeeClickedEvent">
 </AddOrUpdateEmployee>
+
 <EmployeeDetailPage EmployeeDetails="Employee"
                     ShowDetailsPage="ShowDetailsPage"
                     HandleDetailsPageCloseBtnClicked="OnDetailsPageCloseBtnClicked">
@@ -113,12 +115,6 @@
                 VacationTypes="VacationTypes"
                 HandleSaveOperationEvent="OnSaveVacationEvent">
 </VacationDialog>
-
-<style>
-    .cursorStyle {
-        cursor: pointer;
-    }
-</style>
 
 @code {
     OvertimeDialog? _overtimeDialog;
@@ -220,6 +216,8 @@
         ShowAddOrUpdatePage = false;
         await LoadEmployees();
         SelectedEmployee = new Employee();
+        _addOrUpdateEmployee!.ClearContent();
+        _addOrUpdateEmployee!.ChangeTitle("Add");
     }
 
     private async Task LoadEmployees()

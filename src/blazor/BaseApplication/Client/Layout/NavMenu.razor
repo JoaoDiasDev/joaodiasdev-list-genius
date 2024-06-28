@@ -20,12 +20,14 @@
                              @onclick="ShowAdminMenuContainer"
                              style="cursor: pointer;">
                         <div class="hstack gap-1">
-                            <span class="bi bi-person-fill fs-3 text-center" aria-hidden="true" style="margin-top: -2rem"></span>
+                            <span class="bi bi-person-fill fs-3 text-center" aria-hidden="true"
+                                  style="margin-top: -2rem"></span>
                             <span>Administration</span>
                         </div>
                     </NavLink>
-                    <a class="nav-link p-2 text-white" style="margin-left: 2rem; visibility: @CssStyle">
-                        <div class="hstack" @onclick="UserClicked">
+                    <a class="nav-link p-2 text-white" style="margin-left: 2rem; visibility: @CssStyle"
+                       @onclick="UserClicked">
+                        <div class="hstack">
                             <span class="bi bi-people fs-5 text-center" aria-hidden="true" style="margin-top: -2rem"></span>
                             <span>Users</span>
                         </div>
@@ -125,7 +127,7 @@
                     <li style="list-style: none" class="cursorStyle">
                         <a class="nav-link p-2" @onclick="VacationTypeClicked">
                             <div class="hstack">
-                                <span class="bi bi-bi-backpack3 fs-5 text-center" aria-hidden="true" style="margin-top: -2rem;"></span>
+                                <span class="bi bi-backpack3 fs-5 text-center" aria-hidden="true" style="margin-top: -2rem;"></span>
                                 <span>Vacation Type</span>
                             </div>
                         </a>
@@ -147,13 +149,6 @@
         </div>
     </nav>
 </div>
-
-<style>
-    .cursorStyle {
-        cursor: pointer;
-    }
-</style>
-
 @code {
     private string DepartmentMargin { get; set; } = "-3.5rem";
     private string CssStyle { get; set; } = "hidden";
